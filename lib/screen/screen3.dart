@@ -10,7 +10,7 @@ class Screen3 extends StatefulWidget {
   _Screen3State createState() => _Screen3State();
 }
 
-
+// 나중엔 이미지 정보 가져와서 상대 좌표로 변환해야함
 List<Node> buttonDescriptions_ = [
   Node(const Offset(166, 248), "root", null),
   Node(const Offset(166, 248), "hip", "root"),
@@ -46,8 +46,9 @@ class _Screen3State extends State<Screen3> {
   bool _initState = true;
   var moveX, moveY, newPosX, newPosY;
 
-  double get imageWidth => 450;
-  double get imageHeight => 600;
+  // 지금은 절대 크기 지정해줌
+  double get imageWidth => 570;
+  double get imageHeight => 895;
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +56,14 @@ class _Screen3State extends State<Screen3> {
       body: Stack(
         children: [
           Container(
-            width: imageWidth,
-            height: imageHeight,
             decoration: BoxDecoration(
               border: Border.all(color: Colors.red), // 테두리 추가
               color: Colors.blue.shade100, // 배경 색상 추가
             ),
             child: Image.asset(
-              'assets/images/test.png',
+              'assets/images/masking.png',
+              width: imageWidth,
+              height: imageHeight,
               fit: BoxFit.contain, // BoxFit 조정
             ),
           ),
@@ -117,23 +118,23 @@ class _Screen3State extends State<Screen3> {
 
 
           // Draggable buttons
-          ...List.generate(buttonDescriptions_.length, (index) {
-            return Positioned(
+          ...List.generate(buttonDescriptions_.length, (index) { //List.generate 버튼 수 만큼의 리스트를 생성
+            return Positioned( // Positioned 위젯 반환
               left: buttonDescriptions_[index].point.dx,
-              top: buttonDescriptions_[index].point.dy,
-              child: Draggable(
-                feedback: _buildDraggableCircle(index),
-                onDragStarted: () {},
-                onDragUpdate: (updateDragDetails) {
+              top: buttonDescriptions_[index].point.dy,// 버튼 좌표 buttonDescriptions_ 안의 point로 설정
+              child: Draggable( // 드래그 할 수 있는 요소 생성
+                feedback: _buildDraggableCircle(index), // 드래그 중 보여지는 위젯을 정의
+                onDragStarted: () {}, // onDragStarted 드래그 시작시 실행할 함수를 정의 여기선 정의 안 함
+                onDragUpdate: (updateDragDetails) { // 드래그가 업데이트될 때마다 호출
                   if (_initState) {
                     moveX = updateDragDetails.localPosition.dx -
                         buttonDescriptions_[index].point.dx;
                     moveY = updateDragDetails.localPosition.dy -
-                        buttonDescriptions_[index].point.dy;
+                        buttonDescriptions_[index].point.dy; // moveX, moveY 시작위치와 현재위치의 차이 구함
                     _initState = false;
                   }
                   newPosX = updateDragDetails.localPosition.dx - moveX;
-                  newPosY = updateDragDetails.localPosition.dy - moveY;
+                  newPosY = updateDragDetails.localPosition.dy - moveY; // 새로운 위치 계산
                   // positions[index] = Offset(newPosX, newPosY);
                   if (newPosX >= 0 && newPosX <= imageWidth && newPosY >= 0 && newPosY <= imageHeight)
                     _onDrag(index, Offset(newPosX, newPosY));
@@ -152,7 +153,7 @@ class _Screen3State extends State<Screen3> {
 
   Widget _buildDraggableCircle(int index) {
     return Tooltip(
-      message: buttonDescriptions_[index].fromJoint, // 여기서 한글 설명을 사용합니다.
+      message: buttonDescriptions_[index].fromJoint, // 마우스 클릭 시 설명
       child: CircleAvatar(radius: radiusDragBut, child: Text('${index + 1}')),
     );
   }
@@ -184,7 +185,7 @@ class LinePainter extends CustomPainter {
       ..color = Colors.black
       ..strokeWidth = 2;
 
-    for (Node fromJ in buttonDescriptions_) {
+    for (Node fromJ in buttonDescriptions_) {//Node 객체들이 들어 있으며, 각 Node는 연결점을 나타냄
       String currentJoint = fromJ.fromJoint;
       for (Node toJ in buttonDescriptions_){
         String? connectedJoint = toJ.toJoint;
