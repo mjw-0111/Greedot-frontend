@@ -1,16 +1,29 @@
-# projectfront
+## Push 및 Commit
 
-A new Flutter project.
+작업 완료된 파일 건드렸으면 절대 push하지 않기(해당 파일 빼고 commit+push)
 
-## Getting Started
+commit 메시지는 반드시 상세히 작성(이름, 추가사항, 날짜, 추가)
 
-This project is a starting point for a Flutter application.
+    예시:
+    git commit -m"donguk/240105
 
-A few resources to get you started if this is your first Flutter project:
+    - add read me file
+    - fix typo of XX.dart "
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 컨벤션
+
+Class명 시작은 대문자
+
+    파스칼 표기법 사용 (예시: BackgroundColor, TypeName, IPhone)
+
+funtion 시작은 소문자
+
+    카멜 표기법 사용 (예시: backgroundColor, typeName,iPhone)
+
+
+우리가 만든 함수나 클래스 greedot  추가하기
+
+    예시: backgroundColor_greedot, TypeName_greedot
+
+변명 또한 카멜 표기법을 사용하며, 가능한 private으로 정의하여 충돌 방지하기 
