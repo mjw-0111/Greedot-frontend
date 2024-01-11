@@ -1,7 +1,11 @@
 import 'dart:ui';
 import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
+
+import '../structure/structureInit.dart';
+
 import 'package:path_provider/path_provider.dart';
-import 'screen3.dart';
 
 class Node {
   Node(this.point, this.fromJoint, this.toJoint);
@@ -18,7 +22,8 @@ class Node {
   }
 }
 
-Future<File> writeNodesToYaml(List<Node> nodes, double width, double height) async {
+Future<File> writeNodesToYaml(
+    List<Node> nodes, double width, double height) async {
   final directory = await getApplicationDocumentsDirectory();
   final dir = Directory(directory.path);
   if (!await dir.exists()) {
@@ -29,7 +34,8 @@ Future<File> writeNodesToYaml(List<Node> nodes, double width, double height) asy
   // YAML 형식 문자열 생성
   String yaml = 'height: ${height.toInt()}\nskeleton:\n';
   for (var node in nodes) {
-    yaml += '- loc:\n  - ${node.point.dx.toInt()}\n  - ${node.point.dy.toInt()}\n';
+    yaml +=
+        '- loc:\n  - ${node.point.dx.toInt()}\n  - ${node.point.dy.toInt()}\n';
     yaml += '  name: ${node.fromJoint}\n';
     yaml += '  parent: ${node.toJoint ?? 'null'}\n';
   }
@@ -42,21 +48,9 @@ Future<File> writeNodesToYaml(List<Node> nodes, double width, double height) asy
 // YAML 저장 버튼의 onPressed 콜백
 void onSaveYamlPressed() async {
   try {
-    await writeNodesToYaml(buttonDescriptions_, 333, 392); // 이미지의 너비와 높이를 인자로 전달
+    await writeNodesToYaml(skeletonInfo, 333, 392); // 이미지의 너비와 높이를 인자로 전달
     print('YAML 저장 완료');
   } catch (e) {
     print('YAML 저장 실패: $e');
   }
-}
-
-class Node2 {
-  Node2(this.point, this.name);
-  Offset point;
-  String name;
-}
-
-class Edge {
-  Edge(this.fromId, this.toId);
-  int fromId;
-  int toId;
 }
