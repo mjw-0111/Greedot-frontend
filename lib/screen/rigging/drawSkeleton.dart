@@ -7,9 +7,9 @@ import '../../structure/structure.dart';
 import '../../structure/structureInit.dart';
 import '../../widget/design/basicButtons.dart';
 
-import '../root.dart';
+import './riggingRoot.dart';
 
-//global var
+//global varchr
 double radiusDragBut = 15.0;
 
 class SkeletonCanvas extends StatefulWidget {
@@ -21,18 +21,18 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
   List<Offset> positions = List.generate(
       skeletonInfo.length, (index) => Offset(100.0 * (index + 1), 100.0));
 
-  var offsetX = 0.0;
-  var offsetY = 0.0;
-  var preX = 0.0;
-  var preY = 0.0;
-  var trigger = false;
+  double offsetX = 0.0;
+  double offsetY = 0.0;
+  double preX = 0.0;
+  double preY = 0.0;
 
+  bool trigger = false;
   bool _initState = true;
-  var moveX, moveY, newPosX, newPosY;
 
-  // 지금은 절대 크기 지정해줌
-  double get imageWidth => 570;
-  double get imageHeight => 895;
+  late double moveX, moveY, newPosX, newPosY;
+
+  double? imageWidth = Image.file(File(importedImage!.path)).width;
+  double? imageHeight = Image.file(File(importedImage!.path)).height;
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +77,7 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
                     bgColor: Colors.blue,
                     additionalFunc: () async {
                       await writeNodesToYaml(
-                          skeletonInfo, imageWidth, imageHeight);
+                          skeletonInfo, imageWidth!, imageHeight!);
                       ScaffoldMessenger.of(context)
                           .showSnackBar(SnackBar(content: Text('Yaml 파일 저장됨')));
                     },
@@ -125,9 +125,9 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
                       updateDragDetails.localPosition.dy - moveY; // 새로운 위치 계산
                   // positions[index] = Offset(newPosX, newPosY);
                   if (newPosX >= 0 &&
-                      newPosX <= imageWidth &&
+                      newPosX <= imageWidth! &&
                       newPosY >= 0 &&
-                      newPosY <= imageHeight)
+                      newPosY <= imageHeight!)
                     _onDrag(index, Offset(newPosX, newPosY));
                 },
                 onDragEnd: (endDragDetails) {
@@ -151,8 +151,8 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
 
   void _onDrag(int index, Offset offset) {
     // 드래그 위치가 이미지 영역 내에 있는지 확인
-    bool withinWidthBounds = offset.dx >= 0 && offset.dx <= imageWidth;
-    bool withinHeightBounds = offset.dy >= 0 && offset.dy <= imageHeight;
+    bool withinWidthBounds = offset.dx >= 0 && offset.dx <= imageWidth!;
+    bool withinHeightBounds = offset.dy >= 0 && offset.dy <= imageHeight!;
 
     // 조건을 만족하면 상태 업데이트
     if (withinWidthBounds && withinHeightBounds) {
