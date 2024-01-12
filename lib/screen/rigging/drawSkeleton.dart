@@ -31,6 +31,7 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
 
   late double moveX, moveY, newPosX, newPosY;
 
+  // TODO 이부분 수정해야함 값받아오는게 곤란하군
   double? imageWidth = Image.file(File(importedImage!.path)).width;
   double? imageHeight = Image.file(File(importedImage!.path)).height;
 
