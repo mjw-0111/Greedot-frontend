@@ -53,3 +53,5 @@ app.*.map.json
 /window
 .git/
 /macos
+/.gitmessage.txt
+.gitmessage.txt
