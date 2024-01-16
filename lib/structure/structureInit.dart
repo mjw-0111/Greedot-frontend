@@ -1,10 +1,7 @@
 import 'dart:ui';
-import 'dart:io';
 
-import '../screen/rigging/drawSkeleton.dart';
 import '../structure/structure.dart';
 
-import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
 
 //임시 선언 위치

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import '../../widget/design/settingColor.dart';
 import '../../widget/design/basicButtons.dart';
@@ -41,9 +40,9 @@ class _getImageState extends State<getImage_greedot> {
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 30, width: double.infinity),
+            const SizedBox(height: 30, width: double.infinity),
             _buildPhotoArea(),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             _buildButton(),
           ],
         ),

@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../structure/structure.dart';
 import '../../structure/structureInit.dart';
 import '../../widget/design/basicButtons.dart';
-
-import './riggingRoot.dart';
 
 //global varchr
 double radiusDragBut = 15.0;
@@ -31,7 +29,7 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
 
   late double moveX, moveY, newPosX, newPosY;
 
-  // TODO 이부분 수정해야함 값받아오는게 곤란하군
+  // TODO 이부분 수정해야함 값 받아오는게 곤란하군
   double? imageWidth = Image.file(File(importedImage!.path)).width;
   double? imageHeight = Image.file(File(importedImage!.path)).height;
 
@@ -148,6 +146,38 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
       message: skeletonInfo[index].fromJoint, // 마우스 클릭 시 설명
       child: CircleAvatar(radius: radiusDragBut, child: Text('${index + 1}')),
     );
+  }
+
+  Future<File> writeNodesToYaml(
+      List<Node> nodes, double width, double height) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final dir = Directory(directory.path);
+    if (!await dir.exists()) {
+      await dir.create(recursive: true);
+    }
+    final file = File('${dir.path}/skeleton.yaml');
+
+    // YAML 형식 문자열 생성
+    String yaml = 'height: ${height.toInt()}\nskeleton:\n';
+    for (var node in nodes) {
+      yaml +=
+          '- loc:\n  - ${node.point.dx.toInt()}\n  - ${node.point.dy.toInt()}\n';
+      yaml += '  name: ${node.fromJoint}\n';
+      yaml += '  parent: ${node.toJoint ?? 'null'}\n';
+    }
+    yaml += 'width: ${width.toInt()}';
+
+    print(directory);
+    return file.writeAsString(yaml);
+  }
+
+  void onSaveYamlPressed() async {
+    try {
+      await writeNodesToYaml(skeletonInfo, 333, 392); // 이미지의 너비와 높이를 인자로 전달
+      print('YAML 저장 완료');
+    } catch (e) {
+      print('YAML 저장 실패: $e');
+    }
   }
 
   void _onDrag(int index, Offset offset) {

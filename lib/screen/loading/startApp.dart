@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 1500), () {
+    Timer(const Duration(milliseconds: 1500), () {
       bool condition = checkCondition();
       if (condition) {
         exit(0);
@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const String imageLogoName = 'assets/images/flyai.png';
+    //const String imageLogoName = 'assets/images/flyai.png';
 
     var screenHeight = MediaQuery.of(context).size.height;
     var screenWidth = MediaQuery.of(context).size.width;
@@ -44,10 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
       onPopInvoked: (bool didPop) {
         // Handle the pop. If `didPop` is false, it was blocked.
       },
-      //onWillPop: () async => false,
       child: MediaQuery(
-        data:
-            MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(1.0)),
+        data: MediaQuery.of(context)
+            .copyWith(textScaler: const TextScaler.linear(1.0)),
         child: Scaffold(
           backgroundColor: Colors.blue,
           body: Container(
@@ -55,14 +54,14 @@ class _SplashScreenState extends State<SplashScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 SizedBox(height: screenHeight * 0.384375),
-                Container(
-                  child: SvgPicture.asset(
-                    imageLogoName,
-                    width: screenWidth * 0.616666,
-                    height: screenHeight * 0.0859375,
-                  ),
-                ),
-                Expanded(child: SizedBox()),
+                // Container(
+                //   child: SvgPicture.asset(
+                //     imageLogoName,
+                //     width: screenWidth * 0.616666,
+                //     height: screenHeight * 0.0859375,
+                //   ),
+                // ),
+                const Expanded(child: SizedBox()),
                 Align(
                   child: Text("© Greedot",
                       style: TextStyle(
