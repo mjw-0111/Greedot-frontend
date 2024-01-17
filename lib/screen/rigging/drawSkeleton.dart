@@ -149,7 +149,7 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
   }
 
   Future<File> writeNodesToYaml(
-      List<Node> nodes, double width, double height) async {
+      List<Joint> nodes, double width, double height) async {
     final directory = await getApplicationDocumentsDirectory();
     final dir = Directory(directory.path);
     if (!await dir.exists()) {
@@ -218,10 +218,10 @@ class LinePainter extends CustomPainter {
       ..color = Colors.black
       ..strokeWidth = 2;
 
-    for (Node fromJ in skeletonInfo) {
+    for (Joint fromJ in skeletonInfo) {
       //Node 객체들이 들어 있으며, 각 Node는 연결점을 나타냄
       String currentJoint = fromJ.fromJoint;
-      for (Node toJ in skeletonInfo) {
+      for (Joint toJ in skeletonInfo) {
         String? connectedJoint = toJ.toJoint;
         if (currentJoint == connectedJoint) {
           Offset coord1 = Offset(

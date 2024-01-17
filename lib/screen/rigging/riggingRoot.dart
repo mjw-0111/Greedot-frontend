@@ -11,7 +11,7 @@ class RootScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColorMain_greedot,
+      backgroundColor: colorMainBG_greedot,
       body: Center(
           child: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
         EleButton_greedot(

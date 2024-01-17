@@ -1,7 +1,7 @@
 import 'dart:ui';
 
-class Node {
-  Node(this.point, this.fromJoint, this.toJoint);
+class Joint {
+  Joint(this.point, this.fromJoint, this.toJoint);
   Offset point;
   String fromJoint;
   String? toJoint;
@@ -14,3 +14,17 @@ class Node {
     };
   }
 }
+
+class User {
+  User(this.email, this.nickname, this.password, this.role, this.status,
+      this.grade, this.register_at);
+  String email;
+  String nickname;
+  String password;
+  List<Enum>? role;
+  Enum status;
+  Enum grade;
+  Date register_at;
+}
+
+class Date {}

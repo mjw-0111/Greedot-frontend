@@ -36,7 +36,7 @@ class _getImageState extends State<getImage_greedot> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        backgroundColor: backgroundColorMain_greedot,
+        backgroundColor: colorMainBG_greedot,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
