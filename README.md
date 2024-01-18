@@ -37,11 +37,15 @@ gitcommit template 설정 방법
         Fixes: issue #N 
         ...
 
+2. template 과 vscode 연결
 
-2. gitcommit template 
-    git commit
+        git config --global core.editor code
 
-3. vi 편집기가 나온다면
+3. gitcommit template 사용법
+
+        git commit 
+
+4. vi 편집기가 나온다면
     esc -> :wq!
 
 
