@@ -21,6 +21,22 @@ class _getImageState extends State<getImage_greedot> {
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
 
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: colorMainBG_greedot,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 30, width: double.infinity),
+          _buildPhotoArea(),
+          const SizedBox(height: 20),
+          _buildButton(),
+        ],
+      ),
+    );
+  }
+
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
     //pickedFile에 ImagePicker로 가져온 이미지가 담긴다.
@@ -30,24 +46,6 @@ class _getImageState extends State<getImage_greedot> {
         _image = XFile(pickedFile.path); //가져온 이미지를 _image에 저장
       });
     }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: colorMainBG_greedot,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 30, width: double.infinity),
-            _buildPhotoArea(),
-            const SizedBox(height: 20),
-            _buildButton(),
-          ],
-        ),
-      ),
-    );
   }
 
   Widget _buildPhotoArea() {

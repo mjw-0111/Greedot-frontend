@@ -4,6 +4,9 @@ import '../screen/rigging/riggingRoot.dart';
 import '../screen/rigging/getImage.dart';
 import '../widget/design/settingColor.dart';
 import './drawer/drawer.dart';
+import './rigging/drawSkeleton.dart';
+
+String currentPageKey = 'RootScreen';
 
 class Navigation_Greedot extends StatefulWidget {
   const Navigation_Greedot({super.key});
@@ -14,6 +17,12 @@ class Navigation_Greedot extends StatefulWidget {
 
 class _Navigation_GreedotState extends State<Navigation_Greedot> {
   int currentPageIndex = 0;
+
+  void _changePage(String pageKey) {
+    setState(() {
+      currentPageKey = pageKey;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,20 +38,43 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         currentIndex: currentPageIndex,
         onTap: (int index) {
           setState(() {
+            switch (index) {
+              case 0:
+                _changePage('RootScreen');
+                break;
+              case 1:
+                _changePage('getImage_greedot');
+                break;
+              case 2:
+                _changePage('RootScreen');
+                break;
+              default:
+                _changePage('RootScreen');
+                break;
+            }
             currentPageIndex = index;
           });
         },
         backgroundColor: colorNaviBar_greedot,
         selectedItemColor: colorText_greedot,
-        unselectedItemColor: Colors.grey,
+        //todo 색수정
+        unselectedItemColor: colorText_greedot,
         items: bottomNavigationBarItems,
       ),
-      body: <Widget>[
-        const RootScreen(),
-        const getImage_greedot(),
-        const RootScreen(),
-      ][currentPageIndex],
+      body: buildBody(currentPageKey),
     );
+  }
+
+  Widget buildBody(String pageKey) {
+    // 현재 페이지 인덱스에 따라 다른 위젯을 반환합니다.
+    switch (pageKey) {
+      case 'RootScreen':
+        return RootScreen(onPageChange: _changePage);
+      case 'getImage_greedot':
+        return const getImage_greedot();
+      default:
+        return RootScreen(onPageChange: _changePage);
+    }
   }
 
   List<BottomNavigationBarItem> get bottomNavigationBarItems {

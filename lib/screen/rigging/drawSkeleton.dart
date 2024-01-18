@@ -2,12 +2,13 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:projectfront/widget/design/settingColor.dart';
 
 import '../../structure/structure.dart';
 import '../../structure/structureInit.dart';
 import '../../widget/design/basicButtons.dart';
 
-//global varchr
+//global var
 double radiusDragBut = 15.0;
 
 class SkeletonCanvas extends StatefulWidget {
@@ -30,18 +31,23 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
   late double moveX, moveY, newPosX, newPosY;
 
   // TODO 이부분 수정해야함 값 받아오는게 곤란하군
-  double? imageWidth = Image.file(File(importedImage!.path)).width;
-  double? imageHeight = Image.file(File(importedImage!.path)).height;
+  // segment 단계에서 resizing이 들어가기 때문에 고정값
+  double imageWidth = 400;
+  double imageHeight = 400;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
+    // if (importedImage != Null) {
+    //   imageWidth = Image.file(File(importedImage!.path)).width!;
+    //   imageHeight = Image.file(File(importedImage!.path)).height!;
+    // }
+    return Container(
+      color: colorMainBG_greedot,
+      child: Stack(
         children: [
           Container(
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.red), // 테두리 추가
-              color: Colors.blue.shade100, // 배경 색상 추가
+              color: colorNaviBar_greedot, // 배경 색상 추가
             ),
             child: _buildPhotoArea(importedImage),
           ),
@@ -73,7 +79,6 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
                   EleButton_greedot(
                     height: 40,
                     width: 100,
-                    bgColor: Colors.blue,
                     additionalFunc: () async {
                       await writeNodesToYaml(
                           skeletonInfo, imageWidth!, imageHeight!);
@@ -86,7 +91,6 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
                   EleButton_greedot(
                     height: 40,
                     width: 100,
-                    bgColor: Colors.blue,
                     gotoScene: () => SkeletonCanvas(),
                     buttonText: '홈으로 가기',
                   ),
@@ -123,10 +127,11 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
                   newPosY =
                       updateDragDetails.localPosition.dy - moveY; // 새로운 위치 계산
                   // positions[index] = Offset(newPosX, newPosY);
+
                   if (newPosX >= 0 &&
-                      newPosX <= imageWidth! &&
+                      newPosX <= imageWidth &&
                       newPosY >= 0 &&
-                      newPosY <= imageHeight!)
+                      newPosY <= imageHeight)
                     _onDrag(index, Offset(newPosX, newPosY));
                 },
                 onDragEnd: (endDragDetails) {
