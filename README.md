@@ -49,6 +49,37 @@ gitcommit template 설정 방법
     esc -> :wq!
 
 
+## pull request 방법
+
+1. fork한 저장소에 할당된 작업 파일만 push
+2. fork한 저장소 sync 최신화 
+3. 변경 내용 적용 방법과 함께 pull resquest 요청
+
+        # PR 작성 양식
+        
+        ## Work summary
+
+            로그인 기능을 구현하였습니다.
+
+        ## key change
+            00버튼에 팝업 로그인 창 기능을 추가하였습니다.
+            아직 벡엔드 연결은 하지않은 상태이며 향구 해당 기능 추가 예정입니다.
+            해당 기능은 플루터 기본제공 패키지인 [링크]() 사용하여 구현하였습니다.
+        
+        ## How to use
+            XXX.dart 파일에 N 번째줄에 함수에 아래 코드를 추가하여 동작 시킬 수 있습니다.
+            
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => gotoScene!()),
+            );
+
+        ## issue num(optional)
+            이슈 링크 참조
+
+4. 코드 리뷰 이후 관리자가 merge 허용
+
+
 ## 이슈관리
 
 
