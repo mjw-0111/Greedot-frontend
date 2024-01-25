@@ -1,7 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'login.dart'; //
 import '../../widget/design/settingColor.dart';
 import '../../widget/design/sharedController.dart';
+import '../../models/register_model.dart';
+import '../../service/register_service.dart';
+import 'package:http/http.dart' as http;
 
 class SignupScreen extends StatelessWidget {
   @override
@@ -21,28 +25,86 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-  // TextEditingController _usernameController = TextEditingController();
-  // TextEditingController _emailController = TextEditingController();
-  // TextEditingController _passwordController = TextEditingController();
-  // TextEditingController _confirmPasswordController = TextEditingController();
 
-  void _register() {
-    if (passwordController.text == confirmPasswordController.text) {
-      // 비밀번호가 일치하면 로그인 화면으로 이동
-      Navigator.of(context).push(
-        MaterialPageRoute(
-          builder: (context) => LogIn(),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('비밀번호가 일치하지 않습니다'),
-          backgroundColor: colorSnackBar_greedot,
-          duration: Duration(seconds: 2),
-        ),
-      );
+  //회원가입 로직
+  Future<void> _register() async {
+    if (passwordController.text != confirmPasswordController.text) {
+      _showPasswordMismatchError();
+      return;
     }
+    final model = RegisterModel(
+      email: emailController.text,
+      nickname: usernameController.text,
+      password: passwordController.text,
+    );
+    final response = await ApiService.registerUser(model);
+
+    _handleResponse(response);
+  }
+
+  // http 응답 200이면 넘어가고 아니면 에러 메세지 출력
+  void _handleResponse(http.Response response) {
+    if (response.statusCode == 200) {
+      _showSuccessDialog();
+    } else {
+      final errorMessage = _extractErrorMessage(response);
+      _showRegistrationFailedError(errorMessage);
+    }
+  }
+
+  //응답 처리 인코딩 함수
+  String _extractErrorMessage(http.Response response) {
+    try {
+      final decodedResponse = jsonDecode(utf8.decode(response.bodyBytes));
+      return decodedResponse['detail'] ?? '알 수 없는 오류가 발생했습니다.';
+    } catch (e) {
+      return '응답 처리 중 오류가 발생했습니다.';
+    }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("회원가입 성공"),
+          content: Text("회원가입이 성공적으로 완료되었습니다."),
+          actions: <Widget>[
+            TextButton(
+              child: Text("확인"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => LogIn()), // Login 페이지 경로 확인 필요
+                      (Route<dynamic> route) => false,
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showRegistrationFailedError(errorMessage) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+
+        content: Text(errorMessage),
+        backgroundColor: colorSnackBar_greedot,
+        duration: Duration(seconds: 2),
+      ),
+    );
+  }
+
+  void _showPasswordMismatchError() {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('비밀번호가 일치하지 않습니다'),
+        backgroundColor: colorSnackBar_greedot,
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -144,7 +206,7 @@ class _SignupPageState extends State<SignupPage> {
               style: ElevatedButton.styleFrom(
                 backgroundColor: colorBut_greedot,
               ),
-              child: Text('로그인 화면 이동'),
+              child: Text('회원가입'),
             ),
           ],
         ),
