@@ -5,7 +5,7 @@ import '../screen/rigging/getImage.dart';
 import '../widget/design/settingColor.dart';
 import './drawer/drawer.dart';
 import './rigging/drawSkeleton.dart';
-
+import '/screen/login/login.dart';
 String currentPageKey = 'RootScreen';
 
 class Navigation_Greedot extends StatefulWidget {
@@ -46,7 +46,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
                 _changePage('getImage_greedot');
                 break;
               case 2:
-                _changePage('RootScreen');
+                _changePage('LogIn');
                 break;
               default:
                 _changePage('RootScreen');
@@ -72,6 +72,8 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         return RootScreen(onPageChange: _changePage);
       case 'getImage_greedot':
         return const getImage_greedot();
+      case 'LogIn':
+        return LogIn();
       default:
         return RootScreen(onPageChange: _changePage);
     }
