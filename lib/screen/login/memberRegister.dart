@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'login.dart'; //
 import '../../widget/design/settingColor.dart';
 import '../../widget/design/sharedController.dart';
-import '../../models/register_model.dart';
-import '../../service/register_service.dart';
+import '../../models/user_model.dart';
+import '../../service/user_service.dart';
 import 'package:http/http.dart' as http;
 
 class SignupScreen extends StatelessWidget {
@@ -29,7 +29,7 @@ class _SignupPageState extends State<SignupPage> {
   //회원가입 로직
   Future<void> _register() async {
     if (passwordController.text != confirmPasswordController.text) {
-      _showPasswordMismatchError();
+      _showPasswordMismatchError(context);
       return;
     }
     final model = RegisterModel(
@@ -45,10 +45,10 @@ class _SignupPageState extends State<SignupPage> {
   // http 응답 200이면 넘어가고 아니면 에러 메세지 출력
   void _handleResponse(http.Response response) {
     if (response.statusCode == 200) {
-      _showSuccessDialog();
+      _showSuccessDialog(context);
     } else {
       final errorMessage = _extractErrorMessage(response);
-      _showRegistrationFailedError(errorMessage);
+      _showRegistrationFailedError(context, errorMessage);
     }
   }
 
@@ -60,51 +60,6 @@ class _SignupPageState extends State<SignupPage> {
     } catch (e) {
       return '응답 처리 중 오류가 발생했습니다.';
     }
-  }
-
-  void _showSuccessDialog() {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("회원가입 성공"),
-          content: Text("회원가입이 성공적으로 완료되었습니다."),
-          actions: <Widget>[
-            TextButton(
-              child: Text("확인"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(builder: (context) => LogIn()), // Login 페이지 경로 확인 필요
-                      (Route<dynamic> route) => false,
-                );
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _showRegistrationFailedError(errorMessage) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-
-        content: Text(errorMessage),
-        backgroundColor: colorSnackBar_greedot,
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
-
-  void _showPasswordMismatchError() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('비밀번호가 일치하지 않습니다'),
-        backgroundColor: colorSnackBar_greedot,
-        duration: Duration(seconds: 2),
-      ),
-    );
   }
 
   @override
@@ -213,4 +168,48 @@ class _SignupPageState extends State<SignupPage> {
       ),
     );
   }
+}
+void _showSuccessDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("회원가입 성공"),
+        content: Text("회원가입이 성공적으로 완료되었습니다."),
+        actions: <Widget>[
+          TextButton(
+            child: Text("확인"),
+            onPressed: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (context) => LogIn()), // Login 페이지 경로 확인 필요
+                    (Route<dynamic> route) => false,
+              );
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
+
+void _showRegistrationFailedError(BuildContext context, errorMessage) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+
+      content: Text(errorMessage),
+      backgroundColor: colorSnackBar_greedot,
+      duration: Duration(seconds: 2),
+    ),
+  );
+}
+
+void _showPasswordMismatchError(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('비밀번호가 일치하지 않습니다'),
+      backgroundColor: colorSnackBar_greedot,
+      duration: Duration(seconds: 2),
+    ),
+  );
 }

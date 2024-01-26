@@ -1,11 +1,12 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
-//import 'homePage.dart';
-import '../root.dart';
+import '../../models/user_model.dart';
+import '../../service/user_service.dart';
 import '../../widget/design/settingColor.dart';
+import '../root.dart';
 import 'memberRegister.dart';
 import '../../widget/design/sharedController.dart';
 import 'findPassword.dart';
-import '../../screen/rigging/riggingRoot.dart';
 
 class LogIn extends StatefulWidget {
   @override
@@ -13,8 +14,26 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-  TextEditingController controller = TextEditingController();
-  TextEditingController controller2 = TextEditingController();
+
+  Future<void> _login() async {
+    final loginModel = LoginModel(
+      email: loginEmailController.text,
+      password: loginPasswordController.text,
+    );
+    final response = await ApiService.loginUser(loginModel);
+    if (response.statusCode == 200) {
+      currentPageKey = 'RootScreen'; // RootScreen으로 이동
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Navigation_Greedot()),
+      );
+    } else {
+      // 로그인 실패 처리
+      final responseData = json.decode(response.body);
+      final errorMessage = responseData['message'] ?? '로그인에 실패했습니다.';
+      _showLoginFailedDialog(context, errorMessage);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,22 +67,22 @@ class _LogInState extends State<LogIn> {
                           return Column(
                             children: [
                               TextField(
-                                controller: controller,
+                                controller: loginEmailController,
                                 autofocus: true,
                                 decoration:
                                 InputDecoration(
-                                    labelText: 'Enter email',
-                                    hintText: 'mjw01@hello.com',
+                                    labelText: 'email',
+                                    hintText: 'example@nate.com',
                                     hintStyle: TextStyle(color: Colors.grey),
                                     icon: Icon(Icons.mail_outline)
                                 ),
                                 keyboardType: TextInputType.emailAddress,
                               ),
                               TextField(
-                                controller: controller2,
+                                controller: loginPasswordController,
                                 decoration:
                                 InputDecoration(
-                                    labelText: 'Enter password',
+                                    labelText: 'password',
                                     icon: Icon(Icons.lock_outline)
                                 ),
                                 keyboardType: TextInputType.text,
@@ -76,26 +95,7 @@ class _LogInState extends State<LogIn> {
                                   minWidth: 100.0,
                                   height: 50.0,
                                   child: ElevatedButton(
-                                    onPressed: () {
-                                      if (controller.text == emailController.text &&
-                                          controller2.text == passwordController.text) {
-                                        Navigator.push(context,
-                                            MaterialPageRoute(builder: (context) => Navigation_Greedot()),
-                                        );
-                                      } else if (controller.text ==
-                                          emailController.text &&
-                                          controller2.text != passwordController.text) {
-                                        showSnackBar(
-                                            context, Text('비밀번호를 다시 확인해주세요'));
-                                      } else if (controller.text !=
-                                          emailController.text &&
-                                          controller2.text == passwordController.text) {
-                                        showSnackBar(context, Text('이메일 주소를 다시 확인해주세요'));
-                                      } else {
-                                        showSnackBar(
-                                            context, Text('회원 정보를 다시 확인해주세요'));
-                                      }
-                                    },
+                                    onPressed: _login,
                                     child: Icon(
                                       Icons.arrow_forward,
                                       color: colorText_greedot,
@@ -157,4 +157,22 @@ void showSnackBar(BuildContext context, Text text) {
     backgroundColor: colorSnackBar_greedot,
   );
   ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+void _showLoginFailedDialog(BuildContext context, String errorMessage) {
+  showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text('로그인 실패'),
+      content: Text(errorMessage),
+      actions: <Widget>[
+        TextButton(
+          child: Text('확인'),
+          onPressed: () {
+            Navigator.of(ctx).pop();
+          },
+        ),
+      ],
+    ),
+  );
 }

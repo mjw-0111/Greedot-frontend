@@ -68,6 +68,7 @@ flutter:
     - assets/images/test.png
     - assets/images/masking.png
     - assets/images/kid.png
+    - assets/images/gree.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
