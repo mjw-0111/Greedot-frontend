@@ -14,24 +14,24 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-
   Future<void> _login() async {
     final loginModel = LoginModel(
       email: loginEmailController.text,
       password: loginPasswordController.text,
     );
-    final response = await ApiService.loginUser(loginModel);
-    if (response.statusCode == 200) {
+    final response = 200; //await ApiService.loginUser(loginModel);
+    if (response == 200) {
+      //.statusCode == 200) {
       currentPageKey = 'RootScreen'; // RootScreen으로 이동
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Navigation_Greedot()),
       );
     } else {
-      // 로그인 실패 처리
-      final responseData = json.decode(response.body);
-      final errorMessage = responseData['message'] ?? '로그인에 실패했습니다.';
-      _showLoginFailedDialog(context, errorMessage);
+      // 로그인 실패 처리 서버 열리기 전까지는 사용 불가
+      // final responseData = json.decode(response.body);
+      // final errorMessage = responseData['message'] ?? '로그인에 실패했습니다.';
+      // _showLoginFailedDialog(context, errorMessage);
     }
   }
 
@@ -56,93 +56,96 @@ class _LogInState extends State<LogIn> {
               ),
               Form(
                   child: Theme(
-                    data: ThemeData(
-                        primaryColor: Colors.grey,
-                        inputDecorationTheme: InputDecorationTheme(
-                            labelStyle:
-                            TextStyle(color: colorSnackBar_greedot, fontSize: 15.0))),
-                    child: Container(
-                        padding: EdgeInsets.all(40.0),
-                        child: Builder(builder: (context) {
-                          return Column(
-                            children: [
-                              TextField(
-                                controller: loginEmailController,
-                                autofocus: true,
-                                decoration:
-                                InputDecoration(
-                                    labelText: 'email',
-                                    hintText: 'example@nate.com',
-                                    hintStyle: TextStyle(color: Colors.grey),
-                                    icon: Icon(Icons.mail_outline)
+                data: ThemeData(
+                    primaryColor: Colors.grey,
+                    inputDecorationTheme: InputDecorationTheme(
+                        labelStyle: TextStyle(
+                            color: colorSnackBar_greedot, fontSize: 15.0))),
+                child: Container(
+                    padding: EdgeInsets.all(40.0),
+                    child: Builder(builder: (context) {
+                      return Column(
+                        children: [
+                          TextField(
+                            controller: loginEmailController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                                labelText: 'email',
+                                hintText: 'example@nate.com',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                icon: Icon(Icons.mail_outline)),
+                            keyboardType: TextInputType.emailAddress,
+                          ),
+                          TextField(
+                            controller: loginPasswordController,
+                            decoration: InputDecoration(
+                                labelText: 'password',
+                                icon: Icon(Icons.lock_outline)),
+                            keyboardType: TextInputType.text,
+                            obscureText: true, // 비밀번호 안보이도록 하는 것
+                          ),
+                          SizedBox(
+                            height: 40.0,
+                          ),
+                          ButtonTheme(
+                              minWidth: 100.0,
+                              height: 50.0,
+                              child: ElevatedButton(
+                                onPressed: _login,
+                                child: Icon(
+                                  Icons.arrow_forward,
+                                  color: colorText_greedot,
+                                  size: 35.0,
                                 ),
-                                keyboardType: TextInputType.emailAddress,
-                              ),
-                              TextField(
-                                controller: loginPasswordController,
-                                decoration:
-                                InputDecoration(
-                                    labelText: 'password',
-                                    icon: Icon(Icons.lock_outline)
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: colorBut_greedot,
                                 ),
-                                keyboardType: TextInputType.text,
-                                obscureText: true, // 비밀번호 안보이도록 하는 것
-                              ),
-                              SizedBox(
-                                height: 40.0,
-                              ),
-                              ButtonTheme(
-                                  minWidth: 100.0,
-                                  height: 50.0,
-                                  child: ElevatedButton(
-                                    onPressed: _login,
-                                    child: Icon(
-                                      Icons.arrow_forward,
-                                      color: colorText_greedot,
-                                      size: 35.0,
-                                    ),
-                                    style: ElevatedButton.styleFrom(
-                                      backgroundColor: colorBut_greedot,
-                                    ),
-                                  )),
-                              SizedBox(height: 10),
-                              Align(
-                                alignment: Alignment.bottomCenter,
-                                child: Row( // 'child'를 추가해야 합니다.
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => SignupScreen()),
-                                        );
-                                      },
-                                      child: Text(
-                                        '회원가입 하기',
-                                        style: TextStyle(color: colorSnackBar_greedot),
-                                      ),
-                                    ),
-                                    Text('|', style: TextStyle(color: colorSnackBar_greedot)),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(builder: (context) => FindPassword()),
-                                        );
-                                      },
-                                      child: Text(
-                                        '아이디·비밀번호 찾기',
-                                        style: TextStyle(color: colorSnackBar_greedot),
-                                      ),
-                                    ),
-                                  ],
+                              )),
+                          SizedBox(height: 10),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Row(
+                              // 'child'를 추가해야 합니다.
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignupScreen()),
+                                    );
+                                  },
+                                  child: Text(
+                                    '회원가입 하기',
+                                    style:
+                                        TextStyle(color: colorSnackBar_greedot),
+                                  ),
                                 ),
-                              )
-                            ],
-                          );
-                        })),
-                  ))
+                                Text('|',
+                                    style: TextStyle(
+                                        color: colorSnackBar_greedot)),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => FindPassword()),
+                                    );
+                                  },
+                                  child: Text(
+                                    '아이디·비밀번호 찾기',
+                                    style:
+                                        TextStyle(color: colorSnackBar_greedot),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      );
+                    })),
+              ))
             ],
           ),
         ),
