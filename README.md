@@ -18,7 +18,6 @@ gitcommit template 설정 방법
 
 1. .gitmessage 수정 예시
 
-        ...
         ################
         # feature : 새로운 기능 추가
         # fix : 버그 수정
@@ -35,7 +34,6 @@ gitcommit template 설정 방법
         ################
         # 꼬릿말(footer)을 아랫줄에 작성    (관련된 이슈 번호 추가)(optional)
         Fixes: issue #N 
-        ...
 
 2. template 과 vscode 연결
 
