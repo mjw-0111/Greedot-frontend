@@ -40,7 +40,7 @@ class drawer_greedot extends StatelessWidget {
             listTileIcon: Icons.home,
             listTileText: "home",
             onTap: () {
-              pageNavi.changePage('RootScreen');
+              pageNavi.changePage('RiggingRoot');
               Navigator.of(context).pop(); // 드로어를 닫습니다.
             },
           ),

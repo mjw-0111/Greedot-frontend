@@ -7,17 +7,17 @@ import '../../structure/structureInit.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-//design setting for getImage_greedot
+//design setting for GetImage_greedot
 double paddingForButtons = 30; //다 상대적인 값으로 교체 예정
 double canvasSize = 400;
 
-class getImage_greedot extends StatefulWidget {
-  const getImage_greedot({Key? key}) : super(key: key);
+class GetImage_greedot extends StatefulWidget {
+  const GetImage_greedot({Key? key}) : super(key: key);
   @override
-  State<getImage_greedot> createState() => _getImageState();
+  State<GetImage_greedot> createState() => _getImageState();
 }
 
-class _getImageState extends State<getImage_greedot> {
+class _getImageState extends State<GetImage_greedot> {
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
 

@@ -5,8 +5,8 @@ import './drawSkeleton.dart';
 import '../../widget/design/settingColor.dart';
 import '../../provider/pageNavi.dart';
 
-class RootScreen extends StatelessWidget {
-  const RootScreen({Key? key}) : super(key: key);
+class RiggingRoot extends StatelessWidget {
+  const RiggingRoot({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

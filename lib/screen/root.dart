@@ -10,7 +10,7 @@ import './drawer/drawer.dart';
 import './rigging/drawSkeleton.dart';
 import '/screen/login/login.dart';
 
-String currentPageKey = 'RootScreen';
+String currentPageKey = 'RiggingRoot';
 
 class Navigation_Greedot extends StatefulWidget {
   const Navigation_Greedot({super.key});
@@ -21,6 +21,23 @@ class Navigation_Greedot extends StatefulWidget {
 
 class _Navigation_GreedotState extends State<Navigation_Greedot> {
   int currentPageIndex = 0;
+
+  //추가할 페이지 case에 추가
+  Widget buildBody(String pageKey) {
+    switch (pageKey) {
+      case 'RiggingRoot':
+        return RiggingRoot();
+      case 'GetImage_greedot':
+        return GetImage_greedot();
+      case 'LogIn':
+        return LogIn();
+      case 'SkeletonCanvas':
+        return SkeletonCanvas();
+
+      default:
+        return RiggingRoot();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +57,16 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
           String pageKey;
           switch (index) {
             case 0:
-              pageKey = 'RootScreen';
+              pageKey = 'RiggingRoot';
               break;
             case 1:
-              pageKey = 'getImage_greedot';
+              pageKey = 'GetImage_greedot';
               break;
             case 2:
               pageKey = 'LogIn';
               break;
             default:
-              pageKey = 'RootScreen';
+              pageKey = 'RiggingRoot';
               break;
           }
           pageNavi.changePage(pageKey);
@@ -66,29 +83,14 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
 
   int _getCurrentPageIndex(String pageKey) {
     switch (pageKey) {
-      case 'RootScreen':
+      case 'RiggingRoot':
         return 0;
-      case 'getImage_greedot':
+      case 'GetImage_greedot':
         return 1;
       case 'LogIn':
         return 2;
       default:
         return 0;
-    }
-  }
-
-  Widget buildBody(String pageKey) {
-    switch (pageKey) {
-      case 'RootScreen':
-        return RootScreen();
-      case 'getImage_greedot':
-        return getImage_greedot();
-      case 'LogIn':
-        return LogIn();
-      case 'SkeletonCanvas':
-        return SkeletonCanvas();
-      default:
-        return RootScreen();
     }
   }
 

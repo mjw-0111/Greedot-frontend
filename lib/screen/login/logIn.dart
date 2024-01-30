@@ -22,7 +22,7 @@ class _LogInState extends State<LogIn> {
     final response = 200; //await ApiService.loginUser(loginModel);
     if (response == 200) {
       //.statusCode == 200) {
-      currentPageKey = 'RootScreen'; // RootScreen으로 이동
+      currentPageKey = 'RiggingRoot'; // RiggingRoot으로 이동
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Navigation_Greedot()),
