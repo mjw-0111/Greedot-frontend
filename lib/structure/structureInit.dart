@@ -4,6 +4,9 @@ import '../structure/structure.dart';
 
 import 'package:image_picker/image_picker.dart';
 
+//로그인 여부 확인 향후 backend로 빼야할수도 있음
+bool? isLogIn;
+
 //임시 선언 위치
 XFile? importedImage;
 
