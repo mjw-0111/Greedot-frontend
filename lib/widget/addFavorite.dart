@@ -64,7 +64,7 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
             child: Padding(
               padding: EdgeInsets.only(bottom: 35),
               child: Small_EleButton_greedot(
-                gotoScene: () => getImage_greedot(),
+                gotoScene: () => GetImage_greedot(),
                 buttonText: "대화 시작",
               ),
             ),

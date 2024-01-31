@@ -1,4 +1,7 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import '../../models/user_model.dart';
+import '../../service/user_service.dart';
 import '../root.dart';
 import '../../widget/design/settingColor.dart';
 import 'memberRegister.dart';
@@ -17,154 +20,168 @@ class _LogInState extends State<LogIn> {
   // TextEditingController controller = TextEditingController();
   // TextEditingController controller2 = TextEditingController();
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+  Future<void> _login() async {
+    final loginModel = LoginModel(
+      email: loginEmailController.text,
+      password: loginPasswordController.text,
+    );
+    final response = 200; //await ApiService.loginUser(loginModel);
+    if (response == 200) {
+      //.statusCode == 200) {
+      currentPageKey = 'RiggingRoot'; // RiggingRoot으로 이동
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Navigation_Greedot()),
+      );
+    } else {
+      // 로그인 실패 처리 서버 열리기 전까지는 사용 불가
+      // final responseData = json.decode(response.body);
+      // final errorMessage = responseData['message'] ?? '로그인에 실패했습니다.';
+      // _showLoginFailedDialog(context, errorMessage);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: colorMainBG_greedot,
-      child: Builder(
-          builder: (BuildContext context) {
-            return GestureDetector(
-              onTap: () {
-                FocusScope.of(context).unfocus();
-              },
-              child: ScaffoldMessenger(
-                key: scaffoldMessengerKey,
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Padding(padding: EdgeInsets.only(top: 50)),
-                      Center(
-                        child: Image(
-                          image: AssetImage('assets/images/gree.png'),
-                          width: 200.0,
-                        ),
-                      ),
-                      Form(
-                        child: Theme(
-                          data: ThemeData(
-                              primaryColor: Colors.grey,
-                              inputDecorationTheme: InputDecorationTheme(
-                                  labelStyle: TextStyle(color: colorSnackBar_greedot, fontSize: 15.0)
-                              )
-                          ),
-                          child: Container(
-                            padding: EdgeInsets.all(40.0),
-                            child: Column(
-                              children: [
-                                Material(
-                                  child : TextField(
-                                      controller: emailController,
-                                      autofocus: true,
-                                    decoration: InputDecoration(
-                                      labelText: 'Enter email',
-                                      hintText: 'mjw01@hello.com',
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      prefixIcon: Icon(Icons.mail_outline),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                                        borderSide: BorderSide(
-                                          color: colorAppbar_greedot,
-                                        ),
-                                      ),
-                                      filled: true,
-                                      fillColor: colorFilling_greedot,
-                                    ),
-                                    ),
-                                ),
-                                SizedBox(height: 10),
-                                Material(
-                                  child : TextField(
-                                  controller: passwordController,
-                                    decoration: InputDecoration(
-                                      labelText: '비밀번호',
-                                      hintStyle: TextStyle(color: Colors.grey),
-                                      prefixIcon: Icon(Icons.lock_outline),
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                                        borderSide: BorderSide(
-                                          color: colorAppbar_greedot,
-                                        ),
-                                      ),
-                                      filled: true,
-                                      fillColor: colorFilling_greedot,
-                                    ),
-                                  keyboardType: TextInputType.text,
-                                  obscureText: true,
-                                  ),
-                                ),
-                                SizedBox(height: 40.0),
-                                ButtonTheme(
-                                    minWidth: 100.0,
-                                    height: 50.0,
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        // 로그인 버튼 로직
-                                      },
-                                      child: Icon(
-                                        Icons.arrow_forward,
-                                        color: colorText_greedot,
-                                        size: 35.0,
-                                      ),
-                                      style: ElevatedButton.styleFrom(
-                                        backgroundColor: colorBut_greedot,
-                                      ),
-                                    )
-                                ),
-                                SizedBox(height: 10),
-                                Align(
-                                  alignment: Alignment.bottomCenter,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => SignupScreen()),
-                                          );
-                                        },
-                                        child: Text(
-                                          '회원가입 하기',
-                                          style: TextStyle(color: colorSnackBar_greedot),
-                                        ),
-                                      ),
-                                      Text('|', style: TextStyle(color: colorSnackBar_greedot)),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(builder: (context) => FindPassword()),
-                                          );
-                                        },
-                                        child: Text(
-                                          '아이디·비밀번호 찾기',
-                                          style: TextStyle(color: colorSnackBar_greedot),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+    return Scaffold(
+      backgroundColor: colorMainBG_greedot,
+      // email, password 입력하는 부분을 제외한 화면을 탭하면, 키보드 사라지게 GestureDetector 사용
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Padding(padding: EdgeInsets.only(top: 50)),
+              Center(
+                child: Image(
+                  image: AssetImage('assets/images/gree.png'),
+                  width: 200.0,
                 ),
               ),
-            );
-          }
+              Form(
+                  child: Theme(
+                data: ThemeData(
+                    primaryColor: Colors.grey,
+                    inputDecorationTheme: InputDecorationTheme(
+                        labelStyle: TextStyle(
+                            color: colorSnackBar_greedot, fontSize: 15.0))),
+                child: Container(
+                    padding: EdgeInsets.all(40.0),
+                    child: Builder(builder: (context) {
+                      return Column(
+                        children: [
+                          TextField(
+                            controller: loginEmailController,
+                            autofocus: true,
+                            decoration: InputDecoration(
+                                labelText: 'email',
+                                hintText: 'example@nate.com',
+                                hintStyle: TextStyle(color: Colors.grey),
+                                icon: Icon(Icons.mail_outline)),
+                            keyboardType: TextInputType.emailAddress,
+                          ),
+                          TextField(
+                            controller: loginPasswordController,
+                            decoration: InputDecoration(
+                                labelText: 'password',
+                                icon: Icon(Icons.lock_outline)),
+                            keyboardType: TextInputType.text,
+                            obscureText: true, // 비밀번호 안보이도록 하는 것
+                          ),
+                          SizedBox(
+                            height: 40.0,
+                          ),
+                          ButtonTheme(
+                              minWidth: 100.0,
+                              height: 50.0,
+                              child: ElevatedButton(
+                                onPressed: _login,
+                                child: Icon(
+                                  Icons.arrow_forward,
+                                  color: colorText_greedot,
+                                  size: 35.0,
+                                ),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: colorBut_greedot,
+                                ),
+                              )),
+                          SizedBox(height: 10),
+                          Align(
+                            alignment: Alignment.bottomCenter,
+                            child: Row(
+                              // 'child'를 추가해야 합니다.
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => SignupScreen()),
+                                    );
+                                  },
+                                  child: Text(
+                                    '회원가입 하기',
+                                    style:
+                                        TextStyle(color: colorSnackBar_greedot),
+                                  ),
+                                ),
+                                Text('|',
+                                    style: TextStyle(
+                                        color: colorSnackBar_greedot)),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => FindPassword()),
+                                    );
+                                  },
+                                  child: Text(
+                                    '아이디·비밀번호 찾기',
+                                    style:
+                                        TextStyle(color: colorSnackBar_greedot),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      );
+                    })),
+              ))
+            ],
+          ),
+        ),
       ),
     );
   }
+}
 
-  void showSnackBar(BuildContext context, Text text) {
-    final snackBar = SnackBar(
-      content: text,
-      backgroundColor: colorSnackBar_greedot,
-    );
-    scaffoldMessengerKey.currentState?.showSnackBar(snackBar);
-  }
+void showSnackBar(BuildContext context, Text text) {
+  final snackBar = SnackBar(
+    content: text,
+    backgroundColor: colorSnackBar_greedot,
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+}
+
+void _showLoginFailedDialog(BuildContext context, String errorMessage) {
+  showDialog(
+    context: context,
+    builder: (ctx) => AlertDialog(
+      title: Text('로그인 실패'),
+      content: Text(errorMessage),
+      actions: <Widget>[
+        TextButton(
+          child: Text('확인'),
+          onPressed: () {
+            Navigator.of(ctx).pop();
+          },
+        ),
+      ],
+    ),
+  );
 }

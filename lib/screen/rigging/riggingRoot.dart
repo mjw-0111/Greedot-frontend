@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:projectfront/widget/design/basicButtons.dart';
+import './drawSkeleton.dart';
 import 'drawSkeleton.dart';
 import '../../widget/design/settingColor.dart';
+import '../../provider/pageNavi.dart';
 import '../gree/favoriteList.dart';
 import '../gree/keepItem.dart';
 import '../../widget/addFavorite.dart';
 
 
-class RootScreen extends StatefulWidget {
-  const RootScreen({Key? key}) : super(key: key);
+class RiggingRoot extends StatefulWidget {
+  const RiggingRoot({Key? key}) : super(key: key);
 
   @override
-  _RootScreenState createState() => _RootScreenState();
+  _RiggingRootState createState() => _RiggingRootState();
 }
 
-class _RootScreenState extends State<RootScreen> {
+class _RiggingRootState extends State<RiggingRoot> {
   int activeIndex = 0;
+
+// class RiggingRoot extends StatelessWidget {
+//   const RiggingRoot({Key? key}) : super(key: key);
 
   final List<String> imagePaths = [
     'assets/images/gree.png',
@@ -33,10 +39,13 @@ class _RootScreenState extends State<RootScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // PageNavi Provider를 가져옵니다.
+    final pageNavi = Provider.of<PageNavi>(context, listen: false);
+
+
     Size screenSize = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: Container(
+    return Container(
         width: screenSize.width,
         height: screenSize.height,
         color: colorMainBG_greedot,
@@ -102,12 +111,12 @@ class _RootScreenState extends State<RootScreen> {
                 children: <Widget>[
                   const SizedBox(height: 35),
                   Big_EleButton_greedot(
-                    gotoScene: () => FavoriteListPage(),
+                    additionalFunc: () => pageNavi.changePage('FavoriteListPage'),
                     buttonText: "AI 친구들 모아보기",
                   ),
                   const SizedBox(height: 15),
                   Big_EleButton_greedot(
-                    gotoScene: () => SkeletonCanvas(),
+                    additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     buttonText: "우리아이 대화 보기",
                   ),
                 ],
@@ -122,12 +131,13 @@ class _RootScreenState extends State<RootScreen> {
                 children: <Widget>[
                   const SizedBox(height: 35),
                   Big_EleButton_greedot(
+                    additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     gotoScene: () => SkeletonCanvas(),
                     buttonText: "새 AI 친구 만들기",
                   ),
                   const SizedBox(height: 15),
                   Big_EleButton_greedot(
-                    gotoScene: () => SkeletonCanvas(),
+                    additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     buttonText: "같이 게임하기(?)",
                   ),
                 ],
@@ -135,8 +145,8 @@ class _RootScreenState extends State<RootScreen> {
             ),
           ],
         ),
-      ),
-    );
+      );
+
   }
 }
 

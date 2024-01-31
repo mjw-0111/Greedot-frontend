@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import '../../widget/design/settingColor.dart';
 import '../../widget/design/basicButtons.dart';
@@ -8,19 +7,35 @@ import '../../structure/structureInit.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
-//design setting for getImage_greedot
+//design setting for GetImage_greedot
 double paddingForButtons = 10; //다 상대적인 값으로 교체 예정
 double canvasSize = 350;
 
-class getImage_greedot extends StatefulWidget {
-  const getImage_greedot({Key? key}) : super(key: key);
+class GetImage_greedot extends StatefulWidget {
+  const GetImage_greedot({Key? key}) : super(key: key);
   @override
-  State<getImage_greedot> createState() => _getImageState();
+  State<GetImage_greedot> createState() => _getImageState();
 }
 
-class _getImageState extends State<getImage_greedot> {
+class _getImageState extends State<GetImage_greedot> {
   XFile? _image; //이미지를 담을 변수 선언
   final ImagePicker picker = ImagePicker(); //ImagePicker 초기화
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: colorMainBG_greedot,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 30, width: double.infinity),
+          _buildPhotoArea(),
+          const SizedBox(height: 20),
+          _buildButton(),
+        ],
+      ),
+    );
+  }
 
   //이미지를 가져오는 함수
   Future getImage(ImageSource imageSource) async {
@@ -49,27 +64,6 @@ class _getImageState extends State<getImage_greedot> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: colorMainBG_greedot,
-
-        body: Center(
-          child : Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(height: 30, width: double.infinity),
-              _buildPhotoArea(),
-              SizedBox(height: 30),
-              _buildButton(),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
 
   Widget _buildPhotoArea() {
     return Center( // Center 위젯을 사용하여 가운데로 정렬합니다.
@@ -115,7 +109,4 @@ class _getImageState extends State<getImage_greedot> {
       ],
     );
   }
-
-
-
 }

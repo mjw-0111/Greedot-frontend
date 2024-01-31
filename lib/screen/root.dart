@@ -1,38 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../screen/rigging/riggingRoot.dart';
 import '../screen/rigging/getImage.dart';
 import '../widget/design/settingColor.dart';
+import '../provider/pageNavi.dart';
+
 import './drawer/drawer.dart';
 import './rigging/drawSkeleton.dart';
-import 'login/logIn.dart';
+import '/screen/login/login.dart';
+import '/screen/gree/favoriteList.dart';
 
-String currentPageKey = 'RootScreen';
+String currentPageKey = 'RiggingRoot';
 
 class Navigation_Greedot extends StatefulWidget {
-  final int initialPageIndex;
-  const Navigation_Greedot({super.key, this.initialPageIndex=0});
+  const Navigation_Greedot({super.key});
 
   @override
   State<Navigation_Greedot> createState() => _Navigation_GreedotState();
 }
 
 class _Navigation_GreedotState extends State<Navigation_Greedot> {
-  late int currentPageIndex = 0;
+  int currentPageIndex = 0;
 
-  void _changePage(String pageKey) {
-    setState(() {
-      currentPageKey = pageKey;
-    });
+  //추가할 페이지 case에 추가
+  Widget buildBody(String pageKey) {
+    switch (pageKey) {
+      case 'RiggingRoot':
+        return RiggingRoot();
+      case 'GetImage_greedot':
+        return GetImage_greedot();
+      case 'LogIn':
+        return LogIn();
+      case 'SkeletonCanvas':
+        return SkeletonCanvas();
+      case 'FavoriteListPage':
+        return FavoriteListPage();
+      default:
+        return RiggingRoot();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-      return GestureDetector(
-          onTap: () {
-            // 포커스를 제거하여 키보드를 숨깁니다.
-        FocusScope.of(context).unfocus();
-      },
-      child : Scaffold(
+    final pageNavi = Provider.of<PageNavi>(context);
+
+    return Scaffold(
       appBar: AppBar(
         title: const Text("Greedot"),
         backgroundColor: colorMainBG_greedot,
@@ -41,50 +54,45 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
       ),
       endDrawer: const drawer_greedot(),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentPageIndex,
+        currentIndex: _getCurrentPageIndex(pageNavi.currentPageKey),
         onTap: (int index) {
-          setState(() {
-            switch (index) {
-              case 0:
-                _changePage('RootScreen');
-                break;
-              case 1:
-                _changePage('getImage_greedot');
-                break;
-              case 2:
-                _changePage('logIn_greedot'); // 로그인 페이지로 바꾸기
-                break;
-              default:
-                _changePage('RootScreen');
-                break;
-            }
-            currentPageIndex = index;
-          });
+          String pageKey;
+          switch (index) {
+            case 0:
+              pageKey = 'RiggingRoot';
+              break;
+            case 1:
+              pageKey = 'GetImage_greedot';
+              break;
+            case 2:
+              pageKey = 'LogIn';
+              break;
+            default:
+              pageKey = 'RiggingRoot';
+              break;
+          }
+          pageNavi.changePage(pageKey);
         },
-        backgroundColor: colorSnackBar_greedot,
+        backgroundColor: colorNaviBar_greedot,
         selectedItemColor: colorText_greedot,
         //todo 색수정
         unselectedItemColor: colorText_greedot,
         items: bottomNavigationBarItems,
       ),
-      body: buildBody(currentPageKey),
-      ),
+      body: buildBody(pageNavi.currentPageKey),
     );
   }
 
-  Widget buildBody(String pageKey) { // 로그인 페이지 추가하기
-    // 현재 페이지 인덱스에 따라 다른 위젯을 반환합니다.
+  int _getCurrentPageIndex(String pageKey) {
     switch (pageKey) {
-      case 'RootScreen':
-        return RootScreen(); // onPageChange: _changePage
-      case 'getImage_greedot':
-        return const getImage_greedot();
-      case 'logIn':
-        return LogIn();
-      // case '가고싶은페이지':
-      //   return 가고싶은페이지();
+      case 'RiggingRoot':
+        return 0;
+      case 'GetImage_greedot':
+        return 1;
+      case 'LogIn':
+        return 2;
       default:
-        return RootScreen();
+        return 0;
     }
   }
 

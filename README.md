@@ -18,7 +18,6 @@ gitcommit template 설정 방법
 
 1. .gitmessage 수정 예시
 
-        ...
         ################
         # feature : 새로운 기능 추가
         # fix : 버그 수정
@@ -35,14 +34,51 @@ gitcommit template 설정 방법
         ################
         # 꼬릿말(footer)을 아랫줄에 작성    (관련된 이슈 번호 추가)(optional)
         Fixes: issue #N 
-        ...
 
+2. template 과 vscode 연결
 
-2. gitcommit template 
-    git commit
+        git config --global core.editor code
 
-3. vi 편집기가 나온다면
+3. gitcommit template 사용법
+
+        git commit 
+
+4. vi 편집기가 나온다면
     esc -> :wq!
+
+
+## pull request 방법
+
+1. fork한 저장소에 할당된 작업 파일만 push
+2. fork한 저장소 sync 최신화 
+3. 변경 내용 적용 방법과 함께 pull resquest 요청
+
+        # PR 작성 양식
+        
+        ## Work summary
+
+            로그인 기능을 구현하였습니다.
+
+        ## key change
+        
+            00버튼에 팝업 로그인 창 기능을 추가하였습니다.
+            아직 벡엔드 연결은 하지않은 상태이며 향구 해당 기능 추가 예정입니다.
+            해당 기능은 플루터 기본제공 패키지인 [링크]() 사용하여 구현하였습니다.
+        
+        ## How to use
+
+            XXX.dart 파일에 N 번째줄에 함수에 아래 코드를 추가하여 동작 시킬 수 있습니다.
+            
+                Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => gotoScene!()),
+                );
+
+        ## issue num(optional)
+
+            이슈 링크 참조
+
+4. 코드 리뷰 이후 관리자가 merge 허용
 
 
 ## 이슈관리

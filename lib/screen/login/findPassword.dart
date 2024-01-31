@@ -4,11 +4,12 @@ import 'package:flutter/services.dart';
 import '../../widget/design/settingColor.dart'; // Ensure these paths are correct
 import '../../widget/design/sharedController.dart'; // Ensure this path is correct
 import 'package:projectfront/widget/design/basicButtons.dart'; // Ensure this path is correct
+import 'package:provider/provider.dart';
+import '../../provider/pageNavi.dart';
 
 class FindPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final pageNavi = Provider.of<PageNavi>(context, listen: false);
     return MaterialApp(
       home: FindPasswordPage(),
     );
@@ -99,6 +100,8 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    final pageNavi = Provider.of<PageNavi>(context, listen: false);
+
     return Material(
       child: Container(
         color: colorMainBG_greedot,
@@ -138,7 +141,7 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
               ),
               TextButton(
                 onPressed: () {
-                  pageNavi.changePage('LogIn')
+                  pageNavi.changePage('LogIn');
                 },
                 child: Text(
                   'Return to login screen',

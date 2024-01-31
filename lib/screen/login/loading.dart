@@ -18,10 +18,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
       // 2초 후에 다른 화면으로 이동
       Future.delayed(Duration(seconds: 2), () {
         // 이동할 화면으로 네비게이션
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => Navigation_Greedot(initialPageIndex: 1)),
-        );
+
       });
     });
   }
