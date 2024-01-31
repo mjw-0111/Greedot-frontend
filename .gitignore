@@ -52,13 +52,16 @@ app.*.map.json
 /linux
 /web
 /window
+/windows
 .git/
 /macos
-./macos
+./macos 
 ./window
+./windows
 /.gitmessage.txt
 .gitmessage.txt
 *.log
+/trashcan
 
 #####
 **/doc/api/

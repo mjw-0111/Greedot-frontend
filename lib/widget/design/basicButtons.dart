@@ -33,6 +33,7 @@ class EleButton_greedot extends StatelessWidget {
           additionalFunc!(); // additionalFunc이 null이 아닐 때만 호출
         }
         if (gotoScene != null) {
+          //navigation version
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => gotoScene!()),
