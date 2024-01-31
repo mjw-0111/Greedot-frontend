@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
-
 import '../screen/rigging/riggingRoot.dart';
 import '../screen/rigging/getImage.dart';
 import '../widget/design/settingColor.dart';
 import './drawer/drawer.dart';
 import './rigging/drawSkeleton.dart';
+import 'login/logIn.dart';
 
 String currentPageKey = 'RootScreen';
 
 class Navigation_Greedot extends StatefulWidget {
-  const Navigation_Greedot({super.key});
+  final int initialPageIndex;
+  const Navigation_Greedot({super.key, this.initialPageIndex=0});
 
   @override
   State<Navigation_Greedot> createState() => _Navigation_GreedotState();
 }
 
 class _Navigation_GreedotState extends State<Navigation_Greedot> {
-  int currentPageIndex = 0;
+  late int currentPageIndex = 0;
 
   void _changePage(String pageKey) {
     setState(() {
@@ -26,7 +27,12 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+      return GestureDetector(
+          onTap: () {
+            // 포커스를 제거하여 키보드를 숨깁니다.
+        FocusScope.of(context).unfocus();
+      },
+      child : Scaffold(
       appBar: AppBar(
         title: const Text("Greedot"),
         backgroundColor: colorMainBG_greedot,
@@ -46,7 +52,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
                 _changePage('getImage_greedot');
                 break;
               case 2:
-                _changePage('RootScreen');
+                _changePage('logIn_greedot'); // 로그인 페이지로 바꾸기
                 break;
               default:
                 _changePage('RootScreen');
@@ -55,25 +61,30 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
             currentPageIndex = index;
           });
         },
-        backgroundColor: colorNaviBar_greedot,
+        backgroundColor: colorSnackBar_greedot,
         selectedItemColor: colorText_greedot,
         //todo 색수정
         unselectedItemColor: colorText_greedot,
         items: bottomNavigationBarItems,
       ),
       body: buildBody(currentPageKey),
+      ),
     );
   }
 
-  Widget buildBody(String pageKey) {
+  Widget buildBody(String pageKey) { // 로그인 페이지 추가하기
     // 현재 페이지 인덱스에 따라 다른 위젯을 반환합니다.
     switch (pageKey) {
       case 'RootScreen':
-        return RootScreen(onPageChange: _changePage);
+        return RootScreen(); // onPageChange: _changePage
       case 'getImage_greedot':
         return const getImage_greedot();
+      case 'logIn':
+        return LogIn();
+      // case '가고싶은페이지':
+      //   return 가고싶은페이지();
       default:
-        return RootScreen(onPageChange: _changePage);
+        return RootScreen();
     }
   }
 

@@ -32,8 +32,8 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
 
   // TODO 이부분 수정해야함 값 받아오는게 곤란하군
   // segment 단계에서 resizing이 들어가기 때문에 고정값
-  double imageWidth = 400;
-  double imageHeight = 400;
+  double imageWidth = 350;
+  double imageHeight = 350;
 
   @override
   Widget build(BuildContext context) {
@@ -46,8 +46,10 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
       child: Stack(
         children: [
           Container(
+            alignment: Alignment.topCenter,
+            padding: EdgeInsets.only(top: 50),
             decoration: BoxDecoration(
-              color: colorNaviBar_greedot, // 배경 색상 추가
+              color: colorMainBG_greedot, // 배경 색상 추가
             ),
             child: _buildPhotoArea(importedImage),
           ),
@@ -57,16 +59,16 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
             ),
           ),
           Align(
-            alignment: Alignment.bottomRight,
+            alignment: Alignment.bottomCenter,
             child: Padding(
               padding: const EdgeInsets.all(10.0),
-              child: Column(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: <Widget>[
                   EleButton_greedot(
                     height: 40, // 높이 설정
-                    width: 100, // 너비 설정
+                    width: 120, // 너비 설정
                     additionalFunc: () {
                       for (var node in skeletonInfo) {
                         print(
@@ -75,10 +77,10 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
                     },
                     buttonText: '좌표 출력',
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(width: 10),
                   EleButton_greedot(
                     height: 40,
-                    width: 100,
+                    width: 120,
                     additionalFunc: () async {
                       await writeNodesToYaml(
                           skeletonInfo, imageWidth!, imageHeight!);
@@ -87,10 +89,10 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
                     },
                     buttonText: 'Yaml 저장',
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(width: 10),
                   EleButton_greedot(
                     height: 40,
-                    width: 100,
+                    width: 120,
                     gotoScene: () => SkeletonCanvas(),
                     buttonText: '홈으로 가기',
                   ),
@@ -98,6 +100,7 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
               ),
             ),
           ),
+          SizedBox(height:50),
           // Draggable buttons
           ...List.generate(skeletonInfo.length, (index) {
             //List.generate 버튼 수 만큼의 리스트를 생성

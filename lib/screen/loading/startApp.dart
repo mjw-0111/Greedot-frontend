@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../root.dart';
+import '../../widget/design/settingColor.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -48,7 +49,7 @@ class _SplashScreenState extends State<SplashScreen> {
         data: MediaQuery.of(context)
             .copyWith(textScaler: const TextScaler.linear(1.0)),
         child: Scaffold(
-          backgroundColor: Colors.blue,
+          backgroundColor: colorAppbar_greedot,
           body: Container(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
