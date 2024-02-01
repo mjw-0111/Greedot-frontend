@@ -8,8 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 //design setting for GetImage_greedot
-double paddingForButtons = 30; //다 상대적인 값으로 교체 예정
-double canvasSize = 400;
+double paddingForButtons = 10; //다 상대적인 값으로 교체 예정
+double canvasSize = 350;
 
 class GetImage_greedot extends StatefulWidget {
   const GetImage_greedot({Key? key}) : super(key: key);
@@ -48,22 +48,45 @@ class _getImageState extends State<GetImage_greedot> {
     }
   }
 
+  void showUploadSuccessSnackBar() {
+    // Decide the message based on the condition
+    final snackBarContent = _image != null
+        ? Text('성공적으로 업로드되었습니다') // Message for successful upload
+        : Text('업로드에 실패했습니다'); // Message for failed upload
+
+    // Show the Snackbar with the decided content
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: snackBarContent,
+        duration: Duration(seconds: 2),
+        backgroundColor: colorSnackBar_greedot,
+      ),
+    );
+  }
+
+
   Widget _buildPhotoArea() {
-    return _image != null
-        ? Container(
-            width: canvasSize,
-            height: canvasSize,
-            child: Image.file(File(_image!.path)), //가져온 이미지를 화면에 띄워주는 코드
-          )
-        : Container(
-            width: canvasSize,
-            height: canvasSize,
-            color: Colors.grey,
-          );
+    return Center( // Center 위젯을 사용하여 가운데로 정렬합니다.
+      child: Container(
+        width: canvasSize,
+        height: canvasSize,
+        decoration: _image != null
+            ? BoxDecoration(
+          image: DecorationImage(
+            image: FileImage(File(_image!.path)), // 이미지 파일을 화면에 띄워줍니다.
+            fit: BoxFit.cover, // 이미지가 컨테이너를 꽉 채우도록 설정합니다.
+          ),
+        )
+            : BoxDecoration(
+          color: Colors.grey, // 이미지가 없을 경우 회색 배경을 표시합니다.
+        ),
+      ),
+    );
   }
 
   Widget _buildButton() {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         EleButton_greedot(
             additionalFunc: () {
@@ -80,6 +103,7 @@ class _getImageState extends State<GetImage_greedot> {
         EleButton_greedot(
             additionalFunc: () {
               importedImage = _image;
+              showUploadSuccessSnackBar();
             },
             buttonText: "업로드"),
       ],

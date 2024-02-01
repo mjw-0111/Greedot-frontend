@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:projectfront/screen/login/findPassword.dart';
 import 'package:provider/provider.dart';
 
 import '../screen/rigging/riggingRoot.dart';
@@ -9,6 +10,8 @@ import '../provider/pageNavi.dart';
 import './drawer/drawer.dart';
 import './rigging/drawSkeleton.dart';
 import '/screen/login/login.dart';
+import '/screen/login/memberRegister.dart';
+import '/screen/gree/favoriteList.dart';
 
 String currentPageKey = 'RiggingRoot';
 
@@ -33,7 +36,12 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         return LogIn();
       case 'SkeletonCanvas':
         return SkeletonCanvas();
-
+      case 'FavoriteListPage':
+        return FavoriteListPage();
+      case 'SignupScreen':
+        return SignupScreen();
+      case 'FindPassword':
+        return FindPassword();
       default:
         return RiggingRoot();
     }
