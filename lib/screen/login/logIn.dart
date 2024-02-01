@@ -6,6 +6,9 @@ import '../root.dart';
 import '../../widget/design/settingColor.dart';
 import 'memberRegister.dart';
 import '../../widget/design/sharedController.dart';
+import '../../provider/pageNavi.dart';
+import 'package:provider/provider.dart';
+import '../../widget/design/basicButtons.dart';
 import 'findPassword.dart';
 import '../../screen/rigging/riggingRoot.dart';
 import 'loading.dart';
@@ -43,6 +46,7 @@ class _LogInState extends State<LogIn> {
 
   @override
   Widget build(BuildContext context) {
+    final pageNavi = Provider.of<PageNavi>(context, listen: false);
     return Scaffold(
       backgroundColor: colorMainBG_greedot,
       // email, password 입력하는 부분을 제외한 화면을 탭하면, 키보드 사라지게 GestureDetector 사용
@@ -116,11 +120,7 @@ class _LogInState extends State<LogIn> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SignupScreen()),
-                                    );
+                                    pageNavi.changePage('SignupScreen');
                                   },
                                   child: Text(
                                     '회원가입 하기',
@@ -133,11 +133,7 @@ class _LogInState extends State<LogIn> {
                                         color: colorSnackBar_greedot)),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => FindPassword()),
-                                    );
+                                    pageNavi.changePage('FindPassword');
                                   },
                                   child: Text(
                                     '아이디·비밀번호 찾기',

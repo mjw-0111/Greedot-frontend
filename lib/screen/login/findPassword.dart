@@ -20,13 +20,13 @@ class FindPassword extends StatelessWidget {
 
 class FindPasswordPage extends StatefulWidget {
   @override
-  _FindPasswordPageState createState() => _FindPasswordPageState();
+  FindPasswordPageState createState() => FindPasswordPageState();
 }
 
-class _FindPasswordPageState extends State<FindPasswordPage> {
+class FindPasswordPageState extends State<FindPasswordPage> {
   TextEditingController confirmEmailController = TextEditingController();
 
-  void _findPassword() {
+  void findPassword() {
     if (confirmEmailController.text == emailController.text) {
       OverlayEntry overlayEntry = OverlayEntry(
         builder: (context) =>
@@ -40,7 +40,7 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
                   height: 100, // 박스 높이
                   alignment: Alignment.center, // 텍스트를 중앙에 위치시킵니다.
                   decoration: BoxDecoration(
-                    color: Colors.white, // 박스 배경색, 필요에 따라 수정하세요.
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(10), // 박스의 모서리를 둥글게
                   ),
                   child: Row(
@@ -131,7 +131,7 @@ class _FindPasswordPageState extends State<FindPasswordPage> {
               ),
               SizedBox(height: 20),
               ElevatedButton(
-                onPressed: _findPassword,
+                onPressed: findPassword,
                 child: Text('Find Password'),
                 style: ElevatedButton.styleFrom(
                   primary: colorBut_greedot,
