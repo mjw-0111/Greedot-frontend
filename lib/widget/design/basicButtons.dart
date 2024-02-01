@@ -13,7 +13,7 @@ class EleButton_greedot extends StatelessWidget {
   //default value setting
   const EleButton_greedot(
       {this.width = 125,
-        this.height = 50,
+        this.height = 45,
         this.bgColor = colorBut_greedot,
         this.textColor = colorText_greedot,
         required this.buttonText,

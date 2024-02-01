@@ -10,8 +10,10 @@ import '../../provider/pageNavi.dart';
 class FindPassword extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: FindPasswordPage(),
+    return Container(
+      width: MediaQuery.of(context).size.width, // 전체 너비
+      height: MediaQuery.of(context).size.height, // 전체 높이
+      child: FindPasswordPage(),
     );
   }
 }
@@ -31,14 +33,23 @@ class FindPasswordPageState extends State<FindPasswordPage> {
       OverlayEntry overlayEntry = OverlayEntry(
         builder: (context) =>
             Container(
-              width: MediaQuery.of(context).size.width, // 전체 너비
-              height: MediaQuery.of(context).size.height, // 전체 높이
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width, // 전체 너비
+              height: MediaQuery
+                  .of(context)
+                  .size
+                  .height, // 전체 높이
               color: Colors.orangeAccent.withOpacity(0.7), // 반투명 배경
               child: Center(
                 child: Container(
-                  width: 300, // 박스 너비
-                  height: 100, // 박스 높이
-                  alignment: Alignment.center, // 텍스트를 중앙에 위치시킵니다.
+                  width: 300,
+                  // 박스 너비
+                  height: 100,
+                  // 박스 높이
+                  alignment: Alignment.center,
+                  // 텍스트를 중앙에 위치시킵니다.
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10), // 박스의 모서리를 둥글게
@@ -49,14 +60,18 @@ class FindPasswordPageState extends State<FindPasswordPage> {
                       Flexible(
                         child: Text(
                           '비밀번호 : ${passwordController.text} ', // 예제 텍스트
-                          style: TextStyle(color: Colors.deepOrange, fontSize: 25),
-                          overflow: TextOverflow.ellipsis, // 텍스트가 박스를 넘어가면 말줄임표로 표시
+                          style: TextStyle(
+                              color: Colors.deepOrange, fontSize: 25),
+                          overflow: TextOverflow
+                              .ellipsis, // 텍스트가 박스를 넘어가면 말줄임표로 표시
                         ),
                       ),
                       IconButton(
                         icon: Icon(Icons.copy),
                         onPressed: () {
-                          Clipboard.setData(ClipboardData(text: passwordController.text)); // 클립보드에 복사
+                          Clipboard.setData(
+                              ClipboardData(text: passwordController
+                                  .text)); // 클립보드에 복사
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text('비밀번호가 클립보드에 복사되었습니다.'),
@@ -105,63 +120,67 @@ class FindPasswordPageState extends State<FindPasswordPage> {
     return Material(
       child: Container(
         color: colorMainBG_greedot,
-        padding: EdgeInsets.all(20.0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                'Please enter the email address you used to register.',
-                style: TextStyle(color: colorSnackBar_greedot), // Use your text color here
-              ),
-              SizedBox(height: 20),
-              TextField(
-                controller: confirmEmailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.mail_outline),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(20)),
+        child: Center( // Center 위젯을 사용하여 중앙 정렬
+          child: Container(
+            padding: EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // 최소 크기로 설정
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  '회원가입 시 사용한 이메일을 입력해주세요',
+                  style: TextStyle(color: colorSnackBar_greedot),
+                ),
+                SizedBox(height: 20),
+                TextField(
+                  controller: confirmEmailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.mail_outline),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(20)),
+                    ),
+                    filled: true,
+                    fillColor: colorFilling_greedot,
                   ),
-                  filled: true,
-                  fillColor: colorFilling_greedot, // Use your field filling color here
                 ),
-              ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: findPassword,
-                child: Text('Find Password'),
-                style: ElevatedButton.styleFrom(
-                  primary: colorBut_greedot,
-                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
-                  textStyle: TextStyle(fontSize: 18),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: findPassword,
+                  child: Text('비밀번호 찾기'),
+                  style: ElevatedButton.styleFrom(
+                    primary: colorBut_greedot,
+                    padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+                    textStyle: TextStyle(fontSize: 18),
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () {
-                  pageNavi.changePage('LogIn');
-                },
-                child: Text(
-                  'Return to login screen',
-                  style: TextStyle(color: colorSnackBar_greedot), // Use your link text color here
+                SizedBox(height: 20),
+                TextButton(
+                  onPressed: () {
+                    pageNavi.changePage('LogIn');
+                  },
+                  child: Text(
+                    '로그인 화면 돌아가기',
+                    style: TextStyle(color: colorSnackBar_greedot),
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-}
+
 
 // This function is a helper to show SnackBars, if you need to use it elsewhere
-void showSnackBar(BuildContext context, Text content) {
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
-      content: content,
-      backgroundColor: colorSnackBar_greedot, // Use your SnackBar background color here
-    ),
-  );
+  void showSnackBar(BuildContext context, Text content) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: content,
+        backgroundColor: colorSnackBar_greedot, // Use your SnackBar background color here
+      ),
+    );
+  }
 }

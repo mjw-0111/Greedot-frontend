@@ -6,15 +6,15 @@ import '../../widget/design/sharedController.dart';
 import '../../models/user_model.dart';
 import '../../service/user_service.dart';
 import 'package:http/http.dart' as http;
+import 'package:projectfront/widget/design/basicButtons.dart';
 
 class SignupScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        backgroundColor: colorMainBG_greedot,
-        body: SignupPage(),
-      ),
+    return Container(
+      width: MediaQuery.of(context).size.width, // 전체 너비
+      height: MediaQuery.of(context).size.height, // 전체 높이
+      child: SignupPage(),
     );
   }
 }
@@ -66,6 +66,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Container(
+        color: colorMainBG_greedot,
         height: MediaQuery.of(context).size.height,
         padding: EdgeInsets.all(20.0),
         child: Column(
@@ -156,13 +157,11 @@ class _SignupPageState extends State<SignupPage> {
               ),
             ),
             SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: _register,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: colorBut_greedot,
-              ),
-              child: Text('회원가입'),
-            ),
+        EleButton_greedot(
+            additionalFunc: () {
+              _register(); //getImage 함수를 호출해서 카메라로 찍은 사진 가져오기
+            },
+            buttonText: "회원가입"),
           ],
         ),
       ),
