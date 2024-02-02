@@ -52,13 +52,16 @@ app.*.map.json
 /linux
 /web
 /window
+/windows
 .git/
 /macos
-./macos
+./macos 
 ./window
+./windows
 /.gitmessage.txt
 .gitmessage.txt
 *.log
+/trashcan
 
 #####
 **/doc/api/
@@ -72,6 +75,7 @@ app.*.map.json
 build/
 coverage/
 lib/generated_plugin_registrant.dart
+pubspec.lock
 # For library packages, don’t commit the pubspec.lock file.
 # Regenerating the pubspec.lock file lets you test your package against the latest compatible versions of its dependencies.
 # See https://dart.dev/guides/libraries/private-files#pubspeclock

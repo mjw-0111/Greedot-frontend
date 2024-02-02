@@ -38,9 +38,9 @@
 //         destinations: navigationMenu_greedot,
 //       ),
 //       body: <Widget>[
-//         const RootScreen(),
-//         const getImage_greedot(),
-//         const RootScreen(),
+//         const RiggingRoot(),
+//         const GetImage_greedot(),
+//         const RiggingRoot(),
 //       ][currentPageIndex],
 //     );
 //   }

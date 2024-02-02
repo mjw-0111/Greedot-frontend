@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:projectfront/screen/login/findPassword.dart';
+import 'package:provider/provider.dart';
 
 import '../screen/rigging/riggingRoot.dart';
 import '../screen/rigging/getImage.dart';
 import '../widget/design/settingColor.dart';
+import '../provider/pageNavi.dart';
+
 import './drawer/drawer.dart';
 import './rigging/drawSkeleton.dart';
+import '/screen/login/login.dart';
+import '/screen/login/memberRegister.dart';
+import '/screen/gree/favoriteList.dart';
 
-String currentPageKey = 'RootScreen';
+String currentPageKey = 'RiggingRoot';
 
 class Navigation_Greedot extends StatefulWidget {
   const Navigation_Greedot({super.key});
@@ -18,14 +25,32 @@ class Navigation_Greedot extends StatefulWidget {
 class _Navigation_GreedotState extends State<Navigation_Greedot> {
   int currentPageIndex = 0;
 
-  void _changePage(String pageKey) {
-    setState(() {
-      currentPageKey = pageKey;
-    });
+  //추가할 페이지 case에 추가
+  Widget buildBody(String pageKey) {
+    switch (pageKey) {
+      case 'RiggingRoot':
+        return RiggingRoot();
+      case 'GetImage_greedot':
+        return GetImage_greedot();
+      case 'LogIn':
+        return LogIn();
+      case 'SkeletonCanvas':
+        return SkeletonCanvas();
+      case 'FavoriteListPage':
+        return FavoriteListPage();
+      case 'SignupScreen':
+        return SignupScreen();
+      case 'FindPassword':
+        return FindPassword();
+      default:
+        return RiggingRoot();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final pageNavi = Provider.of<PageNavi>(context);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Greedot"),
@@ -35,25 +60,24 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
       ),
       endDrawer: const drawer_greedot(),
       bottomNavigationBar: BottomNavigationBar(
-        currentIndex: currentPageIndex,
+        currentIndex: _getCurrentPageIndex(pageNavi.currentPageKey),
         onTap: (int index) {
-          setState(() {
-            switch (index) {
-              case 0:
-                _changePage('RootScreen');
-                break;
-              case 1:
-                _changePage('getImage_greedot');
-                break;
-              case 2:
-                _changePage('RootScreen');
-                break;
-              default:
-                _changePage('RootScreen');
-                break;
-            }
-            currentPageIndex = index;
-          });
+          String pageKey;
+          switch (index) {
+            case 0:
+              pageKey = 'RiggingRoot';
+              break;
+            case 1:
+              pageKey = 'GetImage_greedot';
+              break;
+            case 2:
+              pageKey = 'LogIn';
+              break;
+            default:
+              pageKey = 'RiggingRoot';
+              break;
+          }
+          pageNavi.changePage(pageKey);
         },
         backgroundColor: colorNaviBar_greedot,
         selectedItemColor: colorText_greedot,
@@ -61,19 +85,20 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         unselectedItemColor: colorText_greedot,
         items: bottomNavigationBarItems,
       ),
-      body: buildBody(currentPageKey),
+      body: buildBody(pageNavi.currentPageKey),
     );
   }
 
-  Widget buildBody(String pageKey) {
-    // 현재 페이지 인덱스에 따라 다른 위젯을 반환합니다.
+  int _getCurrentPageIndex(String pageKey) {
     switch (pageKey) {
-      case 'RootScreen':
-        return RootScreen(onPageChange: _changePage);
-      case 'getImage_greedot':
-        return const getImage_greedot();
+      case 'RiggingRoot':
+        return 0;
+      case 'GetImage_greedot':
+        return 1;
+      case 'LogIn':
+        return 2;
       default:
-        return RootScreen(onPageChange: _changePage);
+        return 0;
     }
   }
 
