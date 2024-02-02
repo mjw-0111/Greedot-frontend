@@ -94,9 +94,23 @@ funtion 시작은 소문자
 
     카멜 표기법 사용 (예시: backgroundColor, typeName,iPhone)
 
-
-우리가 만든 함수나 클래스 greedot  추가하기
+우리가 만든 함수나 클래스 greedot  추가
 
     예시: backgroundColor_greedot, TypeName_greedot
 
-변명 또한 카멜 표기법을 사용하며, 가능한 private으로 정의하여 충돌 방지하기 
+변명 또한 카멜 표기법을 사용하며, 가능한 private으로 정의하여 충돌 방지
+
+
+
+
+## .gitignore
+
+github에 올라간 파일에 대한 gitignore 관리 방법
+
+    git rm --cached [파일명] or git rm -r --cached [폴더명]
+    git commit -m "chore : remove [파일/폴더명] on github"
+    git push [repo명] [브랜치명]
+
+
+
+
