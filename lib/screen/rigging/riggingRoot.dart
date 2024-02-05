@@ -5,14 +5,11 @@ import 'package:flip_card/flip_card.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:projectfront/widget/design/basicButtons.dart';
 import './drawSkeleton.dart';
-import 'drawSkeleton.dart';
 import '../../widget/design/settingColor.dart';
 import '../../provider/pageNavi.dart';
-import '../gree/favoriteList.dart';
 import '../gree/keepItem.dart';
 import '../gree/addFavorite.dart';
-
-import '../../screen/user/user.dart';
+import '../../screen/user/AdminPage.dart';
 
 class RiggingRoot extends StatefulWidget {
   const RiggingRoot({Key? key}) : super(key: key);
@@ -121,6 +118,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                     buttonText: "우리아이 대화 보기",
                   ),
                   const SizedBox(height: 15),
+                  // 임시로 넣어 놓은 버튼 자유롭게 이동시켜도됨
                   Big_EleButton_greedot(
                     additionalFunc: () {
                       Navigator.push(
