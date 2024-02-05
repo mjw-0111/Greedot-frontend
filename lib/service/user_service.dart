@@ -34,6 +34,7 @@ class ApiService {
     return response;
   }
 
+  // 사용자 정보 가져오기
   Future<List<dynamic>> getUsers() async {
     var response = await http.get(Uri.parse('$baseUrl/api/v1/user/users/')); // 끝에 슬래시 추가
     if (response.statusCode == 200) {
@@ -43,4 +44,24 @@ class ApiService {
     }
   }
 
+  // 사용자 정보 업데이트
+  static Future<http.Response> updateUser(int userId, UserUpdateModel userData) async {
+    final url = Uri.parse('$baseUrl/api/v1/user/users/$userId');
+    final response = await http.put(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(userData.toJson()),
+    );
+    return response;
+  }
+
+  // 사용자 삭제
+  static Future<http.Response> deleteUser(int userId) async {
+    final url = Uri.parse('$baseUrl/api/v1/user/users/$userId'); // 사용자 삭제 API 엔드포인트
+    final response = await http.delete(
+      url,
+      headers: {'Content-Type': 'application/json'},
+    );
+    return response;
+  }
 }
