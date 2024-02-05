@@ -2,17 +2,20 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../structure/structure.dart';
 import '../../structure/structureInit.dart';
 import '../../widget/design/basicButtons.dart';
 import './drawSkeleton.dart';
+import '../../provider/pageNavi.dart';
 
 Align drawSkeletonNavi(BuildContext context, double imageWidth, double imageHeight) {
   double elebutW= 120;
   double elebutH= 40;
   double paddingBWbut = 10;
-   return Align(
+  final pageNavi = Provider.of<PageNavi>(context, listen: false);
+  return Align(
          alignment: Alignment.bottomCenter,
          child: Padding(
            padding: EdgeInsets.all(paddingBWbut),
@@ -47,8 +50,8 @@ Align drawSkeletonNavi(BuildContext context, double imageWidth, double imageHeig
                EleButton_greedot(
                  height: elebutH,
                  width: elebutW,
-                 gotoScene: () => SkeletonCanvas(),
-                 buttonText: '홈으로 가기',
+                    additionalFunc: () => pageNavi.changePage('SettingPersonality'),
+                 buttonText: '인성 정하기',
                ),
              ],
            ),
