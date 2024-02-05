@@ -10,7 +10,7 @@ import '../../widget/design/settingColor.dart';
 import '../../provider/pageNavi.dart';
 import '../gree/favoriteList.dart';
 import '../gree/keepItem.dart';
-import '../../widget/addFavorite.dart';
+import '../gree/addFavorite.dart';
 
 
 class RiggingRoot extends StatefulWidget {
