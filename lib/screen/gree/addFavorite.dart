@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../widget/design/settingColor.dart'; // 필요한 경로를 확인하세요
 import 'package:projectfront/widget/design/basicButtons.dart';
-import '../screen/rigging/getImage.dart'; // 버튼 사용을 위해 넣음
+import '../gree/addFavorite.dart';
+import '../rigging/getImage.dart'; // 버튼 사용을 위해 넣음
 
 class FavoriteItemCard extends StatefulWidget {
   final String image;
