@@ -25,3 +25,27 @@ class RegisterModel {
     required this.password,
   });
 }
+
+// 유저 정보 수정 모델 구조
+class UserUpdateModel {
+  final int id;
+  final String? email;
+  final String? nickname;
+  final String? password;
+
+  UserUpdateModel({required this.id, this.email, this.nickname, this.password});
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = {};
+    if (email != null) {
+      data['email'] = email;
+    }
+    if (nickname != null) {
+      data['nickname'] = nickname;
+    }
+    if (password != null) {
+      data['password'] = password;
+    }
+    return data;
+  }
+}
