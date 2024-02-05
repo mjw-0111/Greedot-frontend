@@ -10,8 +10,9 @@ import '../../widget/design/settingColor.dart';
 import '../../provider/pageNavi.dart';
 import '../gree/favoriteList.dart';
 import '../gree/keepItem.dart';
-import '../../widget/addFavorite.dart';
+import '../gree/addFavorite.dart';
 
+import '../../screen/user/user.dart';
 
 class RiggingRoot extends StatefulWidget {
   const RiggingRoot({Key? key}) : super(key: key);
@@ -118,6 +119,16 @@ class _RiggingRootState extends State<RiggingRoot> {
                   Big_EleButton_greedot(
                     additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     buttonText: "우리아이 대화 보기",
+                  ),
+                  const SizedBox(height: 15),
+                  Big_EleButton_greedot(
+                    additionalFunc: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => AdminPage()),
+                      );
+                    },
+                    buttonText: "관리자 페이지 이동하기",
                   ),
                 ],
               ),
