@@ -26,11 +26,21 @@ class ApiService {
       url,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: {
-        'username': model.email,
+        'email': model.email,
         'password': model.password,
       },
     );
 
     return response;
   }
+
+  Future<List<dynamic>> getUsers() async {
+    var response = await http.get(Uri.parse('$baseUrl/api/v1/user/users/')); // 끝에 슬래시 추가
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load users');
+    }
+  }
+
 }
