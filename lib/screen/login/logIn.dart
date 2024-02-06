@@ -17,19 +17,22 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
 
+  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   Future<void> _login() async {
     final loginModel = LoginModel(
-      email: loginEmailController.text,
+      username: loginEmailController.text,
       password: loginPasswordController.text,
     );
     final response = await ApiService.loginUser(loginModel);
     if (response.statusCode == 200) {
-      currentPageKey = 'RootScreen'; // RootScreen으로 이동
+      currentPageKey = 'RootScreen'; // RootScreen으로 이동// RiggingRoot으로 이동
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Navigation_Greedot()),
       );
-    } else {
+    }
+    else {
       // 로그인 실패 처리
       final responseData = json.decode(response.body);
       final errorMessage = responseData['message'] ?? '로그인에 실패했습니다.';

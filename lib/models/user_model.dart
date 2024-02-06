@@ -1,16 +1,9 @@
 //로그인 모델 구조
 class LoginModel {
-  final String email;
+  final String username;
   final String password;
 
-  LoginModel({required this.email, required this.password});
-
-  Map<String, dynamic> toJson() {
-    return {
-      'email': email,
-      'password': password,
-    };
-  }
+  LoginModel({required this.username, required this.password});
 }
 
 //회원가입 모델 구조

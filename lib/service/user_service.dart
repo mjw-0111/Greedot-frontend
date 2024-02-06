@@ -25,7 +25,7 @@ class ApiService {
       url,
       headers: {'Content-Type': 'application/x-www-form-urlencoded'},
       body: {
-        'email': model.email,
+        'username': model.username,
         'password': model.password,
       },
     );
