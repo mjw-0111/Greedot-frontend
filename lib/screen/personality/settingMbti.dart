@@ -1,8 +1,6 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import '../../widget/design/settingColor.dart';
-import 'personalitydata.dart';
 
 
 

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 
 class PersonalityData {
   static final List<String> sexList = ['남자', '여자'];

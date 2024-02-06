@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'login.dart'; // Make sure this is the correct path to your login page
 import 'package:flutter/services.dart';
 import '../../widget/design/settingColor.dart'; // Ensure these paths are correct
 import '../../widget/design/sharedController.dart'; // Ensure this path is correct
-import 'package:projectfront/widget/design/basicButtons.dart'; // Ensure this path is correct
 import 'package:provider/provider.dart';
 import '../../provider/pageNavi.dart';
 
