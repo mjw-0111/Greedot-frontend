@@ -141,7 +141,6 @@ class _RiggingRootState extends State<RiggingRoot> {
                   const SizedBox(height: 35),
                   Big_EleButton_greedot(
                     additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
-                    gotoScene: () => SkeletonCanvas(),
                     buttonText: "새 AI 친구 만들기",
                   ),
                   const SizedBox(height: 15),
