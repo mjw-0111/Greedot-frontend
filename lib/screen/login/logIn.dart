@@ -1,17 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
-import '../../service/user_service.dart';
 import '../root.dart';
 import '../../widget/design/settingColor.dart';
-import 'memberRegister.dart';
 import '../../widget/design/sharedController.dart';
 import '../../provider/pageNavi.dart';
+import '../../service/user_service.dart';
 import 'package:provider/provider.dart';
-import '../../widget/design/basicButtons.dart';
-import 'findPassword.dart';
-import '../../screen/rigging/riggingRoot.dart';
-import 'loading.dart';
+
 
 
 class LogIn extends StatefulWidget {
@@ -20,27 +16,24 @@ class LogIn extends StatefulWidget {
 }
 
 class _LogInState extends State<LogIn> {
-  // TextEditingController controller = TextEditingController();
-  // TextEditingController controller2 = TextEditingController();
-  final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   Future<void> _login() async {
     final loginModel = LoginModel(
       email: loginEmailController.text,
       password: loginPasswordController.text,
     );
-    final response = 200; //await ApiService.loginUser(loginModel);
-    if (response == 200) {
-      //.statusCode == 200) {
-      currentPageKey = 'RiggingRoot'; // RiggingRoot으로 이동
+    final response = await ApiService.loginUser(loginModel);
+    if (response.statusCode == 200) {
+      currentPageKey = 'RootScreen'; // RootScreen으로 이동
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => Navigation_Greedot()),
       );
     } else {
-      // 로그인 실패 처리 서버 열리기 전까지는 사용 불가
-      // final responseData = json.decode(response.body);
-      // final errorMessage = responseData['message'] ?? '로그인에 실패했습니다.';
-      // _showLoginFailedDialog(context, errorMessage);
+      // 로그인 실패 처리
+      final responseData = json.decode(response.body);
+      final errorMessage = responseData['message'] ?? '로그인에 실패했습니다.';
+      _showLoginFailedDialog(context, errorMessage);
     }
   }
 
