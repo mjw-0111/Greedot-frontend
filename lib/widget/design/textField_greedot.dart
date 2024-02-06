@@ -1,13 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:flutter/material.dart';
 
 import '../../widget/design/settingColor.dart';
-import '../../widget/design/sharedController.dart';
-import '../../models/user_model.dart';
-import '../../service/user_service.dart';
-import 'package:http/http.dart' as http;
-import 'package:projectfront/widget/design/basicButtons.dart';
 
 class TextField_greedot extends StatelessWidget {
   final TextEditingController controller;
