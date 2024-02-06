@@ -13,6 +13,8 @@ import './rigging/drawSkeleton.dart';
 import '/screen/login/login.dart';
 import '/screen/login/memberRegister.dart';
 import '/screen/gree/favoriteList.dart';
+import 'personality/settingAge.dart';
+
 
 String currentPageKey = 'RiggingRoot';
 
@@ -45,6 +47,8 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         return FindPassword();
       case 'SpeechSampleApp':
         return SpeechSampleApp();
+      case 'SettingPersonality':
+        return SettingPersonality();
       default:
         return RiggingRoot();
     }
