@@ -62,7 +62,8 @@ app.*.map.json
 .gitmessage.txt
 *.log
 /trashcan
-
+/test
+.metadata
 #####
 **/doc/api/
 .dart_tool/

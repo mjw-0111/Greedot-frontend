@@ -16,7 +16,6 @@ class ApiService {
         'password': model.password,
       }),
     );
-
     return response;
   }
 //값이 들어가면 login 엔드포인트로 값 전달

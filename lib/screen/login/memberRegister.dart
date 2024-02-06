@@ -1,10 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:projectfront/provider/pageNavi.dart';
+import 'package:provider/provider.dart';
 import 'login.dart'; //
 import '../../widget/design/settingColor.dart';
 import '../../widget/design/sharedController.dart';
 import '../../models/user_model.dart';
 import '../../service/user_service.dart';
+import '../../widget/design/textField_greedot.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectfront/widget/design/basicButtons.dart';
 
@@ -25,7 +28,6 @@ class SignupPage extends StatefulWidget {
 }
 
 class _SignupPageState extends State<SignupPage> {
-
   //회원가입 로직
   Future<void> _register() async {
     if (passwordController.text != confirmPasswordController.text) {
@@ -74,116 +76,63 @@ class _SignupPageState extends State<SignupPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            TextField(
+            TextField_greedot(
               controller: emailController,
-              decoration: InputDecoration(
-                labelText: '이메일',
-                prefixIcon: Icon(Icons.mail_outline),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  borderSide: BorderSide(
-                    color: colorAppbar_greedot,
-                  ),
-                ),
-                filled: true,
-                fillColor: colorFilling_greedot,
-              ),
+              labelText: '이메일',
+              icon: Icons.mail_outline,
             ),
             SizedBox(height: 20),
-            TextField(
+            TextField_greedot(
               controller: usernameController,
-              decoration: InputDecoration(
-                labelText: '닉네임',
-                prefixIcon: Icon(Icons.person_outline),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  borderSide: BorderSide(
-                    color: colorAppbar_greedot,
-                  ),
-                ),
-                filled: true,
-                fillColor: colorFilling_greedot,
-              ),
+              labelText: '닉네임',
+              icon: Icons.person_outline,
             ),
             SizedBox(height: 20),
-            TextField(
+            TextField_greedot(
               controller: passwordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: '비밀번호',
-                prefixIcon: Icon(Icons.lock_outline),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  borderSide: BorderSide(
-                    color: colorAppbar_greedot,
-                  ),
-                ),
-                filled: true,
-                fillColor: colorFilling_greedot,
-              ),
+              labelText: '비밀번호',
+              icon: Icons.lock_outline,
             ),
             SizedBox(height: 20),
-            TextField(
+            TextField_greedot(
               controller: confirmPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: '비밀번호 확인',
-                prefixIcon: Icon(Icons.repeat),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  borderSide: BorderSide(
-                    color: colorAppbar_greedot,
-                  ),
-                ),
-                filled: true,
-                fillColor: colorFilling_greedot,
-              ),
+              labelText: '비밀번호 확인',
+              icon: Icons.repeat,
             ),
             SizedBox(height: 20),
-            TextField(
+            TextField_greedot(
               controller: logPasswordController,
-              obscureText: true,
-              decoration: InputDecoration(
-                labelText: '대화 로그 확인용 비밀번호',
-                prefixIcon: Icon(Icons.child_care),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                  borderSide: BorderSide(
-                    color: colorAppbar_greedot,
-                  ),
-                ),
-                filled: true,
-                fillColor: colorFilling_greedot,
-              ),
+              labelText: '대화 로그 확인용 비밀번호',
+              icon: Icons.child_care,
             ),
             SizedBox(height: 20),
-        EleButton_greedot(
-            additionalFunc: () {
-              _register(); //getImage 함수를 호출해서 카메라로 찍은 사진 가져오기
-            },
-            buttonText: "회원가입"),
+            EleButton_greedot(
+                additionalFunc: () {
+                  _register(); //getImage 함수를 호출해서 카메라로 찍은 사진 가져오기
+                },
+                buttonText: "회원가입"),
           ],
         ),
       ),
     );
   }
 }
+
 void _showSuccessDialog(BuildContext context) {
+  final pageNavi =
+      Provider.of<PageNavi>(context, listen: false); // PageNavi 객체 접근
   showDialog(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text("회원가입 성공"),
-        content: Text("회원가입이 성공적으로 완료되었습니다."),
+        title: const Text("회원가입 성공"),
+        content: const Text("회원가입이 성공적으로 완료되었습니다."),
         actions: <Widget>[
           TextButton(
-            child: Text("확인"),
+            child: const Text("확인"),
             onPressed: () {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (context) => LogIn()), // Login 페이지 경로 확인 필요
-                    (Route<dynamic> route) => false,
-              );
+              Navigator.of(context).pop(); // 대화상자를 닫음
+              pageNavi.changePage('LogIn');
             },
           ),
         ],
@@ -195,17 +144,16 @@ void _showSuccessDialog(BuildContext context) {
 void _showRegistrationFailedError(BuildContext context, errorMessage) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-
       content: Text(errorMessage),
       backgroundColor: colorSnackBar_greedot,
-      duration: Duration(seconds: 2),
+      duration: const Duration(seconds: 2),
     ),
   );
 }
 
 void _showPasswordMismatchError(BuildContext context) {
   ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(
+    const SnackBar(
       content: Text('비밀번호가 일치하지 않습니다'),
       backgroundColor: colorSnackBar_greedot,
       duration: Duration(seconds: 2),

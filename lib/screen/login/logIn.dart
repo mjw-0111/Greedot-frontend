@@ -1,12 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
-import '../../service/user_service.dart';
 import '../root.dart';
 import '../../widget/design/settingColor.dart';
 import '../../widget/design/sharedController.dart';
 import '../../provider/pageNavi.dart';
+import '../../service/user_service.dart';
 import 'package:provider/provider.dart';
+
 
 
 class LogIn extends StatefulWidget {
@@ -17,18 +18,16 @@ class LogIn extends StatefulWidget {
 class _LogInState extends State<LogIn> {
 
   final GlobalKey<ScaffoldMessengerState> scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+
   Future<void> _login() async {
+    final pageNavi = Provider.of<PageNavi>(context, listen: false); 
     final loginModel = LoginModel(
       username: loginEmailController.text,
       password: loginPasswordController.text,
     );
     final response = await ApiService.loginUser(loginModel);
     if (response.statusCode == 200) {
-      currentPageKey = 'RootScreen'; // RootScreen으로 이동// RiggingRoot으로 이동
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => Navigation_Greedot()),
-      );
+      pageNavi.changePage('RiggingRoot');
     }
     else {
       // 로그인 실패 처리
