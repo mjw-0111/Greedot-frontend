@@ -83,6 +83,12 @@ class _SignupPageState extends State<SignupPage> {
             ),
             SizedBox(height: 20),
             TextField_greedot(
+              controller: usernameController,
+              labelText: '닉네임',
+              icon: Icons.person_outline,
+            ),
+            SizedBox(height: 20),
+            TextField_greedot(
               controller: passwordController,
               labelText: '비밀번호',
               icon: Icons.lock_outline,
@@ -113,7 +119,8 @@ class _SignupPageState extends State<SignupPage> {
 }
 
 void _showSuccessDialog(BuildContext context) {
-  final pageNavi = Provider.of<PageNavi>(context, listen: false); // PageNavi 객체 접근
+  final pageNavi =
+      Provider.of<PageNavi>(context, listen: false); // PageNavi 객체 접근
   showDialog(
     context: context,
     builder: (BuildContext context) {
