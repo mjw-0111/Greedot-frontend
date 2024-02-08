@@ -61,7 +61,7 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.only(bottom: 100),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.end,

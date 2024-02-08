@@ -10,7 +10,7 @@ import '../../widget/design/settingColor.dart';
 import '../../provider/pageNavi.dart';
 import '../gree/favoriteList.dart';
 import '../gree/keepItem.dart';
-import '../../widget/addFavorite.dart';
+import '../gree/addFavorite.dart';
 
 
 class RiggingRoot extends StatefulWidget {
@@ -110,12 +110,14 @@ class _RiggingRootState extends State<RiggingRoot> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const SizedBox(height: 35),
-                  Big_EleButton_greedot(
+                  EleButton_greedot(
+                    width: 160, height: 45, fontSize: 13,
                     additionalFunc: () => pageNavi.changePage('FavoriteListPage'),
                     buttonText: "AI 친구들 모아보기",
                   ),
                   const SizedBox(height: 15),
-                  Big_EleButton_greedot(
+                  EleButton_greedot(
+                    width: 160, height: 45, fontSize: 13,
                     additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     buttonText: "우리아이 대화 보기",
                   ),
@@ -130,13 +132,15 @@ class _RiggingRootState extends State<RiggingRoot> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   const SizedBox(height: 35),
-                  Big_EleButton_greedot(
+                  EleButton_greedot(
+                    width: 160, height: 45, fontSize: 13,
                     additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     gotoScene: () => SkeletonCanvas(),
                     buttonText: "새 AI 친구 만들기",
                   ),
                   const SizedBox(height: 15),
-                  Big_EleButton_greedot(
+                  EleButton_greedot(
+                    width: 160, height: 45, fontSize: 13,
                     additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     buttonText: "같이 게임하기(?)",
                   ),

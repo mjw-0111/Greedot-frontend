@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../widget/addFavorite.dart';
+import 'addFavorite.dart';
 import '../../widget/design/settingColor.dart';
 
 

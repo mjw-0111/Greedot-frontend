@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../widget/design/settingColor.dart'; // 필요한 경로를 확인하세요
+import '../../../widget/design/settingColor.dart';
 import 'package:projectfront/widget/design/basicButtons.dart';
-import '../screen/rigging/getImage.dart'; // 버튼 사용을 위해 넣음
+import '../rigging/getImage.dart'; // 버튼 사용을 위해 넣음
 
 class FavoriteItemCard extends StatefulWidget {
   final String image;
@@ -62,15 +62,16 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
           Align(
             alignment: Alignment.bottomRight,
             child: Padding(
-              padding: EdgeInsets.only(bottom: 35),
-              child: Small_EleButton_greedot(
+              padding: EdgeInsets.only(bottom: 70),
+              child: EleButton_greedot(
+                isSmall: true,
                 gotoScene: () => GetImage_greedot(),
                 buttonText: "대화 시작",
               ),
             ),
           ),
           Positioned(
-            top: 140, // 이미지와 버튼의 높이에 맞추어 조절
+            top: 140,
             left: 8,
             right: 8,
             child: Column(
