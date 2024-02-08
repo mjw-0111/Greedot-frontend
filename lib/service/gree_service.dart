@@ -1,9 +1,17 @@
+
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import '../models/user_model.dart';
 import '../constants/constants.dart';
 import '../../structure/structureInit.dart';
+
+
+import 'package:dio/dio.dart';
+import 'dart:async';
+import 'package:path/path.dart';
+
+
 
 // class ApiServiceGree{
 //     static Future<http.Response> uploadingImage(XFile image) async {
@@ -17,24 +25,32 @@ import '../../structure/structureInit.dart';
 //   }
 // }
 
+
 class ApiServiceGree {
-  static Future<http.StreamedResponse> uploadImage(XFile image) async {
+  static Future<Response> uploadImage(String imagePath) async {
     final url = Uri.parse('$baseUrl/api/v1/gree/upload-raw-img');
-    // MultipartRequest 생성
-    var request = http.MultipartRequest('POST', url);
+    Dio dio = Dio();
 
-    // 파일을 MultipartFile로 변환
-    var multipartFile = await http.MultipartFile.fromPath(
-      'file', // 서버에서 요구하는 키 값 ('file'이라 가정)
-      image.path,
-    );
+    try {
+      String fileName = basename(imagePath);
+      FormData formData = FormData.fromMap({
+        'image': await MultipartFile.fromFile(imagePath, filename: fileName),
+      });
 
-    // MultipartRequest에 파일 추가
-    request.files.add(multipartFile);
+      Response response = await dio.post(
+        url.toString(),
+        data: formData,
+      );
 
-    // 서버로 요청 보내기
-    var response = await request.send();
-
-    return response;
+      if (response.statusCode == 200) {
+        print("Upload successful");
+      } else {
+        print("Upload failed");
+      }
+      return response;
+    } catch (e) {
+      print("Error uploading image: $e");
+      rethrow;
+    }
   }
 }
