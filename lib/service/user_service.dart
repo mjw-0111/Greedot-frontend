@@ -74,6 +74,47 @@ class ApiService {
     );
     return response;
   }
+
+  // 사용자 프로필 정보 가져오기
+  static Future<UserModel> getUserProfile() async {
+    final token = await AuthService.getToken();
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+    final url = Uri.parse('$baseUrl/api/v1/user/user/profile');
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      print("Received data: ${response.body}");
+      return UserModel.fromJson(json.decode(response.body));
+    } else {
+      // Handle non-200 responses
+      throw Exception('Failed to load user profile');
+    }
+  }
+
+// 사용자 프로필 정보 업데이트
+  static Future<http.Response> updateUserProfile(UserProfileUpdateModel userData) async {
+    final token = await AuthService.getToken();
+    if (token == null) {
+      throw Exception('Token not found');
+    }
+    final url = Uri.parse('$baseUrl/api/v1/user/user/change-profile');
+    final response = await http.put(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(userData.toJson()),
+    );
+    return response;
+  }
 }
 
 class AuthService {

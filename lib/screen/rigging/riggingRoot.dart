@@ -9,6 +9,7 @@ import '../../provider/pageNavi.dart';
 import '../gree/keepItem.dart';
 import '../gree/addFavorite.dart';
 import '../../screen/user/AdminPage.dart';
+import '../../screen/user/ViewProfile.dart';
 
 class RiggingRoot extends StatefulWidget {
   const RiggingRoot({Key? key}) : super(key: key);
@@ -146,6 +147,16 @@ class _RiggingRootState extends State<RiggingRoot> {
                   Big_EleButton_greedot(
                     additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     buttonText: "같이 게임하기(?)",
+                  ),
+                  const SizedBox(height: 15),
+                  Big_EleButton_greedot(
+                    additionalFunc: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ViewProfile()),
+                      );
+                    },
+                    buttonText: "프로필 보기",
                   ),
                 ],
               ),
