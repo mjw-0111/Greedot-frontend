@@ -42,3 +42,40 @@ class UserUpdateModel {
     return data;
   }
 }
+
+enum RoleEnum { ADMIN, MANAGER, MEMBER}
+enum GradeEnum { FREE, BASIC, PREMIUM}
+
+// UserModel 정의
+class UserModel {
+  final int id;
+  final String username;
+  final String nickname;
+  final RoleEnum role;
+  final GradeEnum grade;
+
+  UserModel({required this.id, required this.username, required this.nickname, required this.role, required this.grade});
+
+// UserModel 클래스 내에서 열거형 처리
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+  return UserModel(
+  id: json['id'],
+  username: json['username'],
+  nickname: json['nickname'],
+  role: RoleEnum.values.firstWhere((e) => e.toString().split('.').last.toUpperCase() == json['role']),
+  grade: GradeEnum.values.firstWhere((e) => e.toString().split('.').last.toUpperCase() == json['grade']),
+  );
+  }
+}
+
+class UserProfileUpdateModel {
+  final String? nickname;
+
+  UserProfileUpdateModel({this.nickname});
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (nickname != null) 'nickname': nickname,
+    };
+  }
+}

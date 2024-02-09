@@ -28,7 +28,7 @@ class ApiServiceGree {
       ..files.add(await http.MultipartFile.fromPath(
         'image',
         imageFile.path,
-        contentType: MediaType('image', 'jpeg'), // 우리 이미지 타입 넣기
+        contentType: MediaType('image', 'png'), // 우리 이미지 타입 넣기
         filename: fileName,
       ));
 
