@@ -7,7 +7,6 @@ import 'package:provider/provider.dart';
 import '../../structure/structure.dart';
 import '../../structure/structureInit.dart';
 import '../../widget/design/basicButtons.dart';
-import './drawSkeleton.dart';
 import '../../provider/pageNavi.dart';
 
 Align drawSkeletonNavi(BuildContext context, double imageWidth, double imageHeight) {

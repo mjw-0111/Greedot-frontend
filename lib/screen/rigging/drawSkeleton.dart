@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:projectfront/widget/design/settingColor.dart';
 
 import '../../structure/structure.dart';
 import '../../structure/structureInit.dart';
-import '../../widget/design/basicButtons.dart';
 import './drawSkeletonNavi.dart';
 
 

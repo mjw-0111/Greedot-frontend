@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flip_card/flip_card.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:projectfront/widget/design/basicButtons.dart';
-import './drawSkeleton.dart';
 import '../../widget/design/settingColor.dart';
 import '../../provider/pageNavi.dart';
 import '../gree/keepItem.dart';

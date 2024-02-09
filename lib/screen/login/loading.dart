@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../../widget/design/settingColor.dart';
-import '../../screen/rigging/riggingRoot.dart';
-import '../../screen/root.dart';
+
 
 class LoadingScreen extends StatefulWidget {
   @override

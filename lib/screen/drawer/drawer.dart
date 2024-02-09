@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/design/settingColor.dart';
-import '../../structure/structureInit.dart';
 import '../../provider/pageNavi.dart';
 
 class drawer_greedot extends StatelessWidget {

@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
-import '../root.dart';
 import '../../widget/design/settingColor.dart';
 import '../../widget/design/sharedController.dart';
 import '../../provider/pageNavi.dart';
