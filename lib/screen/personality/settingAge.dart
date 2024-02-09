@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../widget/design/settingColor.dart';
 import './personalitydata.dart';
 import './settingMbti.dart';
+import '../../structure/structure.dart';
 
 class SettingPersonality extends StatefulWidget {
   @override
@@ -11,14 +12,13 @@ class SettingPersonality extends StatefulWidget {
 }
 
 class _SettingPersonalityState extends State<SettingPersonality> {
-  int step = 0;
+  int step = -1;
   double _opacity = 1.0;
   List<String?> selectedOption = List.filled(4, null);
-  List<String> personalityResult = [];
 
   String? _selectedSex;
   String? _selectedAge;
-
+  TextEditingController _nameController = TextEditingController();
   List<String> sexList = PersonalityData.sexList;
   List<String> ageList = PersonalityData.ageList;
   List<List<String>> optionValues = PersonalityData.optionValues;
@@ -40,18 +40,27 @@ class _SettingPersonalityState extends State<SettingPersonality> {
   }
   
 void _goNext() {
+
   setState(() {
     if (step < questionList.length - 1) {
       // 다음 질문으로 이동
       step++;
     } else {
+      Gree greeInfo;
       // 모든 질문에 답함 - 결과 처리
-      personalityResult.clear();
+      String MBTIResult = ''; // MBTI 결과를 계산하는 로직 추가 필요
       for (int i = 0; i < selectedOption.length; i++) {
         int index = optionsList[i].indexOf(selectedOption[i]!);
-        personalityResult.add(optionValues[i][index]);
+        MBTIResult += optionValues[i][index];
       }
+      greeInfo = Gree(
+        name: _nameController.text,
+        age: _selectedAge ?? 'Nullage', // null 체크 필요
+        sex: _selectedSex ?? 'Nullname', // null 체크 필요
+        MBTI: MBTIResult,
+      );
       _showResult = true;
+      print('Name: ${greeInfo.name}, Age: ${greeInfo.age}, Sex: ${greeInfo.sex}, MBTI: ${greeInfo.MBTI}');
     }
   });
 }
@@ -89,8 +98,8 @@ void _goNext() {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    if (step == 0) nameGenderAge(),
-                    if (step != 0 && step < questionList.length)
+                    if (step == -1) nameGenderAge(),
+                    if (step != -1 && step < questionList.length)
                       QuestionWidget(
                         step: step,
                         selectedOption: selectedOption,
@@ -120,6 +129,7 @@ void _goNext() {
           width: 408,
           height: 50,
           child: TextField(
+            controller: _nameController,
             style: TextStyle(color: colorText_greedot),
             decoration: InputDecoration(
               labelText: '이름:',
@@ -149,19 +159,29 @@ void _goNext() {
           children: [
             Flexible(
                 fit: FlexFit.loose,
-                child: _buildDropdown(sexList, _selectedSex, ' 성별: ')),
+                child:
+                    _buildDropdown(sexList, _selectedSex, ' 성별: ', (newValue) {
+                  setState(() {
+                    _selectedSex = newValue;
+                  });
+                })),
             SizedBox(width: 30),
             Flexible(
                 fit: FlexFit.loose,
-                child: _buildDropdown(ageList, _selectedAge, ' 나이: ')),
+                child:
+                    _buildDropdown(ageList, _selectedAge, ' 나이: ', (newValue) {
+                  setState(() {
+                    _selectedAge = newValue;
+                  });
+})),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildDropdown(
-      List<String> optionsList, String? selectedValue, String hintText) {
+  Widget _buildDropdown(List<String> optionsList, String? selectedValue,
+      String hintText, ValueChanged<String?> onChanged) {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         // 드롭다운 버튼의 배경색 설정
@@ -187,24 +207,16 @@ void _goNext() {
       hint: Text(hintText,
           style: TextStyle(color: colorText_greedot, fontSize: 14)),
       icon: const Icon(Icons.arrow_drop_down, color: colorText_greedot),
-      // 드롭다운 아이콘 색상
       iconSize: 20,
       elevation: 20,
       style: TextStyle(color: colorText_greedot, fontSize: 16),
-      onChanged: (newValue) {
-        setState(() {
-          selectedValue = newValue;
-        });
-      },
+      onChanged: onChanged, // 콜백 함수를 매개변수로 전달
       items: optionsList.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Container(
             height: 30,
-            child: Text(
-              value,
-              style: TextStyle(color: Colors.black),
-            ),
+            child: Text(value, style: TextStyle(color: Colors.black)),
           ),
         );
       }).toList(),

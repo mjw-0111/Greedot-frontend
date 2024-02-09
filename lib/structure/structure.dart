@@ -28,3 +28,18 @@ class User {
 }
 
 class Date {}
+
+class Gree {
+  Gree({
+    required this.name,
+    required this.age,
+    required this.sex,
+    required this.MBTI,
+  });
+
+  String name;
+  String age;
+  String sex;
+  String MBTI;
+}
+
