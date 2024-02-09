@@ -2,6 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../models/user_model.dart';
 import '../constants/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 //값이 들어가면 register 엔드포인트로 값 전달
 class ApiService {
@@ -11,7 +12,7 @@ class ApiService {
       url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
-        'email': model.email,
+        'username': model.username,
         'nickname': model.nickname,
         'password': model.password,
       }),
@@ -35,7 +36,17 @@ class ApiService {
 
   // 사용자 정보 가져오기
   Future<List<dynamic>> getUsers() async {
-    var response = await http.get(Uri.parse('$baseUrl/api/v1/user/users/')); // 끝에 슬래시 추가
+    final token = await AuthService.getToken();
+    if (token == null) {
+      throw Exception('no token');
+    }
+    final response = await http.get(
+      Uri.parse('$baseUrl/api/v1/user/users/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token', // 토큰을 Header에 추가
+      },
+    );
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
@@ -62,5 +73,27 @@ class ApiService {
       headers: {'Content-Type': 'application/json'},
     );
     return response;
+  }
+}
+
+class AuthService {
+  static const String tokenKey = 'auth_token';
+
+  // 토큰 저장
+  static Future<void> saveToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(tokenKey, token);
+  }
+
+  // 토큰 가져오기
+  static Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(tokenKey);
+  }
+
+  // 토큰 삭제
+  static Future<void> deleteToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(tokenKey);
   }
 }

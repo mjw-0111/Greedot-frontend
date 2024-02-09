@@ -8,12 +8,12 @@ class LoginModel {
 
 //회원가입 모델 구조
 class RegisterModel {
-  final String email;
+  final String username;
   final String nickname;
   final String password;
 
   RegisterModel({
-    required this.email,
+    required this.username,
     required this.nickname,
     required this.password,
   });
@@ -22,16 +22,16 @@ class RegisterModel {
 // 유저 정보 수정 모델 구조
 class UserUpdateModel {
   final int id;
-  final String? email;
+  final String? username;
   final String? nickname;
   final String? password;
 
-  UserUpdateModel({required this.id, this.email, this.nickname, this.password});
+  UserUpdateModel({required this.id, this.username, this.nickname, this.password});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    if (email != null) {
-      data['email'] = email;
+    if (username != null) {
+      data['username'] = username;
     }
     if (nickname != null) {
       data['nickname'] = nickname;
