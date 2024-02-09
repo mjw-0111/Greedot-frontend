@@ -27,6 +27,8 @@ class _LogInState extends State<LogIn> {
     );
     final response = await ApiService.loginUser(loginModel);
     if (response.statusCode == 200) {
+      final token = json.decode(response.body)['access_token'];
+      await AuthService.saveToken(token);
       pageNavi.changePage('RiggingRoot');
     }
     else {

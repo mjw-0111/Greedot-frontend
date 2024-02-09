@@ -35,7 +35,7 @@ class _SignupPageState extends State<SignupPage> {
       return;
     }
     final model = RegisterModel(
-      email: emailController.text,
+      username: usernameController.text,
       nickname: usernameController.text,
       password: passwordController.text,
     );
@@ -77,7 +77,7 @@ class _SignupPageState extends State<SignupPage> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             TextField_greedot(
-              controller: emailController,
+              controller: usernameController,
               labelText: '이메일',
               icon: Icons.mail_outline,
             ),

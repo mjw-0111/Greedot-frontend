@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../models/user_model.dart';
 import '../../service/user_service.dart';
 import 'package:intl/intl.dart';
+import '../../service/user_service.dart';
 
 class AdminPage extends StatefulWidget {
   @override
@@ -24,14 +25,15 @@ class _AdminPageState extends State<AdminPage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("An error occurred: ${snapshot.error.toString()}"));
+            return Center(
+                child: Text("An error occurred: ${snapshot.error.toString()}"));
           } else if (snapshot.hasData && snapshot.data!.isNotEmpty) {
             return SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
                 columns: const [
                   DataColumn(label: Text('ID')),
-                  DataColumn(label: Text('Email')),
+                  DataColumn(label: Text('username')),
                   DataColumn(label: Text('Nickname')),
                   DataColumn(label: Text('Role')),
                   DataColumn(label: Text('Status')),
@@ -46,12 +48,22 @@ class _AdminPageState extends State<AdminPage> {
                     return DataRow(
                       cells: [
                         DataCell(Text(user['id'].toString())),
-                        DataCell(Text(user['email'])),
+                        DataCell(Text(user['username'])),
                         DataCell(Text(user['nickname'])),
-                        DataCell(Text(user['role'].toString().split('.').last)),
-                        DataCell(Text(user['status'].toString().split('.').last)),
-                        DataCell(Text(user['grade'].toString().split('.').last)),
-                        DataCell(Text(DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.parse(user['register_at'])))),
+                        DataCell(Text(user['role']
+                            .toString()
+                            .split('.')
+                            .last)),
+                        DataCell(Text(user['status']
+                            .toString()
+                            .split('.')
+                            .last)),
+                        DataCell(Text(user['grade']
+                            .toString()
+                            .split('.')
+                            .last)),
+                        DataCell(Text(DateFormat('yyyy-MM-dd – kk:mm').format(
+                            DateTime.parse(user['register_at'])))),
                         DataCell(Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -59,20 +71,23 @@ class _AdminPageState extends State<AdminPage> {
                               icon: Icon(Icons.edit),
                               onPressed: () {
                                 int userId = user['id'];
-                                String userEmail = user['email'];
+                                String userusername = user['username'];
                                 String userNickname = user['nickname'];
-                                showEditUserDialog(context, userId, userEmail, userNickname);
-                                },
+                                showEditUserDialog(
+                                    context, userId, userusername,
+                                    userNickname);
+                              },
                             ),
                             IconButton(
                               icon: Icon(Icons.delete),
-                              onPressed: () => deleteUserAndRefreshList(user['id']),
+                              onPressed: () =>
+                                  deleteUserAndRefreshList(user['id']),
                             ),
                           ],
                         )),
                       ],
                     );
-                      },
+                  },
                 ),
               ),
             );
@@ -85,22 +100,28 @@ class _AdminPageState extends State<AdminPage> {
   }
 
   // 수정 성공 로직
-  Future<void> updateUserAndRefreshList(int userId, UserUpdateModel userData) async {
+  Future<void> updateUserAndRefreshList(int userId,
+      UserUpdateModel userData) async {
     final response = await ApiService.updateUser(userId, userData);
     if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('업데이트되었습니다.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('업데이트되었습니다.')));
       setState(() {
         _futureBuilderKey = UniqueKey();
       });
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('업데이트에 실패하였습니다.')));
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('업데이트에 실패하였습니다.')));
     }
   }
 
   // 수정버튼 누를 때 form 설정
-  Future<void> showEditUserDialog(BuildContext context, int userId, String? email, String? nickname) async {
-    TextEditingController emailController = TextEditingController(text: email);
-    TextEditingController nicknameController = TextEditingController(text: nickname);
+  Future<void> showEditUserDialog(BuildContext context, int userId,
+      String? username, String? nickname) async {
+    TextEditingController usernameController = TextEditingController(
+        text: username);
+    TextEditingController nicknameController = TextEditingController(
+        text: nickname);
     TextEditingController passwordController = TextEditingController();
 
     return showDialog<void>(
@@ -112,7 +133,7 @@ class _AdminPageState extends State<AdminPage> {
             child: ListBody(
               children: <Widget>[
                 TextField(
-                  controller: emailController,
+                  controller: usernameController,
                   decoration: InputDecoration(hintText: "이메일"),
                 ),
                 TextField(
@@ -140,9 +161,15 @@ class _AdminPageState extends State<AdminPage> {
                 // 사용자 정보 업데이트 모델 생성 및 API 호출
                 UserUpdateModel updatedUserData = UserUpdateModel(
                   id: userId,
-                  email: emailController.text.isNotEmpty ? emailController.text : null,
-                  nickname: nicknameController.text.isNotEmpty ? nicknameController.text : null,
-                  password: passwordController.text.isNotEmpty ? passwordController.text : null,
+                  username: usernameController.text.isNotEmpty
+                      ? usernameController.text
+                      : null,
+                  nickname: nicknameController.text.isNotEmpty
+                      ? nicknameController.text
+                      : null,
+                  password: passwordController.text.isNotEmpty
+                      ? passwordController.text
+                      : null,
                 );
                 await updateUserAndRefreshList(userId, updatedUserData);
                 Navigator.of(context).pop();
@@ -159,35 +186,39 @@ class _AdminPageState extends State<AdminPage> {
   Future<void> deleteUserAndRefreshList(int userId) async {
     final confirmDelete = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: Text('유저 삭제'),
-        content: Text('해당 유저를 삭제하시겠습니까?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text('취소'),
+      builder: (BuildContext context) =>
+          AlertDialog(
+            title: Text('유저 삭제'),
+            content: Text('해당 유저를 삭제하시겠습니까?'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: Text('취소'),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: Text('확인'),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text('확인'),
-          ),
-        ],
-      ),
     );
 
     // 삭제 성공 시 setState로 새로고침
     if (confirmDelete == true) {
       final response = await ApiService.deleteUser(userId);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('삭제되었습니다.')));
+        // 토큰 삭제
+        await AuthService.deleteToken();
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('삭제되었습니다.')));
         setState(() {
           _futureBuilderKey = UniqueKey();
         });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('실패하였습니다.')));
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('실패하였습니다.')));
       }
     }
   }
 }
-
 
