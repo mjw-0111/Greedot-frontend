@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../widget/design/settingColor.dart';
 import '../../provider/pageNavi.dart';
+import '../mypage/mypage.dart';
 
 class drawer_greedot extends StatelessWidget {
   const drawer_greedot({super.key});
@@ -26,7 +27,17 @@ class drawer_greedot extends StatelessWidget {
             accountEmail: const Text('dongdong@naver.com'),
             onDetailsPressed: () {
               print('Hello, My Hope World!');
-            },
+              pageNavi.changePage('RiggingRoot');
+              Navigator.of(context).pop();// 드로어를 닫습니다.
+
+              showModalBottomSheet(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return MyPage();
+                  },
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent
+              );},
             decoration: const BoxDecoration(
               color: colorBut_greedot,
               borderRadius: BorderRadius.only(
