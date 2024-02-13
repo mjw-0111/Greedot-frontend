@@ -148,16 +148,6 @@ class _RiggingRootState extends State<RiggingRoot> {
                     additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     buttonText: "같이 게임하기(?)",
                   ),
-                  const SizedBox(height: 15),
-                  Big_EleButton_greedot(
-                    additionalFunc: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => ViewProfile()),
-                      );
-                    },
-                    buttonText: "프로필 보기",
-                  ),
                 ],
               ),
             ),
