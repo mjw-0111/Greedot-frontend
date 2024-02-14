@@ -37,14 +37,12 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         return GetImage_greedot();
       case 'LogIn':
         return LogIn();
-      case 'SkeletonCanvas':
-        return SkeletonCanvas();
       case 'FavoriteListPage':
         return FavoriteListPage();
+      case 'newgree':
+        return GetImage_greedot();
       case 'SignupScreen':
         return SignupScreen();
-      case 'FindPassword':
-        return FindPassword();
       case 'SpeechSampleApp':
         return SpeechSampleApp();
       case 'SettingPersonality':

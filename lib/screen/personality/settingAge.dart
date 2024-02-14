@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import '../../widget/design/settingColor.dart';
+import '../rigging/drawSkeleton.dart';
 import './personalitydata.dart';
 import './settingMbti.dart';
 import '../../service/gree_service.dart';
@@ -79,10 +80,13 @@ class _SettingPersonalityState extends State<SettingPersonality> {
         try {
           await ApiServiceGree.updateGree(widget.greeId!, updatedUserData); // updatedUserData 전달
           print('Gree updated successfully.');
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Gree 정보가 성공적으로 업데이트되었습니다.'),
-              backgroundColor: Colors.green,
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SkeletonCanvas(
+                greeId: widget.greeId, // gree_id 전달
+                imageUrl: imageUrl, // 이미지 URL 전달
+              ),
             ),
           );
         } catch (e) {
@@ -297,7 +301,7 @@ class _SettingPersonalityState extends State<SettingPersonality> {
                 primary: colorBut_greedot, // Background color
               ),
             ),
-          if (step <= questionList.length || _showResult)
+          if (step < questionList.length || _showResult)
             SizedBox(width: 20), // 버튼 사이의 간격
           ElevatedButton(
             onPressed: _goNext,
