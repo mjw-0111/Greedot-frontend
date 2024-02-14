@@ -117,17 +117,6 @@ class _RiggingRootState extends State<RiggingRoot> {
                     additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     buttonText: "우리아이 대화 보기",
                   ),
-                  const SizedBox(height: 15),
-                  // 임시로 넣어 놓은 버튼 자유롭게 이동시켜도됨
-                  Big_EleButton_greedot(
-                    additionalFunc: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => AdminPage()),
-                      );
-                    },
-                    buttonText: "관리자 페이지 이동하기",
-                  ),
                 ],
               ),
             ),
@@ -140,8 +129,8 @@ class _RiggingRootState extends State<RiggingRoot> {
                 children: <Widget>[
                   const SizedBox(height: 35),
                   Big_EleButton_greedot(
-                    additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
-                    buttonText: "새 AI 친구 만들기",
+                    additionalFunc: () => pageNavi.changePage('newgree'),
+                    buttonText: "그리 새로 만들기",
                   ),
                   const SizedBox(height: 15),
                   Big_EleButton_greedot(

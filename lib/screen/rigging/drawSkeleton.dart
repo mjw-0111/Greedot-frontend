@@ -9,6 +9,11 @@ import './drawSkeletonNavi.dart';
 
 
 class SkeletonCanvas extends StatefulWidget {
+  final int? greeId;
+  final String imageUrl;
+
+  SkeletonCanvas({Key? key, this.greeId, required this.imageUrl}) : super(key: key);
+
   @override
   _SkeletonCanvasState createState() => _SkeletonCanvasState();
 }
@@ -34,13 +39,16 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
 
   double conSizeX = 400;
   double conSizeY = 400;
-  
+
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final arrangeCenterX = screenSize.width / 2 - conSizeX/2;
-    final arrangeCenterY = screenSize.height / 2 - conSizeY/2 - 150; // todo 150 으로 하드 코딩한 부분 해결하는 로직 고민
+    final screenSize = MediaQuery
+        .of(context)
+        .size;
+    final arrangeCenterX = screenSize.width / 2 - conSizeX / 2;
+    final arrangeCenterY = screenSize.height / 2 - conSizeY / 2 -
+        150; // todo 150 으로 하드 코딩한 부분 해결하는 로직 고민
 
     return Container(
       color: colorMainBG_greedot,
@@ -49,34 +57,39 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
           Container(
             alignment: Alignment.topCenter,
             padding: EdgeInsets.only(top: 50),
-            child: _buildPhotoArea(importedImage),
+            child: _buildPhotoArea(),
           ),
           Positioned.fill(
             child: CustomPaint(
-              painter: LinePainter(positions, arrangeCenterX ,arrangeCenterY, radiusDragBut),
+              painter: LinePainter(
+                  positions, arrangeCenterX, arrangeCenterY, radiusDragBut),
             ),
           ),
-          drawSkeletonNavi(context , imageWidth,imageHeight), //버튼
+          drawSkeletonNavi(context, imageWidth, imageHeight, widget.greeId), //버튼
           // Draggable buttons
           ...List.generate(skeletonInfo.length, (index) {
             return Positioned(
-              left: skeletonInfo[index].point.dx + arrangeCenterX ,
-              top: skeletonInfo[index].point.dy + arrangeCenterY, // 버튼 좌표 skeletonInfo 안의 point로 설정
+              left: skeletonInfo[index].point.dx + arrangeCenterX,
+              top: skeletonInfo[index].point.dy + arrangeCenterY,
+              // 버튼 좌표 skeletonInfo 안의 point로 설정
               child: Draggable(
                 // 드래그 할 수 있는 요소 생성
-                feedback: _buildDraggableCircle(index), 
+                feedback: _buildDraggableCircle(index),
                 onDragUpdate: (updateDragDetails) {
                   if (_initState) {
                     moveX = updateDragDetails.localPosition.dx -
                         skeletonInfo[index].point.dx;
                     moveY = updateDragDetails.localPosition.dy -
-                        skeletonInfo[index].point.dy;// moveX, moveY 시작위치와 현재위치의 차이 구함
+                        skeletonInfo[index].point
+                            .dy; // moveX, moveY 시작위치와 현재위치의 차이 구함
                     _initState = false;
                   }
                   newPosX = updateDragDetails.localPosition.dx - moveX;
-                  newPosY = updateDragDetails.localPosition.dy - moveY; // 새로운 위치 계산
+                  newPosY =
+                      updateDragDetails.localPosition.dy - moveY; // 새로운 위치 계산
 
-                  if (newPosX >= 0 && newPosX <= imageWidth && newPosY >= 0 && newPosY <= imageHeight) {
+                  if (newPosX >= 0 && newPosX <= imageWidth && newPosY >= 0 &&
+                      newPosY <= imageHeight) {
                     _onDrag(index, Offset(newPosX, newPosY));
                   }
                 },
@@ -98,6 +111,7 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
       child: CircleAvatar(radius: radiusDragBut, child: Text('${index + 1}')),
     );
   }
+
   void _onDrag(int index, Offset offset) {
     // 드래그 위치가 이미지 영역 내에 있는지 확인
     bool withinWidthBounds = offset.dx >= 0 && offset.dx <= imageWidth;
@@ -110,20 +124,21 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
       });
     }
   }
-  Widget _buildPhotoArea(image) {
-    if (image != null) {
-      return Container(
-            width: conSizeX,
-            height: conSizeY,
-            child: Image.file(File(image!.path)), //가져온 이미지를 화면에 띄워주는 코드
-          );
-    } else {
-      return Container(
-            width: conSizeX,
-            height: conSizeY,
-            color: Colors.grey,
-          );
-    }
+
+// _buildPhotoArea 메서드 수정
+  Widget _buildPhotoArea() {
+    return widget.imageUrl.isNotEmpty
+        ? Container(
+      width: conSizeX,
+      height: conSizeY,
+      child: Image.network(
+          widget.imageUrl, fit: BoxFit.cover), // Image.network를 사용하여 이미지 표시
+    )
+        : Container(
+      width: conSizeX,
+      height: conSizeY,
+      color: Colors.grey, // imageUrl이 비어있는 경우 회색 배경 표시
+    );
   }
 }
 

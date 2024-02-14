@@ -159,5 +159,28 @@ class ApiServiceGree {
       _logger.e("Error processing images: $e");
     }
   }
+
+
+  static Future<void> uploadYamlFileToServer(String filePath, int greeId) async {
+    final uri = Uri.parse('$baseUrl/api/v1/gree/greefile/upload_yaml/$greeId');
+    final token = await AuthService.getToken(); // 인증 토큰 가져오기
+    if (token == null) {
+      print('No token found');
+      return;
+    }
+
+    final request = http.MultipartRequest('POST', uri)
+      ..files.add(await http.MultipartFile.fromPath('file', filePath))
+      ..headers.addAll({
+        'Authorization': 'Bearer $token', // 요청 헤더에 인증 토큰 추가
+      });
+
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      print('File uploaded successfully');
+    } else {
+      print('Failed to upload file');
+    }
+  }
 }
 
