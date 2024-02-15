@@ -182,5 +182,34 @@ class ApiServiceGree {
       print('Failed to upload file');
     }
   }
+
+  static Future<void> uploadFilesToBackend(int greeId) async {
+    var uri = Uri.parse(
+        '$baseUrl/api/v1/gree/create-and-upload-assets/$greeId');
+    final token = await AuthService.getToken(); // 인증 토큰 가져오기
+    if (token == null) {
+      print('No token found');
+      return;
+    }
+    final request = http.MultipartRequest('POST', uri)
+      ..headers.addAll({
+        'Authorization': 'Bearer $token', // 요청 헤더에 인증 토큰 추가
+      });
+
+
+    // 여기에 필요한 경우 헤더 설정을 추가할 수 있습니다.
+    // 예: request.headers.addAll({'Authorization': 'Bearer $yourToken'});
+
+    var response = await request.send();
+    final responseString = await http.Response.fromStream(response);
+
+    if (response.statusCode == 200) {
+      print('Files uploaded successfully');
+    } else {
+      print('Failed to upload files: ${response.statusCode}');
+      print('Reason: ${responseString.body}');
+    }
+  }
 }
+
 

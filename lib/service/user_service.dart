@@ -56,7 +56,7 @@ class ApiService {
 
   // 사용자 정보 업데이트
   static Future<http.Response> updateUser(int userId, UserUpdateModel userData) async {
-    final url = Uri.parse('$baseUrl/api/v1/user/users/$userId');
+    final url = Uri.parse('$baseUrl/api/v1/user/$userId');
     final response = await http.put(
       url,
       headers: {'Content-Type': 'application/json'},
@@ -67,7 +67,7 @@ class ApiService {
 
   // 사용자 삭제
   static Future<http.Response> deleteUser(int userId) async {
-    final url = Uri.parse('$baseUrl/api/v1/user/users/$userId'); // 사용자 삭제 API 엔드포인트
+    final url = Uri.parse('$baseUrl/api/v1/user/$userId'); // 사용자 삭제 API 엔드포인트
     final response = await http.delete(
       url,
       headers: {'Content-Type': 'application/json'},
