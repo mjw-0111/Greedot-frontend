@@ -10,6 +10,8 @@ import '../../service/gree_service.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../personality/settingAge.dart';
+
 //design setting for GetImage_greedot
 double paddingForButtons = 10; //다 상대적인 값으로 교체 예정
 double canvasSize = 350;
@@ -57,12 +59,12 @@ class _getImageState extends State<GetImage_greedot> {
     }
   }
 
+
   Future<void> showUploadSuccessSnackBar() async {
     if (_image != null) {
       final response = await ApiServiceGree.uploadImage(_imagePath!);
-      if (response.statusCode == 200) {
-        // 성공적으로 업로드되었을 때의 로직
-        print("업로드 성공!!");
+      if (response != null && response['message'] == 'File uploaded successfully.') {
+        // 업로드 성공 로직
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('성공적으로 업로드되었습니다'),
@@ -70,9 +72,15 @@ class _getImageState extends State<GetImage_greedot> {
             backgroundColor: colorSnackBar_greedot,
           ),
         );
+        int greeId = response['gree_id'];
+        await ApiServiceGree.processGreeImages(greeId); // 추가 이미지 처리 요청
+        // SettingPersonality 위젯으로 네비게이트하며 greeId 전달
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SettingPersonality(greeId: greeId)),
+        );
       } else {
-        // 업로드 실패했을 때의 로직
-        print("업로드 실패: ${response.statusCode}");
+        // 업로드 실패 로직
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('업로드에 실패했습니다'),
@@ -82,8 +90,7 @@ class _getImageState extends State<GetImage_greedot> {
         );
       }
     } else {
-      // 이미지가 선택되지 않았을 때의 로직
-      print("이미지가 선택되지 않았습니다.");
+      // 이미지 선택 안 됨 로직
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('업로드할 이미지를 선택해주세요.'),

@@ -1,56 +1,215 @@
-
+import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:image_picker/image_picker.dart';
-import 'dart:convert';
-import '../models/user_model.dart';
-import '../constants/constants.dart';
-import '../../structure/structureInit.dart';
-
-
-import 'package:dio/dio.dart';
-import 'dart:async';
+import 'package:http_parser/http_parser.dart';
 import 'package:path/path.dart';
-
-
-
-// class ApiServiceGree{
-//     static Future<http.Response> uploadingImage(XFile image) async {
-//     final url = Uri.parse('$baseUrl/api/v1/gree/upload-raw-img');
-//     final response = await http.post(
-//       url,
-//       headers: {'Content-Type': 'mulitpart/form-data'},
-//       body: image
-//     );
-//     return response;
-//   }
-// }
-
+import 'package:projectfront/service/user_service.dart';
+import '../constants/constants.dart';
+import 'dart:async';
+import 'dart:convert';
+import 'package:mime_type/mime_type.dart';
+import 'package:logger/logger.dart';
+import '../models/gree_model.dart';
 
 class ApiServiceGree {
-  static Future<Response> uploadImage(String imagePath) async {
+  static final Logger _logger = Logger();
+
+  static Future<Map<String, dynamic>?> uploadImage(String imagePath) async {
     final url = Uri.parse('$baseUrl/api/v1/gree/upload-raw-img');
-    Dio dio = Dio();
+    final token = await AuthService.getToken();
+    if (token == null) {
+      _logger.e('No token found');
+      return null;
+    }
+
+    File imageFile = File(imagePath);
+    String fileName = basename(imagePath);
+    String? mimeType = mime(imagePath);
+    MediaType mediaType = MediaType.parse(mimeType ?? 'image/png');
+
+    var request = http.MultipartRequest('POST', url)
+      ..headers.addAll({'Authorization': 'Bearer $token'})
+      ..files.add(await http.MultipartFile.fromPath(
+        'file',
+        imageFile.path,
+        contentType: mediaType,
+        filename: fileName,
+      ));
 
     try {
-      String fileName = basename(imagePath);
-      FormData formData = FormData.fromMap({
-        'image': await MultipartFile.fromFile(imagePath, filename: fileName),
-      });
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
 
-      Response response = await dio.post(
-        url.toString(),
-        data: formData,
+      if (response.statusCode == 200) {
+        _logger.i("Upload successful");
+        var responseData = json.decode(response.body);
+        // 전체 응답 데이터를 반환
+        return responseData;
+      } else {
+        _logger.w("Upload failed with status: ${response.statusCode}");
+        return null; // 실패 시 null 반환
+      }
+    } catch (e) {
+      _logger.e("Error uploading image: $e");
+      return null; // 예외 발생 시 null 반환
+    }
+  }
+
+
+
+
+  static Future<void> updateGree(int greeId, GreeUpdate model) async {
+    var url = '$baseUrl/api/v1/gree/update/$greeId';
+    final token = await AuthService.getToken();
+    if (token == null) {
+      throw Exception('no token');
+    }
+    var response = await http.put(
+      Uri.parse(url),
+      headers: {"Authorization": "Bearer $token",
+        "Content-Type": "application/json"},
+      body: json.encode(model.toJson()),
+    );
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      print('Gree updated successfully.');
+    } else {
+      print('Failed to update gree. StatusCode: ${response.statusCode}, Body: ${response.body}');
+    }
+  }
+
+
+
+  static Future<List<dynamic>> readGrees() async {
+    var url = '$baseUrl/api/v1/gree/view';
+    final token = await AuthService.getToken();
+    if (token == null) {
+      throw Exception('no token');
+    }
+    var response = await http.get(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load grees.');
+    }
+  }
+
+
+  static Future<dynamic> readGree(int greeId) async {
+    var url = '$baseUrl/api/v1/gree/view/$greeId';
+    final token = await AuthService.getToken();
+    if (token == null) {
+      throw Exception('no token');
+    }
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        "Authorization": "Bearer $token",
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load gree.');
+    }
+  }
+
+
+  static Future<void> disableGree(int greeId) async {
+    var url = '$baseUrl/api/v1/gree/disable/$greeId';
+    final token = await AuthService.getToken();
+    if (token == null) {
+      throw Exception('no token');
+    }
+    var response = await http.put(Uri.parse(url));
+
+    if (response.statusCode == 200) {
+      print('Gree disabled successfully.');
+    } else {
+      print('Failed to disable gree.');
+    }
+  }
+
+  // 이미지 처리 요청을 위한 함수
+  static Future<void> processGreeImages(int greeId) async {
+    final url = Uri.parse('$baseUrl/api/v1/gree/greefile/upload/$greeId');
+    final token = await AuthService.getToken();
+    if (token == null) {
+      _logger.e('No token found');
+      return;
+    }
+
+    try {
+      var response = await http.post(
+        url,
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
       );
 
       if (response.statusCode == 200) {
-        print("Upload successful");
+        _logger.i("Image processing successful");
+        // 성공 로직, 예: 성공 알림
       } else {
-        print("Upload failed");
+        _logger.w("Image processing failed with status: ${response.statusCode}");
+        // 실패 로직, 예: 실패 알림
       }
-      return response;
     } catch (e) {
-      print("Error uploading image: $e");
-      rethrow;
+      _logger.e("Error processing images: $e");
+    }
+  }
+
+
+  static Future<void> uploadYamlFileToServer(String filePath, int greeId) async {
+    final uri = Uri.parse('$baseUrl/api/v1/gree/greefile/upload_yaml/$greeId');
+    final token = await AuthService.getToken(); // 인증 토큰 가져오기
+    if (token == null) {
+      print('No token found');
+      return;
+    }
+
+    final request = http.MultipartRequest('POST', uri)
+      ..files.add(await http.MultipartFile.fromPath('file', filePath))
+      ..headers.addAll({
+        'Authorization': 'Bearer $token', // 요청 헤더에 인증 토큰 추가
+      });
+
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      print('File uploaded successfully');
+    } else {
+      print('Failed to upload file');
+    }
+  }
+
+  static Future<void> uploadFilesToBackend(int greeId) async {
+    var uri = Uri.parse(
+        '$baseUrl/api/v1/gree/create-and-upload-assets/$greeId');
+    final token = await AuthService.getToken(); // 인증 토큰 가져오기
+    if (token == null) {
+      print('No token found');
+      return;
+    }
+    final request = http.MultipartRequest('POST', uri)
+      ..headers.addAll({
+        'Authorization': 'Bearer $token', // 요청 헤더에 인증 토큰 추가
+      });
+
+
+    // 여기에 필요한 경우 헤더 설정을 추가할 수 있습니다.
+    // 예: request.headers.addAll({'Authorization': 'Bearer $yourToken'});
+
+    var response = await request.send();
+    final responseString = await http.Response.fromStream(response);
+
+    if (response.statusCode == 200) {
+      print('Files uploaded successfully');
+    } else {
+      print('Failed to upload files: ${response.statusCode}');
+      print('Reason: ${responseString.body}');
     }
   }
 }
+
+

@@ -2,28 +2,44 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import '../../widget/design/settingColor.dart';
+import '../rigging/drawSkeleton.dart';
 import './personalitydata.dart';
 import './settingMbti.dart';
+import '../../service/gree_service.dart';
+import '../../models/gree_model.dart';
 
 class SettingPersonality extends StatefulWidget {
+  final int? greeId; // 생성자를 통해 받을 greeId
+
+  SettingPersonality({Key? key, this.greeId}) : super(key: key);
+
   @override
   _SettingPersonalityState createState() => _SettingPersonalityState();
 }
 
 class _SettingPersonalityState extends State<SettingPersonality> {
-  int step = 0;
+  String imageUrl = ''; // 이미지 URL을 저장할 상태 변수
+  int step = -1;
   double _opacity = 1.0;
   List<String?> selectedOption = List.filled(4, null);
-  List<String> personalityResult = [];
 
   String? _selectedSex;
   String? _selectedAge;
-
+  TextEditingController _nameController = TextEditingController();
   List<String> sexList = PersonalityData.sexList;
   List<String> ageList = PersonalityData.ageList;
   List<List<String>> optionValues = PersonalityData.optionValues;
   List<String> questionList = PersonalityData.questionList;
   List<List<String>> optionsList = PersonalityData.optionsList;
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.greeId != null) {
+      fetchGreeImage(widget.greeId!); // 널 체크 연산자 (!) 추가
+    }
+  }
+
 
   void _handleRadioValueChanged(String? newValue) {
     setState(() {
@@ -38,24 +54,77 @@ class _SettingPersonalityState extends State<SettingPersonality> {
       }
     });
   }
-  
-void _goNext() {
-  setState(() {
+
+  void _goNext() async {
     if (step < questionList.length - 1) {
       // 다음 질문으로 이동
-      step++;
+      setState(() {
+        step++;
+      });
     } else {
       // 모든 질문에 답함 - 결과 처리
-      personalityResult.clear();
+      String MBTIResult = '';
       for (int i = 0; i < selectedOption.length; i++) {
         int index = optionsList[i].indexOf(selectedOption[i]!);
-        personalityResult.add(optionValues[i][index]);
+        MBTIResult += optionValues[i][index];
       }
-      _showResult = true;
-    }
-  });
-}
 
+      GreeUpdate updatedUserData = GreeUpdate(
+        gree_name: _nameController.text,
+        prompt_age: int.parse(_selectedAge ?? '0'),
+        prompt_jender: _selectedSex ?? '',
+        prompt_mbti: MBTIResult,
+      );
+
+      if (widget.greeId != null) {
+        try {
+          await ApiServiceGree.updateGree(widget.greeId!, updatedUserData); // updatedUserData 전달
+          print('Gree updated successfully.');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SkeletonCanvas(
+                greeId: widget.greeId, // gree_id 전달
+                imageUrl: imageUrl, // 이미지 URL 전달
+              ),
+            ),
+          );
+        } catch (e) {
+          print('Failed to update gree: $e');
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Gree 정보 업데이트에 실패했습니다.'),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
+      }
+      setState(() {
+        _showResult = true;
+      });
+    }
+
+  }
+
+
+  Future<void> fetchGreeImage(int greeId) async {
+    try {
+      var greeData = await ApiServiceGree.readGree(greeId);
+      print('Received gree data: $greeData'); // 서버 응답 로깅
+      if (greeData != null && greeData['raw_img'] != null) {
+        print('raw_img URL: ${greeData['raw_img']}'); // raw_img URL 로깅
+        if (mounted) {
+          setState(() {
+            imageUrl = greeData['raw_img'];
+          });
+        }
+      } else {
+        print('raw_img URL is null or invalid.');
+      }
+    } catch (e) {
+      print('Error fetching gree image: $e');
+    }
+  }
 
   bool _showResult = false;
 
@@ -64,49 +133,53 @@ void _goNext() {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    double imageSize = screenWidth * 0.3; // 이미지 너비
-    double formWidth = min(screenWidth * 0.35, 500); // 폼 너비
-
-    return Container(
-      width: screenWidth,
-      height: screenHeight,
-      color: colorMainBG_greedot, // 전체 배경색 설정
-      child: Container(
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.network(
-              'assets/images/gree.png', //TODO getImage.dart 에서 이미지 받아오게 수정하기
-              width: 300,
-              height: 300,
-            ),
-            SizedBox(width: 16),
-            Container(
-              width: formWidth,
-              padding: EdgeInsets.all(16),
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if (step == 0) nameGenderAge(),
-                    if (step != 0 && step < questionList.length)
-                      QuestionWidget(
-                        step: step,
-                        selectedOption: selectedOption,
-                        questionList: questionList,
-                        optionsList: optionsList,
-                        onOptionChanged: (newValue) {
-                          _handleRadioValueChanged(newValue);
-                        },
-                      ),
-                    SizedBox(height: 60),
-                    _buildNavigationButtons(),
-                  ],
+    return Scaffold(
+      body: SingleChildScrollView( // 전체 스크롤 가능하게 설정
+        child: Container(
+          width: screenWidth,
+          height: screenHeight,
+          color: colorMainBG_greedot, // 배경색 설정
+          child: Center( // 가운데 정렬로 변경
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Flexible( // 이미지를 Flexible로 감싸기
+                  child: Image.network(
+                    imageUrl, // 이미지 경로
+                    width: 300, // 이미지 너비 고정
+                    height: 300, // 이미지 높이 고정
+                  ),
                 ),
-              ),
+                SizedBox(width: 16), // 이미지와 폼 사이 간격
+                Flexible( // 폼을 Flexible로 감싸기
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    child: SingleChildScrollView( // 폼 내용이 길 경우 스크롤 가능하게 설정
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          if (step == -1) nameGenderAge(),
+                          if (step != -1 && step < questionList.length)
+                            QuestionWidget(
+                              step: step,
+                              selectedOption: selectedOption,
+                              questionList: questionList,
+                              optionsList: optionsList,
+                              onOptionChanged: (newValue) {
+                                _handleRadioValueChanged(newValue);
+                              },
+                            ),
+                          SizedBox(height: 60),
+                          _buildNavigationButtons(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -120,6 +193,7 @@ void _goNext() {
           width: 408,
           height: 50,
           child: TextField(
+            controller: _nameController,
             style: TextStyle(color: colorText_greedot),
             decoration: InputDecoration(
               labelText: '이름:',
@@ -149,19 +223,29 @@ void _goNext() {
           children: [
             Flexible(
                 fit: FlexFit.loose,
-                child: _buildDropdown(sexList, _selectedSex, ' 성별: ')),
+                child:
+                    _buildDropdown(sexList, _selectedSex, ' 성별: ', (newValue) {
+                  setState(() {
+                    _selectedSex = newValue;
+                  });
+                })),
             SizedBox(width: 30),
             Flexible(
                 fit: FlexFit.loose,
-                child: _buildDropdown(ageList, _selectedAge, ' 나이: ')),
+                child:
+                    _buildDropdown(ageList, _selectedAge, ' 나이: ', (newValue) {
+                  setState(() {
+                    _selectedAge = newValue;
+                  });
+})),
           ],
         ),
       ],
     );
   }
 
-  Widget _buildDropdown(
-      List<String> optionsList, String? selectedValue, String hintText) {
+  Widget _buildDropdown(List<String> optionsList, String? selectedValue,
+      String hintText, ValueChanged<String?> onChanged) {
     return DropdownButtonFormField<String>(
       decoration: InputDecoration(
         // 드롭다운 버튼의 배경색 설정
@@ -187,24 +271,16 @@ void _goNext() {
       hint: Text(hintText,
           style: TextStyle(color: colorText_greedot, fontSize: 14)),
       icon: const Icon(Icons.arrow_drop_down, color: colorText_greedot),
-      // 드롭다운 아이콘 색상
       iconSize: 20,
       elevation: 20,
       style: TextStyle(color: colorText_greedot, fontSize: 16),
-      onChanged: (newValue) {
-        setState(() {
-          selectedValue = newValue;
-        });
-      },
+      onChanged: onChanged, // 콜백 함수를 매개변수로 전달
       items: optionsList.map<DropdownMenuItem<String>>((String value) {
         return DropdownMenuItem<String>(
           value: value,
           child: Container(
             height: 30,
-            child: Text(
-              value,
-              style: TextStyle(color: Colors.black),
-            ),
+            child: Text(value, style: TextStyle(color: Colors.black)),
           ),
         );
       }).toList(),

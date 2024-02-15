@@ -11,6 +11,7 @@ import '../gree/addFavorite.dart';
 import '../../screen/user/AdminPage.dart';
 import '../gree/addFavorite.dart';
 
+import '../../screen/user/ViewProfile.dart';
 
 class RiggingRoot extends StatefulWidget {
   const RiggingRoot({Key? key}) : super(key: key);
@@ -136,6 +137,9 @@ class _RiggingRootState extends State<RiggingRoot> {
                     additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                     gotoScene: () => SkeletonCanvas(),
                     buttonText: "새 AI 친구 만들기",
+                  Big_EleButton_greedot(
+                    additionalFunc: () => pageNavi.changePage('newgree'),
+                    buttonText: "그리 새로 만들기",
                   ),
                   const SizedBox(height: 15),
                   EleButton_greedot(

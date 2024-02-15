@@ -8,12 +8,12 @@ class LoginModel {
 
 //회원가입 모델 구조
 class RegisterModel {
-  final String email;
+  final String username;
   final String nickname;
   final String password;
 
   RegisterModel({
-    required this.email,
+    required this.username,
     required this.nickname,
     required this.password,
   });
@@ -22,16 +22,16 @@ class RegisterModel {
 // 유저 정보 수정 모델 구조
 class UserUpdateModel {
   final int id;
-  final String? email;
+  final String? username;
   final String? nickname;
   final String? password;
 
-  UserUpdateModel({required this.id, this.email, this.nickname, this.password});
+  UserUpdateModel({required this.id, this.username, this.nickname, this.password});
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = {};
-    if (email != null) {
-      data['email'] = email;
+    if (username != null) {
+      data['username'] = username;
     }
     if (nickname != null) {
       data['nickname'] = nickname;
@@ -40,5 +40,42 @@ class UserUpdateModel {
       data['password'] = password;
     }
     return data;
+  }
+}
+
+enum RoleEnum { ADMIN, MANAGER, MEMBER}
+enum GradeEnum { FREE, BASIC, PREMIUM}
+
+// UserModel 정의
+class UserModel {
+  final int id;
+  final String username;
+  final String nickname;
+  final RoleEnum role;
+  final GradeEnum grade;
+
+  UserModel({required this.id, required this.username, required this.nickname, required this.role, required this.grade});
+
+// UserModel 클래스 내에서 열거형 처리
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+  return UserModel(
+  id: json['id'],
+  username: json['username'],
+  nickname: json['nickname'],
+  role: RoleEnum.values.firstWhere((e) => e.toString().split('.').last.toUpperCase() == json['role']),
+  grade: GradeEnum.values.firstWhere((e) => e.toString().split('.').last.toUpperCase() == json['grade']),
+  );
+  }
+}
+
+class UserProfileUpdateModel {
+  final String? nickname;
+
+  UserProfileUpdateModel({this.nickname});
+
+  Map<String, dynamic> toJson() {
+    return {
+      if (nickname != null) 'nickname': nickname,
+    };
   }
 }
