@@ -81,5 +81,7 @@ Future<void> writeNodesToYaml(
   await file.writeAsString(yaml);
 
   await ApiServiceGree.uploadYamlFileToServer(file.path, greeId);
+
+  await ApiServiceGree.uploadFilesToBackend(greeId);
 }
 
