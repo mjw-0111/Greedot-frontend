@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'addFavorite.dart';
-import '../../widget/design/settingColor.dart';
+import '../gree/addFavorite.dart';
 
 
 List<FavoriteItemCard> favoriteItems = [

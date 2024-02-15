@@ -6,12 +6,15 @@ import '../screen/rigging/riggingRoot.dart';
 import '../screen/rigging/getImage.dart';
 import '../widget/design/settingColor.dart';
 import '../provider/pageNavi.dart';
+import '../screen/chat/stt.dart';
 
 import './drawer/drawer.dart';
 import './rigging/drawSkeleton.dart';
 import '/screen/login/login.dart';
 import '/screen/login/memberRegister.dart';
 import '/screen/gree/favoriteList.dart';
+import 'personality/settingAge.dart';
+
 
 String currentPageKey = 'RiggingRoot';
 
@@ -42,6 +45,10 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         return SignupScreen();
       case 'FindPassword':
         return FindPassword();
+      case 'SpeechSampleApp':
+        return SpeechSampleApp();
+      case 'SettingPersonality':
+        return SettingPersonality();
       default:
         return RiggingRoot();
     }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../widget/design/settingColor.dart';
-import '../../structure/structureInit.dart';
 import '../../provider/pageNavi.dart';
 
 class drawer_greedot extends StatelessWidget {
@@ -44,7 +43,14 @@ class drawer_greedot extends StatelessWidget {
               Navigator.of(context).pop(); // 드로어를 닫습니다.
             },
           ),
-          DrawerListTile(listTileIcon: Icons.alarm, listTileText: "alarm"),
+          DrawerListTile(
+            listTileIcon: Icons.alarm,
+            listTileText: "alarm",
+            onTap: () {
+              pageNavi.changePage('SpeechSampleApp');
+              Navigator.of(context).pop(); // 드로어를 닫습니다.
+            },
+          ),
           DrawerListTile(listTileIcon: Icons.settings, listTileText: "mes"),
         ],
       ),

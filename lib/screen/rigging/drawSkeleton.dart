@@ -1,15 +1,12 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:projectfront/widget/design/settingColor.dart';
 
 import '../../structure/structure.dart';
 import '../../structure/structureInit.dart';
-import '../../widget/design/basicButtons.dart';
+import './drawSkeletonNavi.dart';
 
-//global var
-double radiusDragBut = 15.0;
 
 class SkeletonCanvas extends StatefulWidget {
   @override
@@ -24,23 +21,27 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
   double offsetY = 0.0;
   double preX = 0.0;
   double preY = 0.0;
+  double radiusDragBut = 15.0;
 
   bool trigger = false;
   bool _initState = true;
 
   late double moveX, moveY, newPosX, newPosY;
 
-  // TODO 이부분 수정해야함 값 받아오는게 곤란하군
   // segment 단계에서 resizing이 들어가기 때문에 고정값
-  double imageWidth = 350;
-  double imageHeight = 350;
+  double imageWidth = 400;
+  double imageHeight = 400;
+
+  double conSizeX = 400;
+  double conSizeY = 400;
+
 
   @override
   Widget build(BuildContext context) {
-    // if (importedImage != Null) {
-    //   imageWidth = Image.file(File(importedImage!.path)).width!;
-    //   imageHeight = Image.file(File(importedImage!.path)).height!;
-    // }
+    final screenSize = MediaQuery.of(context).size;
+    final arrangeCenterX = screenSize.width / 2 - conSizeX/2;
+    final arrangeCenterY = screenSize.height / 2 - conSizeY/2 - 150; // todo 150 으로 하드 코딩한 부분 해결하는 로직 고민
+
     return Container(
       color: colorMainBG_greedot,
       child: Stack(
@@ -48,94 +49,36 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
           Container(
             alignment: Alignment.topCenter,
             padding: EdgeInsets.only(top: 50),
-            decoration: BoxDecoration(
-              color: colorMainBG_greedot, // 배경 색상 추가
-            ),
             child: _buildPhotoArea(importedImage),
           ),
           Positioned.fill(
             child: CustomPaint(
-              painter: LinePainter(positions),
+              painter: LinePainter(positions, arrangeCenterX ,arrangeCenterY, radiusDragBut),
             ),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 100),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: <Widget>[
-                  EleButton_greedot(
-                    height: 40, // 높이 설정
-                    width: 120, // 너비 설정
-                    additionalFunc: () {
-                      for (var node in skeletonInfo) {
-                        print(
-                            '${node.fromJoint} = (${node.point.dx}, ${node.point.dy})');
-                      }
-                    },
-                    buttonText: '좌표 출력',
-                  ),
-                  SizedBox(width: 10),
-                  EleButton_greedot(
-                    height: 40,
-                    width: 120,
-                    additionalFunc: () async {
-                      await writeNodesToYaml(
-                          skeletonInfo, imageWidth!, imageHeight!);
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(SnackBar(content: Text('Yaml 파일 저장됨')));
-                    },
-                    buttonText: 'Yaml 저장',
-                  ),
-                  SizedBox(width: 10),
-                  EleButton_greedot(
-                    height: 40,
-                    width: 120,
-                    gotoScene: () => SkeletonCanvas(),
-                    buttonText: '홈으로 가기',
-                  ),
-                ],
-              ),
-            ),
-          ),
-          SizedBox(height:50),
+          drawSkeletonNavi(context , imageWidth,imageHeight), //버튼
           // Draggable buttons
           ...List.generate(skeletonInfo.length, (index) {
-            //List.generate 버튼 수 만큼의 리스트를 생성
             return Positioned(
-              // Positioned 위젯 반환
-              left: skeletonInfo[index].point.dx,
-              top: skeletonInfo[index]
-                  .point
-                  .dy, // 버튼 좌표 skeletonInfo 안의 point로 설정
+              left: skeletonInfo[index].point.dx + arrangeCenterX ,
+              top: skeletonInfo[index].point.dy + arrangeCenterY, // 버튼 좌표 skeletonInfo 안의 point로 설정
               child: Draggable(
                 // 드래그 할 수 있는 요소 생성
-                feedback: _buildDraggableCircle(index), // 드래그 중 보여지는 위젯을 정의
-                onDragStarted:
-                    () {}, // onDragStarted 드래그 시작시 실행할 함수를 정의 여기선 정의 안 함
+                feedback: _buildDraggableCircle(index),
                 onDragUpdate: (updateDragDetails) {
-                  // 드래그가 업데이트될 때마다 호출
                   if (_initState) {
                     moveX = updateDragDetails.localPosition.dx -
                         skeletonInfo[index].point.dx;
                     moveY = updateDragDetails.localPosition.dy -
-                        skeletonInfo[index]
-                            .point
-                            .dy; // moveX, moveY 시작위치와 현재위치의 차이 구함
+                        skeletonInfo[index].point.dy;// moveX, moveY 시작위치와 현재위치의 차이 구함
                     _initState = false;
                   }
                   newPosX = updateDragDetails.localPosition.dx - moveX;
-                  newPosY =
-                      updateDragDetails.localPosition.dy - moveY; // 새로운 위치 계산
-                  // positions[index] = Offset(newPosX, newPosY);
+                  newPosY = updateDragDetails.localPosition.dy - moveY; // 새로운 위치 계산
 
-                  if (newPosX >= 0 &&
-                      newPosX <= imageWidth &&
-                      newPosY >= 0 &&
-                      newPosY <= imageHeight)
+                  if (newPosX >= 0 && newPosX <= imageWidth && newPosY >= 0 && newPosY <= imageHeight) {
                     _onDrag(index, Offset(newPosX, newPosY));
+                  }
                 },
                 onDragEnd: (endDragDetails) {
                   _initState = true;
@@ -155,43 +98,10 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
       child: CircleAvatar(radius: radiusDragBut, child: Text('${index + 1}')),
     );
   }
-
-  Future<File> writeNodesToYaml(
-      List<Joint> nodes, double width, double height) async {
-    final directory = await getApplicationDocumentsDirectory();
-    final dir = Directory(directory.path);
-    if (!await dir.exists()) {
-      await dir.create(recursive: true);
-    }
-    final file = File('${dir.path}/skeleton.yaml');
-
-    // YAML 형식 문자열 생성
-    String yaml = 'height: ${height.toInt()}\nskeleton:\n';
-    for (var node in nodes) {
-      yaml +=
-          '- loc:\n  - ${node.point.dx.toInt()}\n  - ${node.point.dy.toInt()}\n';
-      yaml += '  name: ${node.fromJoint}\n';
-      yaml += '  parent: ${node.toJoint ?? 'null'}\n';
-    }
-    yaml += 'width: ${width.toInt()}';
-
-    print(directory);
-    return file.writeAsString(yaml);
-  }
-
-  void onSaveYamlPressed() async {
-    try {
-      await writeNodesToYaml(skeletonInfo, 333, 392); // 이미지의 너비와 높이를 인자로 전달
-      print('YAML 저장 완료');
-    } catch (e) {
-      print('YAML 저장 실패: $e');
-    }
-  }
-
   void _onDrag(int index, Offset offset) {
     // 드래그 위치가 이미지 영역 내에 있는지 확인
-    bool withinWidthBounds = offset.dx >= 0 && offset.dx <= imageWidth!;
-    bool withinHeightBounds = offset.dy >= 0 && offset.dy <= imageHeight!;
+    bool withinWidthBounds = offset.dx >= 0 && offset.dx <= imageWidth;
+    bool withinHeightBounds = offset.dy >= 0 && offset.dy <= imageHeight;
 
     // 조건을 만족하면 상태 업데이트
     if (withinWidthBounds && withinHeightBounds) {
@@ -200,26 +110,30 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
       });
     }
   }
-
   Widget _buildPhotoArea(image) {
-    return image != null
-        ? Container(
-            width: 400,
-            height: 400,
+    if (image != null) {
+      return Container(
+            width: conSizeX,
+            height: conSizeY,
             child: Image.file(File(image!.path)), //가져온 이미지를 화면에 띄워주는 코드
-          )
-        : Container(
-            width: 400,
-            height: 400,
+          );
+    } else {
+      return Container(
+            width: conSizeX,
+            height: conSizeY,
             color: Colors.grey,
           );
+    }
   }
 }
 
 class LinePainter extends CustomPainter {
   final List<Offset> positions;
+  final double arrangeCenterX;
+  final double arrangeCenterY;
+  final double radiusDragBut;
 
-  LinePainter(this.positions);
+  LinePainter(this.positions, this.arrangeCenterX, this.arrangeCenterY,this.radiusDragBut );
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
@@ -233,9 +147,9 @@ class LinePainter extends CustomPainter {
         String? connectedJoint = toJ.toJoint;
         if (currentJoint == connectedJoint) {
           Offset coord1 = Offset(
-              fromJ.point.dx + radiusDragBut, fromJ.point.dy + radiusDragBut);
+              fromJ.point.dx + radiusDragBut + arrangeCenterX , fromJ.point.dy + radiusDragBut +arrangeCenterY);
           Offset coord2 = Offset(
-              toJ.point.dx + radiusDragBut, toJ.point.dy + radiusDragBut);
+              toJ.point.dx + radiusDragBut + arrangeCenterX, toJ.point.dy + radiusDragBut + arrangeCenterY);
           canvas.drawLine(coord1, coord2, paint);
         }
       }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../widget/design/settingColor.dart';
+import '../../widget/design/settingColor.dart';
 import 'package:projectfront/widget/design/basicButtons.dart';
 import '../rigging/getImage.dart'; // 버튼 사용을 위해 넣음
 
