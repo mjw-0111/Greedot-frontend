@@ -81,7 +81,7 @@ class ApiService {
     if (token == null) {
       throw Exception('Token not found');
     }
-    final url = Uri.parse('$baseUrl/api/v1/user/user/profile');
+    final url = Uri.parse('$baseUrl/api/v1/user/profile');
     final response = await http.get(
       url,
       headers: {
@@ -104,7 +104,7 @@ class ApiService {
     if (token == null) {
       throw Exception('Token not found');
     }
-    final url = Uri.parse('$baseUrl/api/v1/user/user/change-profile');
+    final url = Uri.parse('$baseUrl/api/v1/user/change-profile');
     final response = await http.put(
       url,
       headers: {

@@ -1,22 +1,16 @@
 import 'package:flutter/material.dart';
 import '../../widget/design/settingColor.dart';
+import '../../models/gree_model.dart';
 import 'package:projectfront/widget/design/basicButtons.dart';
 import '../rigging/getImage.dart';
 
 class FavoriteItemCard extends StatefulWidget {
-  final String image;
-  final String name;
-  final String mbti;
-  final String description;
+  final Gree gree;
 
   FavoriteItemCard({
     Key? key,
-    required this.image,
-    required this.name,
-    required this.mbti,
-    required this.description,
+    required this.gree,
   }) : super(key: key);
-
 
   @override
   _FavoriteItemCardState createState() => _FavoriteItemCardState();
@@ -38,8 +32,9 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
             alignment: Alignment.topCenter,
             child: Padding(
               padding: EdgeInsets.only(top: 20),
-              child: Image.asset(
-                widget.image,
+              // Image.network 사용, DB에서 불러온 이미지 주소를 사용
+              child: Image.network(
+                widget.gree.raw_img,
                 fit: BoxFit.cover,
                 width: 120, height: 120,
               ),
@@ -59,18 +54,8 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
               },
             ),
           ),
-          Align(
-            alignment: Alignment.bottomRight,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 35),
-              child: Small_EleButton_greedot(
-                gotoScene: () => GetImage_greedot(),
-                buttonText: "대화 시작",
-              ),
-            ),
-          ),
           Positioned(
-            top: 140, // 이미지와 버튼의 높이에 맞추어 조절
+            top: 140,
             left: 8,
             right: 8,
             child: Column(
@@ -78,11 +63,10 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.name,
+                  widget.gree.gree_name ?? 'Unknown', // null 처리
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                Text(widget.mbti),
-                Text(widget.description),
+                Text(widget.gree.prompt_mbti ?? 'Unknown'), // null 처리
               ],
             ),
           ),
