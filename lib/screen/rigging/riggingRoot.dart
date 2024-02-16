@@ -8,8 +8,10 @@ import '../../widget/design/settingColor.dart';
 import '../../provider/pageNavi.dart';
 import '../gree/keepItem.dart';
 import '../gree/addFavorite.dart';
+import '../rigging/drawSkeleton.dart';
 import '../../screen/user/AdminPage.dart';
 import '../gree/addFavorite.dart';
+import '../emotionReport/reportPage.dart';
 
 import '../../screen/user/ViewProfile.dart';
 
@@ -118,7 +120,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   const SizedBox(height: 15),
                   EleButton_greedot(
                     width: 160, height: 45, fontSize: 13,
-                    additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
+                    additionalFunc: () => pageNavi.changePage('ReportPage'),
                     buttonText: "우리아이 대화 보기",
                   ),
                 ],
@@ -134,10 +136,6 @@ class _RiggingRootState extends State<RiggingRoot> {
                   const SizedBox(height: 35),
                   EleButton_greedot(
                     width: 160, height: 45, fontSize: 13,
-                    additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
-                    gotoScene: () => SkeletonCanvas(),
-                    buttonText: "새 AI 친구 만들기",
-                  Big_EleButton_greedot(
                     additionalFunc: () => pageNavi.changePage('newgree'),
                     buttonText: "그리 새로 만들기",
                   ),
