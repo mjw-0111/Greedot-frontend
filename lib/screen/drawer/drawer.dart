@@ -58,7 +58,7 @@ class drawer_greedot extends StatelessWidget {
             listTileIcon: Icons.alarm,
             listTileText: "alarm",
             onTap: () {
-              pageNavi.changePage('SpeechSampleApp');
+              pageNavi.changePage('ChatPage');
               Navigator.of(context).pop(); // 드로어를 닫습니다.
             },
           ),

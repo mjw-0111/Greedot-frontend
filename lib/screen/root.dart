@@ -52,6 +52,8 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         return ChatPage();
       case 'SettingPersonality':
         return SettingPersonality();
+      case 'ChatPage':
+        return ChatPage();
       default:
         return RiggingRoot();
     }
