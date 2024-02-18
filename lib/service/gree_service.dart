@@ -56,7 +56,6 @@ class ApiServiceGree {
 
 
 
-
   static Future<void> updateGree(int greeId, GreeUpdate model) async {
     var url = '$baseUrl/api/v1/gree/update/$greeId';
     final token = await AuthService.getToken();
@@ -79,20 +78,27 @@ class ApiServiceGree {
 
 
 
-  static Future<List<dynamic>> readGrees() async {
+  static Future<List<Gree>> readGrees() async {
     var url = '$baseUrl/api/v1/gree/view';
     final token = await AuthService.getToken();
     if (token == null) {
       throw Exception('no token');
     }
-    var response = await http.get(Uri.parse(url));
+    var response = await http.get(
+      Uri.parse(url),
+      headers: {
+        "Authorization": "Bearer $token",
+      },
+    );
 
     if (response.statusCode == 200) {
-      return json.decode(response.body);
+      List jsonResponse = json.decode(response.body);
+      return jsonResponse.map((data) => Gree.fromJson(data)).toList();
     } else {
       throw Exception('Failed to load grees.');
     }
   }
+
 
 
   static Future<dynamic> readGree(int greeId) async {
