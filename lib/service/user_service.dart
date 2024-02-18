@@ -115,6 +115,17 @@ class ApiService {
     );
     return response;
   }
+
+  // Chatbot 대화 업데이트
+  static Future<http.Response> GetChatBotMessage(int greeId, String message) async {
+    final url = Uri.parse('$baseUrl/api/v1/ai/chat');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'greeId':greeId,'message':message}),
+    );
+    return response;
+  }
 }
 
 class AuthService {

@@ -10,52 +10,54 @@ import '../../widget/design/basicButtons.dart';
 import '../../provider/pageNavi.dart';
 import '../../service/gree_service.dart';
 
+class LoadingNotifier with ChangeNotifier {
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
+
+  void setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
+}
+
 Align drawSkeletonNavi(BuildContext context, double imageWidth, double imageHeight, int? greeid) {
   double elebutW= 120;
   double elebutH= 40;
   double paddingBWbut = 10;
   final pageNavi = Provider.of<PageNavi>(context, listen: false);
   return Align(
-         alignment: Alignment.bottomCenter,
-         child: Padding(
-           padding: EdgeInsets.all(paddingBWbut),
-           child: Row(
-             mainAxisSize: MainAxisSize.min,
-             crossAxisAlignment: CrossAxisAlignment.end,
-             children: <Widget>[
-               EleButton_greedot(
-                 height: elebutH, // 높이 설정
-                 width: elebutW, // 너비 설정
-                 additionalFunc: () {
-                   for (var node in skeletonInfo) {
-                     print(
-                         '${node.fromJoint} = (${node.point.dx}, ${node.point.dy})');
-                   }
-                 },
-                 buttonText: '좌표 출력',
-               ),
-               SizedBox(width: paddingBWbut),
-               EleButton_greedot(
-                 height: elebutH,
-                 width: elebutW,
-                 additionalFunc: () async {
-                   if (greeid != null) {
-                     await writeNodesToYaml(
-                         skeletonInfo, imageWidth, imageHeight, greeid);
-                     ScaffoldMessenger.of(context)
-                         .showSnackBar(SnackBar(content: Text('YAML 파일이 서버에 저장됨')));
-                   } else {
-                     ScaffoldMessenger.of(context)
-                         .showSnackBar(SnackBar(content: Text('gree_id가 없습니다.')));
-                   }
-                 },
-                 buttonText: 'Yaml 저장',
-               ),
-             ],
-           ),
-         ),
-       );
- }
+    alignment: Alignment.bottomCenter,
+    child: Padding(
+      padding: EdgeInsets.all(paddingBWbut),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: <Widget>[
+          EleButton_greedot(
+            height: elebutH,
+            width: elebutW,
+            additionalFunc: ()  async {
+              if (greeid == null) {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('gree_id가 없습니다.')));
+                return;
+              }
+              showLoadingDialog(context); // 로딩 대화 상자 표시
+              try {
+                await writeNodesToYaml(skeletonInfo, imageWidth, imageHeight, greeid);
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('YAML 파일이 서버에 저장됨')));
+              } finally {
+                closeLoadingDialog(context);// 로딩 종료
+                pageNavi.changePage('ChatPage');
+              }
+            },
+            buttonText: 'Yaml 저장',
+          ),
+        ],
+      ),
+    ),
+  );
+}
 Future<void> writeNodesToYaml(
     List<Joint> nodes, double width, double height, int? greeId) async {
   if (greeId == null) {
@@ -85,3 +87,24 @@ Future<void> writeNodesToYaml(
   await ApiServiceGree.uploadFilesToBackend(greeId);
 }
 
+void showLoadingDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, // 사용자가 대화 상자 외부를 탭해도 닫히지 않도록 설정
+    builder: (BuildContext context) {
+      return AlertDialog(
+        content: Row(
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(width: 20), // 스피너와 텍스트 사이의 간격
+            Text("생성 중입니다..."),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void closeLoadingDialog(BuildContext context) {
+  Navigator.of(context).pop(); // 대화 상자 닫기
+}
