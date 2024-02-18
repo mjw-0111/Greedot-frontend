@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:projectfront/widget/design/settingColor.dart';
+import 'package:provider/provider.dart';
 
 import '../../structure/structure.dart';
 import '../../structure/structureInit.dart';
@@ -43,6 +44,7 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
 
   @override
   Widget build(BuildContext context) {
+    final loadingNotifier = Provider.of<LoadingNotifier>(context);
     final screenSize = MediaQuery
         .of(context)
         .size;
@@ -65,7 +67,9 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
                   positions, arrangeCenterX, arrangeCenterY, radiusDragBut),
             ),
           ),
-          drawSkeletonNavi(context, imageWidth, imageHeight, widget.greeId), //버튼
+          drawSkeletonNavi(context, imageWidth, imageHeight, widget.greeId),
+          if (loadingNotifier.isLoading)
+            Center(child: CircularProgressIndicator()),
           // Draggable buttons
           ...List.generate(skeletonInfo.length, (index) {
             return Positioned(
