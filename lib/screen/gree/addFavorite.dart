@@ -3,6 +3,9 @@ import '../../widget/design/settingColor.dart';
 import '../../models/gree_model.dart';
 import 'package:projectfront/widget/design/basicButtons.dart';
 import '../rigging/getImage.dart';
+import '../../screen/root.dart';
+import '../../provider/pageNavi.dart';
+import 'package:provider/provider.dart';
 
 class FavoriteItemCard extends StatefulWidget {
   final Gree gree;
@@ -21,6 +24,8 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
 
   @override
   Widget build(BuildContext context) {
+    final pageNavi = Provider.of<PageNavi>(context, listen: false);
+
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
@@ -50,7 +55,17 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
               onPressed: () {
                 setState(() {
                   isFavorite = !isFavorite;
+                  //widget.gree.id;
                 });
+              },
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: ElevatedButton(
+              child: Text('대화 시작'),
+              onPressed: () {
+                pageNavi.changePage('ChatPage', data: PageData(greeId: widget.gree.id));
               },
             ),
           ),
