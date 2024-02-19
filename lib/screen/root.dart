@@ -16,6 +16,7 @@ import '/screen/gree/favoriteList.dart';
 import 'personality/settingAge.dart';
 
 
+
 String currentPageKey = 'RiggingRoot';
 
 class Navigation_Greedot extends StatefulWidget {
@@ -30,6 +31,10 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
 
   //추가할 페이지 case에 추가
   Widget buildBody(String pageKey) {
+    final pageNavi = Provider.of<PageNavi>(context);
+    String pageKey = pageNavi.currentPageKey;
+    PageData? data = pageNavi.currentPageData;
+
     switch (pageKey) {
       case 'RiggingRoot':
         return RiggingRoot();
@@ -43,10 +48,12 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         return GetImage_greedot();
       case 'SignupScreen':
         return SignupScreen();
-      case 'SpeechSampleApp':
-        return SpeechSampleApp();
+      case 'ChatPage':
+        return ChatPage();
       case 'SettingPersonality':
         return SettingPersonality();
+      case 'ChatPage':
+        return ChatPage();
       default:
         return RiggingRoot();
     }

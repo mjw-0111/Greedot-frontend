@@ -183,9 +183,9 @@ class ApiServiceGree {
 
     final response = await request.send();
     if (response.statusCode == 200) {
-      print('File uploaded successfully');
+      print('yaml uploaded successfully');
     } else {
-      print('Failed to upload file');
+      print('yaml to upload file');
     }
   }
 
@@ -207,9 +207,9 @@ class ApiServiceGree {
     final responseString = await http.Response.fromStream(response);
 
     if (response.statusCode == 200) {
-      print('Files uploaded successfully');
+      print('gif uploaded successfully');
     } else {
-      print('Failed to upload files: ${response.statusCode}');
+      print('gif to upload files: ${response.statusCode}');
       print('Reason: ${responseString.body}');
     }
   }
