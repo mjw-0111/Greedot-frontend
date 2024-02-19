@@ -48,7 +48,7 @@ Align drawSkeletonNavi(BuildContext context, double imageWidth, double imageHeig
                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('YAML 파일이 서버에 저장됨')));
               } finally {
                 closeLoadingDialog(context);// 로딩 종료
-                pageNavi.changePage('ChatPage');
+                pageNavi.changePage('ChatPage',  data: PageData(greeId: greeid));
               }
             },
             buttonText: 'Yaml 저장',

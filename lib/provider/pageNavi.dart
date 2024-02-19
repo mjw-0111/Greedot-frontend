@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import '../structure/structure.dart';
 
 class PageData {
-  final int? greeId;
+  final int? greeId; 
+  final String? imageUrl;
 
-  PageData({this.greeId});
+  PageData({this.greeId, this.imageUrl});
 }
 
 class PageNavi with ChangeNotifier {
@@ -17,6 +18,8 @@ class PageNavi with ChangeNotifier {
   void changePage(String pageKey, {PageData? data}) {
     _currentPageKey = pageKey;
     _currentPageData = data;
+
     notifyListeners();
+  
   }
 }

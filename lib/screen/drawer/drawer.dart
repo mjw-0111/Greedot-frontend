@@ -54,14 +54,6 @@ class drawer_greedot extends StatelessWidget {
               Navigator.of(context).pop(); // 드로어를 닫습니다.
             },
           ),
-          DrawerListTile(
-            listTileIcon: Icons.alarm,
-            listTileText: "alarm",
-            onTap: () {
-              pageNavi.changePage('ChatPage');
-              Navigator.of(context).pop(); // 드로어를 닫습니다.
-            },
-          ),
           DrawerListTile(listTileIcon: Icons.settings, listTileText: "mes"),
         ],
       ),

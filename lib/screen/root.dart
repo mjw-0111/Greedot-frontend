@@ -49,13 +49,13 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
       case 'SignupScreen':
         return SignupScreen();
       case 'ChatPage':
-        return ChatPage();
+        return ChatPage(greeId:data?.greeId);
       case 'SettingPersonality':
-        return SettingPersonality();
+        return SettingPersonality(greeId:data!.greeId);
+      case 'SkeletonCanvas':
+        return SkeletonCanvas(greeId:data!.greeId, imageUrl:data.imageUrl);
       case 'ReportPage':
         return ReportPage();
-      case 'ChatPage':
-        return ChatPage();
       default:
         return RiggingRoot();
     }

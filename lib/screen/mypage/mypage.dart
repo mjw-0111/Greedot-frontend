@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projectfront/provider/pageNavi.dart';
+import 'package:provider/provider.dart';
 import '../../models/user_model.dart';
 import '../../service/user_service.dart';
 import '../../widget/design/settingColor.dart';
@@ -92,12 +94,13 @@ class _MyPageState extends State<MyPage> {
   void _handleLogout() async {
     await AuthService.deleteToken(); // 토큰 삭제하여 로그아웃 처리
     // 로그아웃 후 로그인 화면으로 이동
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => LogIn()),
-    );
+    // Navigator.of(context).pushReplacement(
+    //   MaterialPageRoute(builder: (context) => LogIn()),
+    // );
+    Navigator.of(context).pop();
+    final pageNavi = Provider.of<PageNavi>(context, listen: false);
+    pageNavi.changePage('LogIn');
   }
-
-
 
   void showEditProfileDialog(BuildContext context, UserModel user) {
     TextEditingController nicknameController = TextEditingController(text: user.nickname);

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:projectfront/models/user_model.dart';
+import 'package:projectfront/provider/pageNavi.dart';
+import 'package:provider/provider.dart';
 
 import '../../widget/design/settingColor.dart';
 import '../../widget/design/basicButtons.dart';
@@ -61,6 +63,7 @@ class _getImageState extends State<GetImage_greedot> {
 
 
   Future<void> showUploadSuccessSnackBar() async {
+    final pageNavi = Provider.of<PageNavi>(context, listen: false);
     if (_image != null) {
       final response = await ApiServiceGree.uploadImage(_imagePath!);
       if (response != null && response['message'] == 'File uploaded successfully.') {
@@ -75,10 +78,12 @@ class _getImageState extends State<GetImage_greedot> {
         int greeId = response['gree_id'];
         await ApiServiceGree.processGreeImages(greeId); // 추가 이미지 처리 요청
         // SettingPersonality 위젯으로 네비게이트하며 greeId 전달
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => SettingPersonality(greeId: greeId)),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(builder: (context) => SettingPersonality(greeId: greeId)),
+        // );
+        pageNavi.changePage('SettingPersonality', data: PageData(greeId: greeId));
+
       } else {
         // 업로드 실패 로직
         ScaffoldMessenger.of(context).showSnackBar(

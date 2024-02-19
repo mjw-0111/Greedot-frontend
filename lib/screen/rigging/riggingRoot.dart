@@ -16,7 +16,6 @@ import '../gree/addFavorite.dart';
 import '../emotionReport/reportPage.dart';
 
 import '../../screen/user/ViewProfile.dart';
-
 class RiggingRoot extends StatefulWidget {
   const RiggingRoot({Key? key}) : super(key: key);
 
@@ -26,17 +25,41 @@ class RiggingRoot extends StatefulWidget {
 
 class _RiggingRootState extends State<RiggingRoot> {
   int activeIndex = 0;
-  late Future<List<Gree>> futureGrees;
+  List<Gree> _grees = [];
+  List<String?> _greeGifs = [];
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    futureGrees = ApiServiceGree.readGrees();
-    futureGrees.then((greeList) {
-      if (greeList.isNotEmpty) {
-        print("First Gree ID: ${greeList.first.id}");
+    _loadGreesAndGifs();
+  }
+
+  Future<void> _loadGreesAndGifs() async {
+    // Gree 객체들을 로드하고, 각 객체에 대한 GIF URL을 가져옵니다.
+    try {
+      List<Gree> grees = await ApiServiceGree.readGrees();
+      // 각 Gree 객체에 대한 GIF URL을 비동기적으로 가져옵니다.
+      List<String?> greeGifs = await Future.wait(grees.map((gree) async {
+        return await ApiServiceGree.fetchSpecificGreeGif(gree.id!);
+      }));
+
+      if (mounted) {
+        setState(() {
+          _grees = grees;
+          _greeGifs = greeGifs;
+          _isLoading = false;
+        });
       }
-    });
+    } catch (e) {
+      // 오류 처리
+      print("Error loading Gree data: $e");
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
@@ -48,32 +71,21 @@ class _RiggingRootState extends State<RiggingRoot> {
       width: screenSize.width,
       height: screenSize.height,
       color: colorMainBG_greedot,
-      child: FutureBuilder<List<Gree>>(
-        future: futureGrees,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
-            return Center(child: Text("Error: ${snapshot.error}"));
-          } else if (snapshot.hasData) {
-            List<Gree> grees = snapshot.data!;
-            return Stack(
+      child: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : Stack(
               children: <Widget>[
                 CarouselSlider(
-                  items: grees.map((gree) {
-                    return FutureBuilder<String?>(
-                      future: ApiServiceGree.fetchSpecificGreeGif(gree.id!),
-                      builder: (context, snapshot) {
-                        if (snapshot.hasError || !snapshot.hasData) {
-                          return Text("No 'dab' GIF found");
-                        } else {
-                          return FlipCard(
-                            front: Image.network(snapshot.data!, fit: BoxFit.cover),
+                  items: _grees.asMap().entries.map((entry) {
+                    int idx = entry.key;
+                    Gree gree = entry.value;
+                    String? gifUrl = _greeGifs[idx];
+                    return gifUrl == null
+                        ? Text("No 'dab' GIF found")
+                        : FlipCard(
+                            front: Image.network(gifUrl, fit: BoxFit.cover),
                             back: buildCardBack(gree),
                           );
-                        }
-                      },
-                    );
                   }).toList(),
                   options: CarouselOptions(
                     height: 240,
@@ -93,7 +105,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   child: Center(
                     child: AnimatedSmoothIndicator(
                       activeIndex: activeIndex,
-                      count: grees.length,
+                      count: _grees.length,
                       effect: SlideEffect(
                         dotHeight: 6,
                         dotWidth: 6,
@@ -103,12 +115,12 @@ class _RiggingRootState extends State<RiggingRoot> {
                     ),
                   ),
                 ),
-                Positioned(
+                const Positioned(
                   bottom: 230,
                   left: 0,
                   right: 0,
                   child: Text(
-                      "캐릴터를 터치하면 캐릭터 정보가 보여요!",
+                      "캐릭터를 터치하면 캐릭터 정보가 보여요!",
                       textAlign: TextAlign.center,
                       style: TextStyle(color: colorSnackBar_greedot, fontSize: 15)
                   ),
@@ -154,15 +166,11 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
               ],
-            );
-          } else {
-            return Center(child: Text("No Gree data available."));
-          }
-        },
-      ),
+            )
     );
+          }   
   }
-}
+
 
 Widget buildCardBack(Gree gree) {
   return Padding(
