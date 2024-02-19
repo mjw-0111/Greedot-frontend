@@ -8,7 +8,13 @@ import '../../widget/design/settingColor.dart';
 import '../../provider/pageNavi.dart';
 import '../../models/gree_model.dart';
 import '../../service/gree_service.dart';
+import '../gree/keepItem.dart';
+import '../gree/addFavorite.dart';
+import '../rigging/drawSkeleton.dart';
 import '../../screen/user/AdminPage.dart';
+import '../gree/addFavorite.dart';
+import '../emotionReport/reportPage.dart';
+
 import '../../screen/user/ViewProfile.dart';
 
 class RiggingRoot extends StatefulWidget {
