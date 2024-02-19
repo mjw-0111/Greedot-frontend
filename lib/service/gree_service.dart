@@ -203,9 +203,6 @@ class ApiServiceGree {
       });
 
 
-    // 여기에 필요한 경우 헤더 설정을 추가할 수 있습니다.
-    // 예: request.headers.addAll({'Authorization': 'Bearer $yourToken'});
-
     var response = await request.send();
     final responseString = await http.Response.fromStream(response);
 
