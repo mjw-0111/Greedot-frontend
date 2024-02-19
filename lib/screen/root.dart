@@ -14,7 +14,7 @@ import '/screen/login/login.dart';
 import '/screen/login/memberRegister.dart';
 import '/screen/gree/favoriteList.dart';
 import 'personality/settingAge.dart';
-
+import '../screen/emotionReport/reportPage.dart';
 
 
 String currentPageKey = 'RiggingRoot';
@@ -52,6 +52,8 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         return ChatPage();
       case 'SettingPersonality':
         return SettingPersonality();
+      case 'ReportPage':
+        return ReportPage();
       case 'ChatPage':
         return ChatPage();
       default:
