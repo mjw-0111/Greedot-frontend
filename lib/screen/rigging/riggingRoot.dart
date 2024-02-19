@@ -64,9 +64,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                     return FutureBuilder<String?>(
                       future: ApiServiceGree.fetchSpecificGreeGif(gree.id!),
                       builder: (context, snapshot) {
-                        if (snapshot.connectionState == ConnectionState.waiting) {
-                          return CircularProgressIndicator();
-                        } else if (snapshot.hasError || !snapshot.hasData) {
+                       if (snapshot.hasError || !snapshot.hasData) {
                           return Text("No 'dab' GIF found");
                         } else {
                           return FlipCard(
