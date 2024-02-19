@@ -31,7 +31,12 @@ class _RiggingRootState extends State<RiggingRoot> {
   @override
   void initState() {
     super.initState();
-    futureGrees = ApiServiceGree.readGrees(); // 데이터 로드
+    futureGrees = ApiServiceGree.readGrees();
+    futureGrees.then((greeList) {
+      if (greeList.isNotEmpty) {
+        print("First Gree ID: ${greeList.first.id}");
+      }
+    });
   }
 
   @override
@@ -56,12 +61,19 @@ class _RiggingRootState extends State<RiggingRoot> {
               children: <Widget>[
                 CarouselSlider(
                   items: grees.map((gree) {
-                    return Builder(
-                      builder: (BuildContext context) {
-                        return FlipCard(
-                          front: Image.network(gree.raw_img, fit: BoxFit.cover),
-                          back: buildCardBack(gree),
-                        );
+                    return FutureBuilder<String?>(
+                      future: ApiServiceGree.fetchSpecificGreeGif(gree.id!),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError || !snapshot.hasData) {
+                          return Text("No 'dab' GIF found");
+                        } else {
+                          return FlipCard(
+                            front: Image.network(snapshot.data!, fit: BoxFit.cover),
+                            back: buildCardBack(gree),
+                          );
+                        }
                       },
                     );
                   }).toList(),
@@ -111,12 +123,12 @@ class _RiggingRootState extends State<RiggingRoot> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const SizedBox(height: 35),
-                      Big_EleButton_greedot(
+                      EleButton_greedot(
                         additionalFunc: () => pageNavi.changePage('FavoriteListPage'),
                         buttonText: "AI 친구들 모아보기",
                       ),
                       const SizedBox(height: 15),
-                      Big_EleButton_greedot(
+                      EleButton_greedot(
                         additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                         buttonText: "우리아이 대화 보기",
                       ),
@@ -131,12 +143,12 @@ class _RiggingRootState extends State<RiggingRoot> {
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const SizedBox(height: 35),
-                      Big_EleButton_greedot(
+                      EleButton_greedot(
                         additionalFunc: () => pageNavi.changePage('newgree'),
                         buttonText: "그리 새로 만들기",
                       ),
                       const SizedBox(height: 15),
-                      Big_EleButton_greedot(
+                      EleButton_greedot(
                         additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
                         buttonText: "같이 게임하기",
                       ),

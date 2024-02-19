@@ -213,6 +213,38 @@ class ApiServiceGree {
       print('Reason: ${responseString.body}');
     }
   }
+
+
+  static Future<String?> fetchSpecificGreeGif(int greeId) async {
+    final url = Uri.parse('$baseUrl/api/v1/gree/getgif/$greeId');
+    final token = await AuthService.getToken();
+    if (token == null) {
+      _logger.e('No token found');
+      return null;
+    }
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        final gifInfo = jsonResponse.firstWhere(
+              (gif) => gif['file_name'] == 'dab',
+          orElse: () => null,
+        );
+        return gifInfo != null ? gifInfo['real_name'] : null;
+      } else {
+        _logger.w("Failed to fetch GIFs with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      _logger.e("Error fetching GIFs: $e");
+      return null;
+    }
+  }
 }
 
 
