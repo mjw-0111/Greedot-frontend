@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import '../../models/gree_model.dart';
 import '../gree/addFavorite.dart';
 
-List<Gree> favoriteItems = [
-];
 
 Widget buildItemTextSection(Gree gree) {
   return Padding(

@@ -53,6 +53,7 @@ dependencies:
   dio: ^5.4.0
   mime_type: ^1.0.0
   logger: ^1.2.2
+  fl_chart: ^0.60.0
 
 dev_dependencies:
   flutter_test:

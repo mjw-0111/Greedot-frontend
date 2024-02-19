@@ -66,6 +66,7 @@ class UserModel {
   grade: GradeEnum.values.firstWhere((e) => e.toString().split('.').last.toUpperCase() == json['grade']),
   );
   }
+  String get gradeString => grade.toString().split('.').last;
 }
 
 class UserProfileUpdateModel {
