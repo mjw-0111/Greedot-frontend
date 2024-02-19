@@ -116,13 +116,14 @@ class ApiService {
     return response;
   }
 
-  // Chatbot 대화 업데이트
-  static Future<http.Response> GetChatBotMessage(int greeId, String message) async {
+  // Chatbot 대화 업데이트 int greeId, String message
+  static Future<http.Response> GetChatBotMessage(Map<String, dynamic> data) async {
     final url = Uri.parse('$baseUrl/api/v1/ai/chat');
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'greeId':greeId,'message':message}),
+      body:json.encode(data)
+      //body: jsonEncode({'greeId':greeId,'message':message}),
     );
     return response;
   }
