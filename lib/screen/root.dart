@@ -67,6 +67,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Greedot"),
         backgroundColor: colorMainBG_greedot,
         centerTitle: false,
