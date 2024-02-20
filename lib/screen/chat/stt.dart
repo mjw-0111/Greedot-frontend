@@ -116,7 +116,8 @@ class _ChatPageState extends State<ChatPage> {
           'gree_id': widget.greeId!,
           'message': message
         });
-        print('Response received: ${jsonDecode(utf8.decode(response.bodyBytes))}'); // 응답 로그
+        print('Response received: ${jsonDecode(
+            utf8.decode(response.bodyBytes))}'); // 응답 로그
 
         if (response.statusCode == 200) {
           final decodedResponse = jsonDecode(utf8.decode(response.bodyBytes));
@@ -170,51 +171,49 @@ class _ChatPageState extends State<ChatPage> {
       child: Column(
         children: [
           Expanded(
-            child: Row(
+            child: Stack(
               children: [
-                Expanded(
-                  flex: 3, // 채팅창이 차지하는 비율을 조정합니다.
-                  child: ListView.builder(
-                    reverse: true,
-                    //padding: const EdgeInsets.only(top:30.0),
-                    padding: const EdgeInsets.all(30.0),
-                    itemCount: messages.length,
-                    itemBuilder: (context, index) {
-                      final message = messages[messages.length - 1 -
-                          index]; // 메시지 리스트를 역순으로 렌더링합니다.
-                      return Align(
-                        alignment: message.isUser
-                            ? Alignment.centerLeft
-                            : Alignment.centerRight,
-                        child: Container(
-                          margin: EdgeInsets.symmetric(
-                              vertical: 5, horizontal: 10),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 15),
-                          decoration: BoxDecoration(
-                            color: message.isUser ? colorBut_greedot : Colors
-                                .grey[300],
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            message.messageContent,
-                            style: TextStyle(
-                                color: message.isUser ? Colors.white : Colors
-                                    .black),
-                          ),
-                        ),
-                      );
-                    },
+                Align(
+                  // GIF를 중앙에 크게 배치
+                  alignment: Alignment.center,
+                  child: GifPlayer(
+                    gifUrl: currentGifUrl.isNotEmpty
+                        ? currentGifUrl
+                        : 'https://some-default-url/default.gif',
+                    width: 600.0, // GIF 크기 조정
+                    height: 600.0,
                   ),
                 ),
-                Expanded(
-                  flex: 2,
-                  child: GifPlayer(
-                    // null이 아니면 currentGifUrl을 사용하고, null이면 기본 URL을 제공합니다.
-                    gifUrl: currentGifUrl ?? 'https://some-default-url/default.gif',
-                    width: 200.0,
-                    height: 500.0,
-                  ),
+                ListView.builder(
+                  reverse: true,
+                  padding: const EdgeInsets.all(30.0),
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    final message = messages[messages.length - 1 - index];
+                    return Align(
+                      // 사용자 메시지는 오른쪽, 봇 메시지는 왼쪽 정렬
+                      alignment: message.isUser
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(
+                            vertical: 5, horizontal: 10),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 10, horizontal: 15),
+                        decoration: BoxDecoration(
+                          color: message.isUser ? colorBut_greedot : Colors
+                              .grey[300],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Text(
+                          message.messageContent,
+                          style: TextStyle(
+                              color: message.isUser ? Colors.white : Colors
+                                  .black),
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),
