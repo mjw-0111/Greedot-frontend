@@ -1,14 +1,19 @@
 import 'dart:convert';
 
+import 'package:just_audio/just_audio.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter/material.dart';
+import 'package:projectfront/screen/chat/gifPlayer.dart';
 import 'package:projectfront/widget/design/settingColor.dart';
 import 'package:provider/provider.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 import '../../service/user_service.dart';
 import '../../widget/design/settingColor.dart';
 
-import '../../provider/pageNavi.dart';
+import '../../service/gree_service.dart';
+import '../../screen/chat/stt.dart';
+
+
 
 class ChatMessage {
   String messageContent;
@@ -29,6 +34,33 @@ class _ChatPageState extends State<ChatPage> {
   var text = "Hold the button and speak";
   var isListening = false;
   List<ChatMessage> messages = [];
+  Map<String, String> keywordToGifUrl = {};
+
+  String currentGifUrl = '';
+
+  void initState() {
+    super.initState();
+    if (widget.greeId != null) {
+      loadGifsAndUpdateMap(widget.greeId!); // 위젯 초기화 시 GIF 목록 로드
+    }
+  }
+
+  void loadGifsAndUpdateMap(int greeId) async {
+    Map<String, String> fetchedGifs = await ApiServiceGree.fetchGreeGifs(
+        greeId);
+    if (fetchedGifs.isNotEmpty) {
+      setState(() {
+        keywordToGifUrl = fetchedGifs;
+        currentGifUrl =
+            fetchedGifs.values.first; //
+      });
+    } else {
+      // GIF를 가져오지 못했을 경우 처리
+      setState(() {
+        currentGifUrl = 'https://default-gif-url/default.gif'; // 기본 GIF URL
+      });
+    }
+  }
 
   void _onSpeechResult(String newText) {
     if (isListening) { // isListening이 true일 때만 결과를 처리합니다.
@@ -54,8 +86,8 @@ class _ChatPageState extends State<ChatPage> {
             _onSpeechResult(result.recognizedWords);
           }
         },
-        listenFor: Duration(seconds: 15), // 사용자가 말할 수 있는 최대 시간을 늘립니다.
-        pauseFor: Duration(milliseconds: 1500), // 사용자가 말을 멈춘 후 인식을 중지할 시간을 설정합니다.
+        listenFor: Duration(seconds: 15),
+        pauseFor: Duration(milliseconds: 1500),
         localeId: 'ko_KR',
       );
     } else {
@@ -64,24 +96,47 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+
   void _sendMessage(String message) async {
     print('Sending message with greeId: ${widget.greeId}');
 
     if (widget.greeId != null) {
       try {
-        var response = await ApiService.GetChatBotMessage(widget.greeId!, message);
-        print('Response received: ${response.body}'); // 응답 로그 출력
+        var response = await ApiService.GetChatBotMessage({
+          'gree_id': widget.greeId!,
+          'message': message
+        });
+        print('Response received: ${jsonDecode(utf8.decode(response.bodyBytes))}'); // 응답 로그
 
         if (response.statusCode == 200) {
           final decodedResponse = jsonDecode(utf8.decode(response.bodyBytes));
           final gptTalkContent = decodedResponse['chat_response']['gpt_talk']['content'];
+          final voiceUrl = decodedResponse['chat_response']['gpt_talk']['voice_url'];
+
+          String newGifUrl = currentGifUrl;
+          for (var keyword in keywordToGifUrl.keys) {
+            if (gptTalkContent.contains(keyword)) {
+              newGifUrl = keywordToGifUrl[keyword]!; //TODO 이부분 수정필요
+              break;
+            }
+          }
+
+          AudioPlayer audioPlayer = AudioPlayer();
 
           setState(() {
             messages.add(ChatMessage(
-                messageContent: gptTalkContent, isUser: false));
+                messageContent: gptTalkContent,
+                isUser: false
+            ));
+            currentGifUrl = newGifUrl;
           });
+
+          if (voiceUrl != null && voiceUrl is String && voiceUrl.isNotEmpty) {
+            // voiceUrl이 유효하면 오디오 재생
+            await audioPlayer.setUrl(voiceUrl);
+            await audioPlayer.play();
+          }
         } else {
-          // 서버 응답에 문제가 있을 때의 처리
           print('The request failed with status: ${response.statusCode}');
         }
       } catch (e) {
@@ -97,40 +152,65 @@ class _ChatPageState extends State<ChatPage> {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
           Expanded(
-            child: ListView.builder(
-              reverse: true,
-              padding: const EdgeInsets.all(30.0),
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                final message = messages[messages.length - 1 - index]; // 메시지 리스트를 역순으로 렌더링
-                return Align(
-                  alignment: message.isUser ? Alignment.centerLeft : Alignment.centerRight,
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    decoration: BoxDecoration(
-                      color: message.isUser ? colorBut_greedot : Colors.grey[300],
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: Text(
-                      message.messageContent,
-                      style: TextStyle(color: message.isUser ? Colors.white : Colors.black),
-                    ),
+            child: Row(
+              children: [
+                Expanded(
+                  flex: 3, // 채팅창이 차지하는 비율을 조정합니다.
+                  child: ListView.builder(
+                    reverse: true,
+                    //padding: const EdgeInsets.only(top:30.0),
+                    padding: const EdgeInsets.all(30.0),
+                    itemCount: messages.length,
+                    itemBuilder: (context, index) {
+                      final message = messages[messages.length - 1 -
+                          index]; // 메시지 리스트를 역순으로 렌더링합니다.
+                      return Align(
+                        alignment: message.isUser
+                            ? Alignment.centerLeft
+                            : Alignment.centerRight,
+                        child: Container(
+                          margin: EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
+                          decoration: BoxDecoration(
+                            color: message.isUser ? colorBut_greedot : Colors
+                                .grey[300],
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            message.messageContent,
+                            style: TextStyle(
+                                color: message.isUser ? Colors.white : Colors
+                                    .black),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+                Expanded(
+                  flex: 2,
+                  child: GifPlayer(
+                    // null이 아니면 currentGifUrl을 사용하고, null이면 기본 URL을 제공합니다.
+                    gifUrl: currentGifUrl ?? 'https://some-default-url/default.gif',
+                    width: 200.0,
+                    height: 500.0,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height:50),
+          SizedBox(height: 50),
           AvatarGlow(
             animate: isListening,
             duration: const Duration(milliseconds: 2000),
             repeat: true,
             glowColor: Colors.grey,
-            //endRadius: 75.0,
             child: FloatingActionButton(
               backgroundColor: colorBut_greedot,
               onPressed: () {
@@ -141,131 +221,13 @@ class _ChatPageState extends State<ChatPage> {
                   _startListening();
                 }
               },
-              child: Icon(isListening ? Icons.mic : Icons.mic_none, color: Colors.white),
+              child: Icon(isListening ? Icons.mic : Icons.mic_none,
+                  color: Colors.white),
             ),
           ),
-          SizedBox(height:50),
+          SizedBox(height: 50),
         ],
       ),
     );
   }
 }
-
-
-
-  /*@override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(text),
-            SizedBox(height: 100),
-            AvatarGlow(
-              animate: isListening,
-              duration: const Duration(milliseconds: 2000),
-              repeat: true,
-              glowColor: Colors.black,
-              child: IconButton(
-                onPressed: () async {
-                  setState(() {
-                    isListening = !isListening;
-                  });
-                  if (isListening) {
-                    var available = await speechToText.initialize(
-                      onError: (val) => print('Error: $val'),
-                      onStatus: (val) => print('Status: $val'),
-                    );
-                    if (available) {
-                      speechToText.listen(
-                        onResult: (result) {
-                          setState(() {
-                            text = result.recognizedWords;
-                          });
-                          _onSpeechResult(result.recognizedWords);
-                        },
-                        localeId: 'ko_KR', // 한국어 로케일 설정
-                      );
-                    } else {
-                      print(
-                          "The user has denied the use of speech recognition.");
-                    }
-                  } else {
-                    speechToText.stop();
-                  }
-                },
-                icon: Icon(isListening ? Icons.mic : Icons.mic_none,
-                    color: Colors.black),
-              ),
-            )
-          ],
-        ),
-      ),
-    );
-  }
-}*/
-
-
-// class _SpeechSampleAppState extends State<SpeechSampleApp> {
-
-//   SpeechToText speechToText = SpeechToText();
-
-//   var text = "hold the button and speak";
-//   var isListening = false;
-
-// @override
-// Widget build(BuildContext context) {
-//   return Center( // 전체를 Center 위젯으로 감싸서 가운데 정렬
-//     child: Container(
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.center, // 세로 방향으로 중앙 정렬
-//         crossAxisAlignment: CrossAxisAlignment.center, // 가로 방향으로 중앙 정렬
-//         children: [
-//           Text(text),
-//           SizedBox(height: 100),
-//           AvatarGlow(
-//             animate: isListening,
-//             duration: const Duration(milliseconds: 2000),
-//             repeat: true,
-//             glowColor: Colors.black,
-//             child: IconButton(
-//               onPressed: () async{
-//                 setState(() {
-//                 isListening = !isListening;
-//                 });
-//                 if(isListening){
-//                  var avaliable = await speechToText.initialize();
-//                   if(avaliable){
-//                     print('성공');
-//                     setState(() {
-//                       speechToText.listen(
-//                         onResult: ((result) {
-//                           setState(() {
-//                             text = result.recognizedWords;
-//                           });
-//                         })
-//                       );
-//                     });
-//                     print(text);
-//                   }
-//                   else{
-//                     print("2에 걸림");
-//                   }
-//                 }
-//                 else{
-//                   speechToText.stop();
-//                   print('1에 걸림');
-//                 }
-//               },
-//               icon: Icon(isListening ? Icons.mic : Icons.mic_none, color: Colors.black),
-//             ),
-//           )
-//         ],
-//       ),
-//     ),
-//   );
-// }
-
-// }
