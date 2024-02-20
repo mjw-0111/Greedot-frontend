@@ -114,20 +114,25 @@ class _ReportPageState extends State<ReportPage> {
       return [];
     }
 
-    // List.generate 대신 List를 직접 생성하고 조건에 따라 항목을 추가합니다.
     List<PieChartSectionData> sections = [];
     emotions.forEach((key, sentences) {
       final bool isTouched = emotions.keys.toList().indexOf(key) == touchedIndex;
-      final double fontSize = isTouched ? 18 : 15;
+      final double fontSize = isTouched ? 17 : 15;
       final double radius = isTouched ? 60 : 50;
       final double percentage = sentences.length / totalSentences * 100;
 
-      // percentage가 0보다 클 때만 sections 리스트에 추가합니다.
+      // 디버깅을 위한 로그 출력
+      print('Emotion: $key, Is Touched: $isTouched, Percentage: $percentage');
+
       if (percentage > 0) {
+        String titleText = isTouched ? '$key\n${percentage.toStringAsFixed(1)}%' : key;
+        // 타이틀 설정 전에 로그 출력
+        print('Title Text: $titleText');
+
         sections.add(PieChartSectionData(
           color: emotionColor[key],
-          value:  percentage,
-          title: isTouched ? '$key\n${percentage.toStringAsFixed(1)}%' : key,
+          value: percentage,
+          title: titleText,
           radius: radius,
           titleStyle: TextStyle(
             fontSize: fontSize,
@@ -229,7 +234,13 @@ class _ReportPageState extends State<ReportPage> {
                     if (event is FlTapUpEvent && pieTouchResponse != null &&
                         pieTouchResponse.touchedSection != null) {
                       setState(() {
-                        touchedIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                        // 여기서 touchedIndex를 설정할 때, 현재 터치된 섹션에 대한 인덱스를 올바르게 찾아야 합니다.
+                        int currentIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
+                        // 감정 목록 중에서 실제로 표시된 감정만을 찾아서 인덱스를 조정합니다.
+                        List<String> displayedEmotions = emotions.keys.where((key) => emotions[key]!.isNotEmpty).toList();
+                        // touchedIndex를 조정하기 위해 displayedEmotions 리스트에서 실제 인덱스를 찾습니다.
+                        String touchedEmotion = displayedEmotions[currentIndex];
+                        touchedIndex = emotions.keys.toList().indexOf(touchedEmotion);
                       });
                     }
                   },
@@ -239,6 +250,7 @@ class _ReportPageState extends State<ReportPage> {
                 sections: showingSections(),
               ),
             ),
+
           ),
           if (touchedIndex != -1) // 선택된 감정이 있을 때만 이미지를 보여줍니다.
             Expanded(
