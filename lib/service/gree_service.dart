@@ -275,6 +275,35 @@ class ApiServiceGree {
       return {};
     }
   }
+
+  static Future<List<String>> fetchUploadedImages(int greeId, int promptSelect) async {
+    var url = '$baseUrl/api/v1/gree/generate-and-upload-image/$greeId';
+    final token = await AuthService.getToken();
+    if (token == null) {
+      throw Exception('No token');
+    }
+
+    var body = jsonEncode({
+      'promptSelect': promptSelect,
+    });
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+      List<String> uploadedUrls = List<String>.from(jsonResponse["uploaded_image_urls"]);
+      return uploadedUrls;
+    } else {
+      throw Exception('Failed to fetch uploaded images.');
+    }
+  }
 }
 
 

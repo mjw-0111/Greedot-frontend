@@ -88,7 +88,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                           );
                   }).toList(),
                   options: CarouselOptions(
-                    height: 240,
+                    height: 500,
                     viewportFraction: 1.0,
                     autoPlay: true,
                     onPageChanged: (index, reason) {
@@ -139,7 +139,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                       ),
                       const SizedBox(height: 15),
                       EleButton_greedot(
-                        additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
+                        additionalFunc: () => pageNavi.changePage('ReportPage'),
                         buttonText: "우리아이 대화 보기",
                       ),
                     ],
