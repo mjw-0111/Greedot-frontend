@@ -35,6 +35,7 @@ class _ChatPageState extends State<ChatPage> {
   var isListening = false;
   List<ChatMessage> messages = [];
   Map<String, String> keywordToGifUrl = {};
+  Map<String, String> keywordMapping = {};
 
   String currentGifUrl = '';
 
@@ -59,6 +60,15 @@ class _ChatPageState extends State<ChatPage> {
       setState(() {
         currentGifUrl = 'https://default-gif-url/default.gif'; // 기본 GIF URL
       });
+    }
+  }
+
+  void createKeywordMapping() {
+    List<String> koreanKeywords = ['가', '나', '다', '라']; // 한글 키워드 목록
+    List<String> keys = keywordToGifUrl.keys.toList();
+
+    for (int i = 0; i < keys.length; i++) {
+      keywordMapping[koreanKeywords[i]] = keys[i];
     }
   }
 
@@ -114,10 +124,14 @@ class _ChatPageState extends State<ChatPage> {
           final voiceUrl = decodedResponse['chat_response']['gpt_talk']['voice_url'];
 
           String newGifUrl = currentGifUrl;
-          for (var keyword in keywordToGifUrl.keys) {
-            if (gptTalkContent.contains(keyword)) {
-              newGifUrl = keywordToGifUrl[keyword]!; //TODO 이부분 수정필요
-              break;
+          for (var koreanKeyword in keywordMapping.keys) {
+            if (gptTalkContent.contains(koreanKeyword)) {
+              String? mappedKey = keywordMapping[koreanKeyword];
+              if (mappedKey != null && keywordToGifUrl.containsKey(mappedKey)) {
+                // 매핑된 영문 키워드로 URL 찾기
+                newGifUrl = keywordToGifUrl[mappedKey]!;
+                break;
+              }
             }
           }
 
