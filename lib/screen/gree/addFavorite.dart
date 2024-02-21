@@ -6,6 +6,7 @@ import '../rigging/getImage.dart';
 import '../../screen/root.dart';
 import '../../provider/pageNavi.dart';
 import 'package:provider/provider.dart';
+import '../../service/user_service.dart';
 
 class FavoriteItemCard extends StatefulWidget {
   final Gree gree;
@@ -62,11 +63,25 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
           ),
           Align(
             alignment: Alignment.bottomRight,
-            child: ElevatedButton(
-              child: Text('대화 시작'),
-              onPressed: () {
-                pageNavi.changePage('ChatPage', data: PageData(greeId: widget.gree.id));
-              },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                EleButton_greedot(
+                  isSmall: true,
+                  buttonText: "대화 시작",
+                  fontSize: 11,
+                  padding: EdgeInsets.symmetric(horizontal: 2),
+                  additionalFunc: () => pageNavi.changePage('ChatPage', data: PageData(greeId: widget.gree.id)),
+                ),
+                SizedBox(height: 4), // 버튼 사이의 간격을 조정
+                EleButton_greedot(
+                  isSmall: true,
+                  buttonText: "리포트 보기",
+                  fontSize: 11,
+                  padding: EdgeInsets.symmetric(horizontal: 2),
+                  additionalFunc: () => pageNavi.changePage('ReportPage', data: PageData(greeId: widget.gree.id)),
+                ),
+              ],
             ),
           ),
           Positioned(

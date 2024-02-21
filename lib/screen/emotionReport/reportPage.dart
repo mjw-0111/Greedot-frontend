@@ -3,6 +3,7 @@ import 'package:fl_chart/fl_chart.dart';
 import '../../widget/design/settingColor.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../../service/gree_service.dart';
 
 import '../../widget/design/sharedController.dart';
 import '../../provider/pageNavi.dart';
@@ -12,6 +13,8 @@ import 'package:projectfront/widget/design/basicButtons.dart';
 import '../../models/user_model.dart';
 
 class ReportPage extends StatefulWidget {
+  final int? greeId;
+  const ReportPage({Key? key, this.greeId}) : super(key: key);
   @override
   _ReportPageState createState() => _ReportPageState();
 }
@@ -21,46 +24,18 @@ class _ReportPageState extends State<ReportPage> {
   Map<String, List<String>> emotions = {}; // 초기 상태는 비어있음
   Map<String, String> urls = {};
 
+
   @override
   void initState() {
     super.initState();
     fetchEmotionData();
   }
 
-  Future<List<String>> fetchSentences() async {
-    final url = Uri.parse(
-        'http://20.196.198.166:8000/api/v1/log/sentence/1'); // 실제 URL로 변경 필요
-    final response = await http.get(url);
-    if (response.statusCode == 200) {
-      final data = json.decode(utf8.decode(response.bodyBytes));
-      List<String> sentences = List<String>.from(data['sentences']);
-      return sentences;
-    } else {
-      // 오류 처리
-      throw Exception('Failed to load sentences');
-    }
-  }
-
-  Future<Map<String, dynamic>> makeEmotionReport(List<String> sentences) async {
-    final url = Uri.parse(
-        'http://20.196.198.166:8000/api/v1/ai/make-emotion-report/1');
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: json.encode({'sentences': sentences}),
-    );
-    if (response.statusCode == 200) {
-      return json.decode(utf8.decode(response.bodyBytes));
-    } else {
-      // 오류 처리
-      throw Exception('Failed to make emotion report');
-    }
-  }
 
   Future<void> fetchEmotionData() async {
     try {
-      List<String> sentences = await fetchSentences();
-      var report = await makeEmotionReport(sentences);
+      List<String> sentences = await ApiServiceGree.fetchSentences(widget.greeId!);
+      var report = await ApiServiceGree.makeEmotionReport(sentences,widget.greeId!);
       setState(() {
         emotions = report['emotions'].map((emotion, sentences) =>
             MapEntry(emotion, List<String>.from(sentences))).cast<String,
@@ -77,7 +52,7 @@ class _ReportPageState extends State<ReportPage> {
     '기쁨': Colors.blue[400]!,
     '당황': Colors.orange[400]!,
     '분노': Colors.red[400]!,
-    '불안': Colors.yellow[400]!,
+    '불안': Colors.teal[400]!,
     '상처': Colors.purple[400]!,
     '슬픔': Colors.green[400]!,
   };
@@ -218,53 +193,53 @@ class _ReportPageState extends State<ReportPage> {
 
   Widget buildChartAndImageRow() {
     return Container(
-      height: MediaQuery
-          .of(context)
-          .size
-          .height / 3,
+      height: MediaQuery.of(context).size.height / 3,
       padding: EdgeInsets.all(16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
           Expanded(
             child: PieChart(
-              PieChartData(
-                pieTouchData: PieTouchData(
-                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
-                    if (event is FlTapUpEvent && pieTouchResponse != null &&
-                        pieTouchResponse.touchedSection != null) {
-                      setState(() {
-                        // 여기서 touchedIndex를 설정할 때, 현재 터치된 섹션에 대한 인덱스를 올바르게 찾아야 합니다.
+                PieChartData(
+                  pieTouchData: PieTouchData(
+                    touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                      if (event is FlTapUpEvent && pieTouchResponse != null &&
+                          pieTouchResponse.touchedSection != null) {
                         int currentIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
-                        // 감정 목록 중에서 실제로 표시된 감정만을 찾아서 인덱스를 조정합니다.
+                        // 디버깅 로그 추가: 현재 터치된 섹션 인덱스
+                        print('Current touched section index: $currentIndex');
                         List<String> displayedEmotions = emotions.keys.where((key) => emotions[key]!.isNotEmpty).toList();
-                        // touchedIndex를 조정하기 위해 displayedEmotions 리스트에서 실제 인덱스를 찾습니다.
                         String touchedEmotion = displayedEmotions[currentIndex];
-                        touchedIndex = emotions.keys.toList().indexOf(touchedEmotion);
-                      });
-                    }
-                  },
-                ),
-                centerSpaceRadius: 40,
-                sectionsSpace: 2,
-                sections: showingSections(),
-              ),
-            ),
+                        // 디버깅 로그 추가: 현재 터치된 감정
+                        print('Touched emotion: $touchedEmotion');
+                        setState(() {
+                          touchedIndex = emotions.keys.toList().indexOf(touchedEmotion);
+                          // 디버깅 로그 추가: 설정된 touchedIndex
+                          print('Set touchedIndex: $touchedIndex');
+                        });
+                      }
+                    },
+                  ),
+                )
 
+            ),
           ),
-          if (touchedIndex != -1) // 선택된 감정이 있을 때만 이미지를 보여줍니다.
+          if (touchedIndex != -1 && urls.isNotEmpty) // 선택된 감정이 있고, urls 맵이 비어있지 않을 때
             Expanded(
-              child: urls.isNotEmpty &&
-                  emotions.keys.elementAt(touchedIndex) != null
-                  ? Image.network(
-                  urls[emotions.keys.elementAt(touchedIndex)]!, width: 100.0)
-                  : Image.asset(
-                  'assets/images/greegirl_3.png', width: 100.0), // 대체 이미지
+              child: Image.network(
+                urls[emotions.keys.elementAt(touchedIndex)] ?? '', // null 대체 연산자를 사용하여 urls 맵에 해당 키가 없을 경우 빈 문자열 반환
+                width: 100.0,
+                errorBuilder: (context, error, stackTrace) {
+                  // 이미지 로드 실패 시 대체 이미지 표시
+                  return Image.asset('assets/images/greegirl_3.png', width: 100.0);
+                },
+              ),
             ),
         ],
       ),
     );
   }
+
 
 
   Widget buildScrollableEmotionSentences(String emotion) {
