@@ -89,7 +89,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   }).toList(),
                   options: CarouselOptions(
                     height: 500,
-                    viewportFraction: 1.0,
+                    viewportFraction: 0.33,
                     autoPlay: true,
                     onPageChanged: (index, reason) {
                       setState(() {
