@@ -10,10 +10,9 @@ import 'package:speech_to_text/speech_to_text.dart';
 import '../../service/user_service.dart';
 import '../../widget/design/settingColor.dart';
 
+import '../../widget/design/settingColor.dart';
 import '../../service/gree_service.dart';
 import '../../screen/chat/stt.dart';
-
-
 
 class ChatMessage {
   String messageContent;
@@ -39,29 +38,36 @@ class _ChatPageState extends State<ChatPage> {
 
   String currentGifUrl = '';
 
+  bool _isLoadingGif = true;
+
+  @override
   void initState() {
     super.initState();
     if (widget.greeId != null) {
       loadGifsAndUpdateMap(widget.greeId!); // 위젯 초기화 시 GIF 목록 로드
+    } else {
+      // greeId가 없는 경우 로딩 상태를 false로 설정하여 로딩 스피너를 숨깁니다.
+      setState(() {
+        _isLoadingGif = false;
+      });
     }
   }
 
 
   void loadGifsAndUpdateMap(int greeId) async {
-    Map<String, String> fetchedGifs = await ApiServiceGree.fetchGreeGifs(
-        greeId);
+    Map<String, String> fetchedGifs = await ApiServiceGree.fetchGreeGifs(greeId);
     if (fetchedGifs.isNotEmpty) {
       setState(() {
         keywordToGifUrl = fetchedGifs;
         currentGifUrl = fetchedGifs.values.first;
+        _isLoadingGif = false; // GIF 로딩 완료
         createKeywordMapping();
-
-        //print("keywordToGifUrl contents: $keywordToGifUrl");
       });
     } else {
       // GIF를 가져오지 못했을 경우 처리
       setState(() {
         currentGifUrl = 'https://default-gif-url/default.gif'; // 기본 GIF URL
+        _isLoadingGif = false; // 로딩 완료
       });
     }
   }
@@ -173,22 +179,26 @@ class _ChatPageState extends State<ChatPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.white,
+      color: colorMainBG_greedot,
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
-                Align(
-                  // GIF를 중앙에 크게 배치
-                  alignment: Alignment.center,
-                  child: GifPlayer(
-                    gifUrl: currentGifUrl.isNotEmpty
-                        ? currentGifUrl
-                        : 'https://some-default-url/default.gif',
-                    width: 600.0, // GIF 크기 조정
-                    height: 600.0,
+                if (_isLoadingGif) // 로딩 스피너 조건부 표시
+                  Center(
+                    child: CircularProgressIndicator(color: colorBut_greedot),
+                  )
+                else // GIF가 준비되었을 때만 GifPlayer 표시
+                  Align(
+                    alignment: Alignment.center,
+                    child: GifPlayer(
+                      gifUrl: currentGifUrl.isNotEmpty
+                          ? currentGifUrl
+                          : 'https://some-default-url/default.gif',
+                      width: 600.0, // GIF 크기 조정
+                      height: 600.0,
                   ),
                 ),
                 ListView.builder(

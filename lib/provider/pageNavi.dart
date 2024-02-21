@@ -4,8 +4,8 @@ import '../structure/structure.dart';
 class PageData {
   final int? greeId; 
   final String? imageUrl;
-
-  PageData({this.greeId, this.imageUrl});
+  final int? greeStyle;
+  PageData({this.greeId, this.imageUrl, this.greeStyle});
 }
 
 class PageNavi with ChangeNotifier {

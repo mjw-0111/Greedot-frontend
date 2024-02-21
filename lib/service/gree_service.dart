@@ -105,13 +105,14 @@ class ApiServiceGree {
     if (token == null) {
       throw Exception('no token');
     }
+    print('test');
     var response = await http.get(
       Uri.parse(url),
       headers: {
         "Authorization": "Bearer $token",
       },
     );
-
+    print(response.statusCode);
     if (response.statusCode == 200) {
       return json.decode(response.body);
     } else {
