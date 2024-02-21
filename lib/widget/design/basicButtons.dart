@@ -17,7 +17,7 @@ class EleButton_greedot extends StatelessWidget {
       {this.width = 125,
         this.height = 45,
         this.bgColor = colorBut_greedot,
-        this.textColor = colorText_greedot,
+        this.textColor = colorBig_But_greedot,
         required this.buttonText,
         this.fontSize = 16.0,
         this.gotoScene,
