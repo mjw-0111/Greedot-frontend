@@ -15,6 +15,7 @@ class FavoriteItemCard extends StatefulWidget {
     Key? key,
     required this.gree,
   }) : super(key: key);
+
   @override
   _FavoriteItemCardState createState() => _FavoriteItemCardState();
 }
@@ -61,21 +62,32 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
               onPressed: () {
                 setState(() {
                   isFavorite = !isFavorite;
-                  // 여기에서 즐겨찾기 상태를 업데이트하는 로직을 추가할 수 있습니다.
+                  //widget.gree.id;
                 });
               },
             ),
           ),
           Align(
             alignment: Alignment.bottomRight,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.blue, // 버튼 배경색
-              ),
-              child: Text('대화 시작'),
-              onPressed: () {
-                pageNavi.changePage('ChatPage', data: PageData(greeId: widget.gree.id));
-              },
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                EleButton_greedot(
+                  isSmall: true,
+                  buttonText: "대화 시작",
+                  fontSize: 11,
+                  padding: EdgeInsets.symmetric(horizontal: 2),
+                  additionalFunc: () => pageNavi.changePage('ChatPage', data: PageData(greeId: widget.gree.id)),
+                ),
+                SizedBox(height: 4), // 버튼 사이의 간격을 조정
+                EleButton_greedot(
+                  isSmall: true,
+                  buttonText: "리포트 보기",
+                  fontSize: 11,
+                  padding: EdgeInsets.symmetric(horizontal: 2),
+                  additionalFunc: () => pageNavi.changePage('ReportPage', data: PageData(greeId: widget.gree.id)),
+                ),
+              ],
             ),
           ),
           Positioned(
