@@ -51,7 +51,7 @@ Align drawSkeletonNavi(BuildContext context, double imageWidth, double imageHeig
                 pageNavi.changePage('ChatPage',  data: PageData(greeId: greeid));
               }
             },
-            buttonText: 'Yaml 저장',
+            buttonText: '그리 생성하기',
           ),
         ],
       ),
