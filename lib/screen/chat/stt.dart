@@ -46,6 +46,7 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+
   void loadGifsAndUpdateMap(int greeId) async {
     Map<String, String> fetchedGifs = await ApiServiceGree.fetchGreeGifs(
         greeId);
@@ -167,6 +168,8 @@ class _ChatPageState extends State<ChatPage> {
     }
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -248,3 +251,6 @@ class _ChatPageState extends State<ChatPage> {
     );
   }
 }
+
+
+

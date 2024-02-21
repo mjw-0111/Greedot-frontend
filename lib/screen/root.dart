@@ -57,7 +57,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
       case 'ReportPage':
         return ReportPage();
       case 'GenerativeAI':
-        return GenerativeAI(greeId:data!.greeId);
+        return GenerativeAI(greeId:data?.greeId);
       default:
         return RiggingRoot();
     }
