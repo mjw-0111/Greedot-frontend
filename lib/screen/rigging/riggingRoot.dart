@@ -134,13 +134,9 @@ class _RiggingRootState extends State<RiggingRoot> {
                     children: <Widget>[
                       const SizedBox(height: 35),
                       EleButton_greedot(
+                        width: 170, height: 50,
                         additionalFunc: () => pageNavi.changePage('FavoriteListPage'),
                         buttonText: "AI 친구들 모아보기",
-                      ),
-                      const SizedBox(height: 15),
-                      EleButton_greedot(
-                        additionalFunc: () => pageNavi.changePage('ReportPage'),
-                        buttonText: "우리아이 대화 보기",
                       ),
                     ],
                   ),
@@ -154,13 +150,9 @@ class _RiggingRootState extends State<RiggingRoot> {
                     children: <Widget>[
                       const SizedBox(height: 35),
                       EleButton_greedot(
+                        width: 170, height: 50,
                         additionalFunc: () => pageNavi.changePage('newgree'),
                         buttonText: "그리 새로 만들기",
-                      ),
-                      const SizedBox(height: 15),
-                      EleButton_greedot(
-                        additionalFunc: () => pageNavi.changePage('SkeletonCanvas'),
-                        buttonText: "같이 게임하기",
                       ),
                     ],
                   ),
@@ -168,7 +160,7 @@ class _RiggingRootState extends State<RiggingRoot> {
               ],
             )
     );
-          }   
+          }
   }
 
 
