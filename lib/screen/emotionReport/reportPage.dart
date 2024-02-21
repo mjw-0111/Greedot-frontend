@@ -58,12 +58,12 @@ class _ReportPageState extends State<ReportPage> {
   }
 
   final Map<String, Color> emotionColor = {
-    '기쁨': Colors.blue[400]!,
-    '당황': Colors.orange[400]!,
+    '기쁨': Colors.orange[400]!,
+    '당황': Colors.green[400]!,
     '분노': Colors.red[400]!,
-    '불안': Colors.teal[400]!,
+    '불안': Colors.indigo[400]!,
     '상처': Colors.purple[400]!,
-    '슬픔': Colors.green[400]!,
+    '슬픔': Colors.blue[400]!,
   };
 
   Widget buildLegend() {
@@ -183,20 +183,29 @@ class _ReportPageState extends State<ReportPage> {
         children: <Widget>[
           Expanded(
             child: PieChart(
-                PieChartData(
-                  pieTouchData: PieTouchData(
-                    touchCallback: (event, pieTouchResponse) {
-                      if (event is FlTapUpEvent && pieTouchResponse != null && pieTouchResponse.touchedSection != null) {
+              PieChartData(
+                pieTouchData: PieTouchData(
+                  touchCallback: (FlTouchEvent event, pieTouchResponse) {
+                    if (event is FlTapUpEvent && pieTouchResponse != null &&
+                        pieTouchResponse.touchedSection != null) {
+                      setState(() {
+                        // 여기서 touchedIndex를 설정할 때, 현재 터치된 섹션에 대한 인덱스를 올바르게 찾아야 합니다.
                         int currentIndex = pieTouchResponse.touchedSection!.touchedSectionIndex;
-                        setState(() {
-                          touchedIndex = currentIndex;
-                        });
-                      }
-                    },
-                  ),
-                  sections: showingSections(),
-                )
+                        // 감정 목록 중에서 실제로 표시된 감정만을 찾아서 인덱스를 조정합니다.
+                        List<String> displayedEmotions = emotions.keys.where((key) => emotions[key]!.isNotEmpty).toList();
+                        // touchedIndex를 조정하기 위해 displayedEmotions 리스트에서 실제 인덱스를 찾습니다.
+                        String touchedEmotion = displayedEmotions[currentIndex];
+                        touchedIndex = emotions.keys.toList().indexOf(touchedEmotion);
+                      });
+                    }
+                  },
+                ),
+                centerSpaceRadius: 40,
+                sectionsSpace: 2,
+                sections: showingSections(),
+              ),
             ),
+
           ),
           if (touchedIndex != -1 && urls.isNotEmpty)
             Expanded(
