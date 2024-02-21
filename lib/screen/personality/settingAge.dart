@@ -74,7 +74,7 @@ class _SettingPersonalityState extends State<SettingPersonality> {
       GreeUpdate updatedUserData = GreeUpdate(
         gree_name: _nameController.text,
         prompt_age: int.parse(_selectedAge ?? '0'),
-        prompt_jender: _selectedSex ?? '',
+        prompt_gender: _selectedSex ?? '',
         prompt_mbti: MBTIResult,
       );
 
