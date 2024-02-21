@@ -20,6 +20,7 @@ class SettingPersonality extends StatefulWidget {
 }
 
 class _SettingPersonalityState extends State<SettingPersonality> {
+  bool _isLoadingImage = true;
   String imageUrl = ''; // 이미지 URL을 저장할 상태 변수
   int step = -1;
   double _opacity = 1.0;
@@ -37,8 +38,11 @@ class _SettingPersonalityState extends State<SettingPersonality> {
   @override
   void initState() {
     super.initState();
+    _isLoadingImage = true; // initState에서 이미지 로딩 상태를 true로 설정
     if (widget.greeId != null) {
       fetchGreeImage(widget.greeId!); // 널 체크 연산자 (!) 추가
+    } else {
+      _isLoadingImage = false; // greeId가 null인 경우 로딩 상태를 false로 설정
     }
   }
 
@@ -82,16 +86,7 @@ class _SettingPersonalityState extends State<SettingPersonality> {
         final pageNavi = Provider.of<PageNavi>(context, listen: false);
         try {
           await ApiServiceGree.updateGree(widget.greeId!, updatedUserData); // updatedUserData 전달
-          print('Gree updated successfully.');
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(
-          //     builder: (context) => SkeletonCanvas(
-          //       greeId: widget.greeId, // gree_id 전달
-          //       imageUrl: imageUrl, // 이미지 URL 전달
-          //     ),
-          //   ),
-          // );
+
           pageNavi.changePage('SkeletonCanvas', data: PageData(greeId: widget.greeId , imageUrl:imageUrl ));
 
         } catch (e) {
@@ -115,19 +110,21 @@ class _SettingPersonalityState extends State<SettingPersonality> {
   Future<void> fetchGreeImage(int greeId) async {
     try {
       var greeData = await ApiServiceGree.readGree(greeId);
-      print('Received gree data: $greeData'); // 서버 응답 로깅
+      // 서버 응답 로깅 등...
       if (greeData != null && greeData['raw_img'] != null) {
-        print('raw_img URL: ${greeData['raw_img']}'); // raw_img URL 로깅
         if (mounted) {
           setState(() {
             imageUrl = greeData['raw_img'];
+            _isLoadingImage = false; // 이미지 로딩 완료 상태를 false로 설정
           });
         }
       } else {
-        print('raw_img URL is null or invalid.');
+        // 로딩 실패 처리...
+        _isLoadingImage = false; // 실패 상태 역시 로딩 완료로 간주
       }
     } catch (e) {
-      print('Error fetching gree image: $e');
+      // 에러 처리...
+      _isLoadingImage = false; // 에러 발생 시 로딩 상태를 false로 설정
     }
   }
 
@@ -138,14 +135,15 @@ class _SettingPersonalityState extends State<SettingPersonality> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
-    return Scaffold(
-      body: SingleChildScrollView( // 전체 스크롤 가능하게 설정
-        child: Container(
-          width: screenWidth,
-          height: screenHeight,
-          color: colorMainBG_greedot, // 배경색 설정
-          child: Center( // 가운데 정렬로 변경
-            child: Row(
+    return Container(
+        width: screenWidth,
+        height: screenHeight,
+        color: colorMainBG_greedot, // 배경색 설정
+        child: Center(
+          child: _isLoadingImage
+              ? CircularProgressIndicator() // 이미지 로딩 중 스피너 표시
+              : SingleChildScrollView( // 이미지 로딩 완료 시 스크롤뷰 추가
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -156,29 +154,28 @@ class _SettingPersonalityState extends State<SettingPersonality> {
                     height: 300, // 이미지 높이 고정
                   ),
                 ),
-                SizedBox(width: 16), // 이미지와 폼 사이 간격
+                SizedBox(width: 16), // 이미지와 폼 사이 간격 (이 부분은 Row에서 사용되지 않으므로, 필요에 따라 조정이 필요할 수 있습니다)
                 Flexible( // 폼을 Flexible로 감싸기
                   child: Container(
                     padding: EdgeInsets.all(16),
-                    child: SingleChildScrollView( // 폼 내용이 길 경우 스크롤 가능하게 설정
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (step == -1) nameGenderAge(),
-                          if (step != -1 && step < questionList.length)
-                            QuestionWidget(
-                              step: step,
-                              selectedOption: selectedOption,
-                              questionList: questionList,
-                              optionsList: optionsList,
-                              onOptionChanged: (newValue) {
-                                _handleRadioValueChanged(newValue);
-                              },
-                            ),
-                          SizedBox(height: 60),
-                          _buildNavigationButtons(),
-                        ],
-                      ),
+                    // 폼 내용이 길 경우 스크롤 가능하게 설정
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        if (step == -1) nameGenderAge(),
+                        if (step != -1 && step < questionList.length)
+                          QuestionWidget(
+                            step: step,
+                            selectedOption: selectedOption,
+                            questionList: questionList,
+                            optionsList: optionsList,
+                            onOptionChanged: (newValue) {
+                              _handleRadioValueChanged(newValue);
+                            },
+                          ),
+                        SizedBox(height: 60),
+                        _buildNavigationButtons(),
+                      ],
                     ),
                   ),
                 ),
@@ -186,8 +183,7 @@ class _SettingPersonalityState extends State<SettingPersonality> {
             ),
           ),
         ),
-      ),
-    );
+      );
   }
 
   Column nameGenderAge() {

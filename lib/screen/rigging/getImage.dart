@@ -78,15 +78,11 @@ class _getImageState extends State<GetImage_greedot> {
         int greeId = response['gree_id'];
         if (i == 1){
         await ApiServiceGree.processGreeImages(greeId); // 추가 이미지 처리 요청
-        // SettingPersonality 위젯으로 네비게이트하며 greeId 전달
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => SettingPersonality(greeId: greeId)),
-        // );
+
         pageNavi.changePage('SettingPersonality', data: PageData(greeId: greeId));
         }
         else if (i==2){
-          pageNavi.changePage('GenerativeAI', data: PageData(greeId: greeId));
+          pageNavi.changePage('GenerativeAIprompt', data: PageData(greeId: greeId,));
         }
 
       } else {
