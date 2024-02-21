@@ -116,7 +116,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
                 const Positioned(
-                  bottom: 230,
+                  bottom: 120,
                   left: 0,
                   right: 0,
                   child: Text(

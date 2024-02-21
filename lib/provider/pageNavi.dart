@@ -9,7 +9,7 @@ class PageData {
 }
 
 class PageNavi with ChangeNotifier {
-  String _currentPageKey = "RiggingRoot";
+  String _currentPageKey = "LogIn";
   PageData? _currentPageData;
 
   String get currentPageKey => _currentPageKey;
