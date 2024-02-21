@@ -172,7 +172,7 @@ Widget buildCardBack(Gree gree) {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text('이름: ${gree.gree_name ?? '없음'}', style: TextStyle(fontWeight: FontWeight.bold)),
-        Text('성별: ${gree.prompt_jender ?? '없음'}'),
+        Text('성별: ${gree.prompt_gender ?? '없음'}'),
         Text('나이: ${gree.prompt_age ?? '없음'}'),
         Text('성격: ${gree.prompt_mbti ?? '없음'}'),
       ],

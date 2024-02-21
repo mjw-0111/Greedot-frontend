@@ -2,7 +2,7 @@ class Gree {
   final int? id;
   final String? gree_name;
   final int? prompt_age;
-  final String? prompt_jender;
+  final String? prompt_gender;
   final String? prompt_mbti;
   final String raw_img;
 
@@ -10,7 +10,7 @@ class Gree {
     this.id,
     this.gree_name,
     this.prompt_age,
-    this.prompt_jender,
+    this.prompt_gender,
     this.prompt_mbti,
     required this.raw_img,
   });
@@ -20,7 +20,7 @@ class Gree {
       id: json['id'],
       gree_name: json['gree_name'],
       prompt_age: json['prompt_age'],
-      prompt_jender: json['prompt_jender'],
+      prompt_gender: json['prompt_gender'],
       prompt_mbti: json['prompt_mbti'],
       raw_img: json['raw_img'],
     );
@@ -30,13 +30,13 @@ class Gree {
 class GreeUpdate {
   final String? gree_name;
   final int? prompt_age;
-  final String? prompt_jender;
+  final String? prompt_gender;
   final String? prompt_mbti;
 
   GreeUpdate({
     this.gree_name,
     this.prompt_age,
-    this.prompt_jender,
+    this.prompt_gender,
     this.prompt_mbti,
   });
 
@@ -49,8 +49,8 @@ class GreeUpdate {
     if (prompt_age != null) {
       data['prompt_age'] = prompt_age;
     }
-    if (prompt_jender != null) {
-      data['prompt_jender'] = prompt_jender;
+    if (prompt_gender != null) {
+      data['prompt_gender'] = prompt_gender;
     }
     if (prompt_mbti != null) {
       data['prompt_mbti'] = prompt_mbti;
