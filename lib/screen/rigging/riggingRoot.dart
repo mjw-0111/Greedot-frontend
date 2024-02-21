@@ -99,7 +99,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
                 Positioned(
-                  bottom: 20,
+                  bottom: 30,
                   left: 0,
                   right: 0,
                   child: Center(
@@ -116,7 +116,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
                 const Positioned(
-                  bottom: 230,
+                  bottom: 300,
                   left: 0,
                   right: 0,
                   child: Text(
@@ -126,9 +126,9 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
                 Positioned(
-                  bottom: 50,
+                  bottom: 150,
                   left: 0,
-                  right: 170,
+                  right: 200,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -142,8 +142,8 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
                 Positioned(
-                  bottom: 50,
-                  left: 170,
+                  bottom: 150,
+                  left: 200,
                   right: 0,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
