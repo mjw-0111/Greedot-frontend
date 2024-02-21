@@ -52,8 +52,10 @@ class _ChatPageState extends State<ChatPage> {
     if (fetchedGifs.isNotEmpty) {
       setState(() {
         keywordToGifUrl = fetchedGifs;
-        currentGifUrl =
-            fetchedGifs.values.first; //
+        currentGifUrl = fetchedGifs.values.first;
+        createKeywordMapping();
+
+        //print("keywordToGifUrl contents: $keywordToGifUrl");
       });
     } else {
       // GIF를 가져오지 못했을 경우 처리
@@ -64,12 +66,13 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void createKeywordMapping() {
-    List<String> koreanKeywords = ['가', '나', '다', '라']; // 한글 키워드 목록
+    List<String> koreanKeywords = ['춤', '걷', '웨이브', '점프']; // 한글 키워드 목록
     List<String> keys = keywordToGifUrl.keys.toList();
 
     for (int i = 0; i < keys.length; i++) {
       keywordMapping[koreanKeywords[i]] = keys[i];
     }
+    //print("keywordMapping contents: $keywordMapping");
   }
 
   void _onSpeechResult(String newText) {
@@ -145,6 +148,7 @@ class _ChatPageState extends State<ChatPage> {
             ));
             currentGifUrl = newGifUrl;
           });
+          //print("Selected new GIF URL: $newGifUrl");
 
           if (voiceUrl != null && voiceUrl is String && voiceUrl.isNotEmpty) {
             // voiceUrl이 유효하면 오디오 재생
