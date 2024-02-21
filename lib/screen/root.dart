@@ -7,7 +7,7 @@ import '../screen/rigging/getImage.dart';
 import '../widget/design/settingColor.dart';
 import '../provider/pageNavi.dart';
 import '../screen/chat/stt.dart';
-
+import 'gree/generativeAI.dart';
 import './drawer/drawer.dart';
 import './rigging/drawSkeleton.dart';
 import '/screen/login/login.dart';
@@ -49,13 +49,15 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
       case 'SignupScreen':
         return SignupScreen();
       case 'ChatPage':
-        return ChatPage();
+        return ChatPage(greeId:data?.greeId);
       case 'SettingPersonality':
-        return SettingPersonality();
+        return SettingPersonality(greeId:data!.greeId);
+      case 'SkeletonCanvas':
+        return SkeletonCanvas(greeId:data!.greeId, imageUrl:data.imageUrl);
       case 'ReportPage':
         return ReportPage();
-      case 'ChatPage':
-        return ChatPage();
+      case 'GenerativeAI':
+        return GenerativeAI(greeId:data!.greeId);
       default:
         return RiggingRoot();
     }
@@ -67,6 +69,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
 
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: const Text("Greedot"),
         backgroundColor: colorMainBG_greedot,
         centerTitle: false,

@@ -11,9 +11,9 @@ import './drawSkeletonNavi.dart';
 
 class SkeletonCanvas extends StatefulWidget {
   final int? greeId;
-  final String imageUrl;
+  final String? imageUrl;
 
-  SkeletonCanvas({Key? key, this.greeId, required this.imageUrl}) : super(key: key);
+  SkeletonCanvas({Key? key, this.greeId, this.imageUrl}) : super(key: key);
 
   @override
   _SkeletonCanvasState createState() => _SkeletonCanvasState();
@@ -131,12 +131,12 @@ class _SkeletonCanvasState extends State<SkeletonCanvas> {
 
 // _buildPhotoArea 메서드 수정
   Widget _buildPhotoArea() {
-    return widget.imageUrl.isNotEmpty
+    return widget.imageUrl!.isNotEmpty
         ? Container(
       width: conSizeX,
       height: conSizeY,
       child: Image.network(
-          widget.imageUrl, fit: BoxFit.cover), // Image.network를 사용하여 이미지 표시
+          widget.imageUrl!, fit: BoxFit.cover), // Image.network를 사용하여 이미지 표시
     )
         : Container(
       width: conSizeX,

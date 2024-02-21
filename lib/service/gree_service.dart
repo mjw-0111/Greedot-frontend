@@ -55,7 +55,6 @@ class ApiServiceGree {
   }
 
 
-
   static Future<void> updateGree(int greeId, GreeUpdate model) async {
     var url = '$baseUrl/api/v1/gree/update/$greeId';
     final token = await AuthService.getToken();
@@ -72,10 +71,10 @@ class ApiServiceGree {
     if (response.statusCode >= 200 && response.statusCode < 300) {
       print('Gree updated successfully.');
     } else {
-      print('Failed to update gree. StatusCode: ${response.statusCode}, Body: ${response.body}');
+      print('Failed to update gree. StatusCode: ${response
+          .statusCode}, Body: ${response.body}');
     }
   }
-
 
 
   static Future<List<Gree>> readGrees() async {
@@ -98,7 +97,6 @@ class ApiServiceGree {
       throw Exception('Failed to load grees.');
     }
   }
-
 
 
   static Future<dynamic> readGree(int greeId) async {
@@ -158,7 +156,8 @@ class ApiServiceGree {
         _logger.i("Image processing successful");
         // 성공 로직, 예: 성공 알림
       } else {
-        _logger.w("Image processing failed with status: ${response.statusCode}");
+        _logger.w(
+            "Image processing failed with status: ${response.statusCode}");
         // 실패 로직, 예: 실패 알림
       }
     } catch (e) {
@@ -167,7 +166,8 @@ class ApiServiceGree {
   }
 
 
-  static Future<void> uploadYamlFileToServer(String filePath, int greeId) async {
+  static Future<void> uploadYamlFileToServer(String filePath,
+      int greeId) async {
     final uri = Uri.parse('$baseUrl/api/v1/gree/greefile/upload_yaml/$greeId');
     final token = await AuthService.getToken(); // 인증 토큰 가져오기
     if (token == null) {
@@ -202,9 +202,6 @@ class ApiServiceGree {
         'Authorization': 'Bearer $token', // 요청 헤더에 인증 토큰 추가
       });
 
-
-    // 여기에 필요한 경우 헤더 설정을 추가할 수 있습니다.
-    // 예: request.headers.addAll({'Authorization': 'Bearer $yourToken'});
 
     var response = await request.send();
     final responseString = await http.Response.fromStream(response);
@@ -244,6 +241,97 @@ class ApiServiceGree {
     } else {
       // 오류 처리
       throw Exception('Failed to make emotion report');
+    }
+  }
+
+
+  static Future<String?> fetchSpecificGreeGif(int greeId) async {
+    final url = Uri.parse('$baseUrl/api/v1/gree/getgif/$greeId');
+    final token = await AuthService.getToken();
+    if (token == null) {
+      _logger.e('No token found');
+      return null;
+    }
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        final gifInfo = jsonResponse.firstWhere(
+              (gif) => gif['file_name'] == 'dab',
+          orElse: () => null,
+        );
+        return gifInfo != null ? gifInfo['real_name'] : null;
+      } else {
+        _logger.w("Failed to fetch GIFs with status: ${response.statusCode}");
+        return null;
+      }
+    } catch (e) {
+      _logger.e("Error fetching GIFs: $e");
+      return null;
+    }
+  }
+
+
+  static Future<Map<String, String>> fetchGreeGifs(int greeId) async {
+    final url = Uri.parse('$baseUrl/api/v1/gree/getgif/$greeId');
+    final token = await AuthService.getToken();
+    if (token == null) {
+      _logger.e('No token found');
+      return {};
+    }
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {'Authorization': 'Bearer $token'},
+      );
+
+      if (response.statusCode == 200) {
+        final jsonResponse = json.decode(response.body);
+        // 모든 GIF 정보를 포함하는 맵을 반환합니다.
+        return Map.fromIterable(jsonResponse, key: (gif) => gif['file_name'],
+            value: (gif) => gif['real_name']);
+      } else {
+        _logger.w("Failed to fetch GIFs with status: ${response.statusCode}");
+        return {};
+      }
+    } catch (e) {
+      _logger.e("Error fetching GIFs: $e");
+      return {};
+    }
+  }
+
+  static Future<List<String>> fetchUploadedImages(int greeId, int promptSelect) async {
+    var url = '$baseUrl/api/v1/gree/generate-and-upload-image/$greeId';
+    final token = await AuthService.getToken();
+    if (token == null) {
+      throw Exception('No token');
+    }
+
+    var body = jsonEncode({
+      'promptSelect': promptSelect,
+    });
+
+    var response = await http.post(
+      Uri.parse(url),
+      headers: {
+        "Authorization": "Bearer $token",
+        "Content-Type": "application/json",
+      },
+      body: body,
+    );
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = json.decode(response.body);
+      List<String> uploadedUrls = List<String>.from(jsonResponse["uploaded_image_urls"]);
+      return uploadedUrls;
+    } else {
+      throw Exception('Failed to fetch uploaded images.');
     }
   }
 }

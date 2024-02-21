@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:projectfront/provider/pageNavi.dart';
+import 'package:provider/provider.dart';
 import '../../widget/design/settingColor.dart';
 import '../rigging/drawSkeleton.dart';
 import './personalitydata.dart';
@@ -77,18 +79,21 @@ class _SettingPersonalityState extends State<SettingPersonality> {
       );
 
       if (widget.greeId != null) {
+        final pageNavi = Provider.of<PageNavi>(context, listen: false);
         try {
           await ApiServiceGree.updateGree(widget.greeId!, updatedUserData); // updatedUserData 전달
           print('Gree updated successfully.');
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SkeletonCanvas(
-                greeId: widget.greeId, // gree_id 전달
-                imageUrl: imageUrl, // 이미지 URL 전달
-              ),
-            ),
-          );
+          // Navigator.push(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => SkeletonCanvas(
+          //       greeId: widget.greeId, // gree_id 전달
+          //       imageUrl: imageUrl, // 이미지 URL 전달
+          //     ),
+          //   ),
+          // );
+          pageNavi.changePage('SkeletonCanvas', data: PageData(greeId: widget.greeId , imageUrl:imageUrl ));
+
         } catch (e) {
           print('Failed to update gree: $e');
           ScaffoldMessenger.of(context).showSnackBar(

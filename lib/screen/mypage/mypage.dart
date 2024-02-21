@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:projectfront/provider/pageNavi.dart';
+import 'package:provider/provider.dart';
 import '../../models/user_model.dart';
 import '../../service/user_service.dart';
 import '../../widget/design/settingColor.dart';
@@ -25,7 +27,7 @@ class _MyPageState extends State<MyPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Profile'),
-        backgroundColor: colorMainBG_greedot, // 상단 앱바 색상 설정
+        backgroundColor: colorMainBG_greedot,
       ),
       body: FutureBuilder<UserModel>(
         future: userProfile,
@@ -48,14 +50,9 @@ class _MyPageState extends State<MyPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        CircleAvatar(
-                          radius: 60,
-                          backgroundColor: colorBut_greedot,
-                          backgroundImage: AssetImage('assets/images/kid.png'),
-                        ),
                         SizedBox(height: 16),
                         Text(
-                          user.username, // 사용자 이름 표시
+                          user.nickname, // 사용자 이름 표시
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 32,
@@ -63,9 +60,9 @@ class _MyPageState extends State<MyPage> {
                           ),
                         ),
                         SizedBox(height: 80),
-                        _buildInfoContainer('이메일 계정', user.username), // 이메일
+                        _buildInfoContainer('이메일 계정', user.username),
                         SizedBox(height: 40),
-                        _buildInfoContainer('닉네임', user.nickname), // 전화번호
+                        _buildInfoContainer('멤버쉽 등급', user.gradeString),
                         SizedBox(height: 100),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
@@ -97,12 +94,13 @@ class _MyPageState extends State<MyPage> {
   void _handleLogout() async {
     await AuthService.deleteToken(); // 토큰 삭제하여 로그아웃 처리
     // 로그아웃 후 로그인 화면으로 이동
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (context) => LogIn()),
-    );
+    // Navigator.of(context).pushReplacement(
+    //   MaterialPageRoute(builder: (context) => LogIn()),
+    // );
+    Navigator.of(context).pop();
+    final pageNavi = Provider.of<PageNavi>(context, listen: false);
+    pageNavi.changePage('LogIn');
   }
-
-
 
   void showEditProfileDialog(BuildContext context, UserModel user) {
     TextEditingController nicknameController = TextEditingController(text: user.nickname);

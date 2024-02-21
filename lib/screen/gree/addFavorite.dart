@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../service/gree_service.dart';
 import '../../widget/design/settingColor.dart';
 import '../../models/gree_model.dart';
 import 'package:projectfront/widget/design/basicButtons.dart';
@@ -6,7 +7,6 @@ import '../rigging/getImage.dart';
 import '../../screen/root.dart';
 import '../../provider/pageNavi.dart';
 import 'package:provider/provider.dart';
-import '../../service/user_service.dart';
 
 class FavoriteItemCard extends StatefulWidget {
   final Gree gree;
@@ -34,17 +34,23 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
       color: colorFilling_greedot,
       child: Stack(
         children: [
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: EdgeInsets.only(top: 20),
-              // Image.network 사용, DB에서 불러온 이미지 주소를 사용
-              child: Image.network(
-                widget.gree.raw_img,
-                fit: BoxFit.cover,
-                width: 120, height: 120,
-              ),
-            ),
+          FutureBuilder<String?>(
+            future: ApiServiceGree.fetchSpecificGreeGif(widget.gree.id ?? 0),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return CircularProgressIndicator();
+              } else if (snapshot.hasError || !snapshot.hasData) {
+                String errorMessage = "Error fetching GIFs";
+                if (snapshot.hasError) {
+                  errorMessage += ": ${snapshot.error}";
+                } else if (!snapshot.hasData) {
+                  errorMessage = "No GIF found";
+                }
+                return Text(errorMessage);
+              }else {
+                return Image.network(snapshot.data!, fit: BoxFit.cover);
+              }
+            },
           ),
           Align(
             alignment: Alignment.topRight,
@@ -93,10 +99,14 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.gree.gree_name ?? 'Unknown', // null 처리
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                  widget.gree.gree_name ?? 'Unknown',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                 ),
-                Text(widget.gree.prompt_mbti ?? 'Unknown'), // null 처리
+                SizedBox(height: 4), // 간격 추가
+                Text(
+                  widget.gree.prompt_mbti ?? 'Unknown',
+                  style: TextStyle(fontSize: 14),
+                ),
               ],
             ),
           ),
