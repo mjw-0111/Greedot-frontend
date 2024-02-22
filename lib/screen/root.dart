@@ -92,7 +92,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
               pageKey = 'RiggingRoot';
               break;
             case 1:
-              pageKey = 'GetImage_greedot';
+              pageKey = 'FavoriteListPage';
               break;
             case 2:
               pageKey = 'LogIn';
@@ -117,7 +117,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
     switch (pageKey) {
       case 'RiggingRoot':
         return 0;
-      case 'GetImage_greedot':
+      case 'FavoriteListPage':
         return 1;
       case 'LogIn':
         return 2;
@@ -130,15 +130,15 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
     return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.home),
-        label: "home",
+        label: "홈",
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.notification_add),
-        label: "notification",
+        icon: Icon(Icons.child_care),
+        label: "그리 목록",
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.message),
-        label: "setting",
+        icon: Icon(Icons.login),
+        label: "로그인",
       ),
     ];
   }
