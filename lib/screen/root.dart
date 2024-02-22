@@ -57,7 +57,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
       case 'SkeletonCanvas':
         return SkeletonCanvas(greeId:data!.greeId, imageUrl:data.imageUrl);
       case 'ReportPage':
-        return ReportPage();
+        return ReportPage(greeId:data?.greeId);
       case 'GenerativeAI':
         return GenerativeAI(greeId:data!.greeId,greeStyle: data!.greeStyle );
         case 'GenerativeAIprompt':

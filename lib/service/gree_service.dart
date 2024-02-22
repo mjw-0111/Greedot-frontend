@@ -220,12 +220,13 @@ class ApiServiceGree {
         '$baseUrl/api/v1/log/sentence/$greeId'); // 실제 URL로 변경 필요
     final response = await http.get(url);
     if (response.statusCode == 200) {
+      print('% sentence load success');
       final data = json.decode(utf8.decode(response.bodyBytes));
       List<String> sentences = List<String>.from(data['sentences']);
       return sentences;
     } else {
       // 오류 처리
-      throw Exception('Failed to load sentences');
+      throw Exception('% Failed to load sentences');
     }
   }
 
@@ -238,10 +239,11 @@ class ApiServiceGree {
       body: json.encode({'sentences': sentences}),
     );
     if (response.statusCode == 200) {
+      print('% make report success');
       return json.decode(utf8.decode(response.bodyBytes));
     } else {
       // 오류 처리
-      throw Exception('Failed to make emotion report');
+      throw Exception('% Failed to make emotion report');
     }
   }
 
