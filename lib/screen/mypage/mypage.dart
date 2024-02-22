@@ -66,25 +66,16 @@ class _MyPageState extends State<MyPage> {
                         SizedBox(height: 100),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
-                         children: <Widget>[
-  TextButton(
-    style: TextButton.styleFrom(
-      primary: Colors.black45, // 버튼 텍스트 및 아이콘 색상
-      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // 버튼 내부 패딩
-    ),
-    child: const Text('프로필 수정'),
-    onPressed: () => showEditProfileDialog(context, user),
-  ),
-  TextButton(
-    style: TextButton.styleFrom(
-      primary: Colors.black45, // 여기서는 기본 색상을 사용하거나 원하는 색상 지정
-      padding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // 버튼 내부 패딩
-    ),
-    child: Text('로그아웃'),
-    onPressed: () => _handleLogout(),
-  ),
-],
-
+                          children: <Widget>[
+                            TextButton(
+                              child: Text('프로필 수정'),
+                              onPressed: () => showEditProfileDialog(context, user),
+                            ),
+                            TextButton(
+                              child: Text('로그아웃'),
+                              onPressed: () => _handleLogout()
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -102,6 +93,10 @@ class _MyPageState extends State<MyPage> {
 
   void _handleLogout() async {
     await AuthService.deleteToken(); // 토큰 삭제하여 로그아웃 처리
+    // 로그아웃 후 로그인 화면으로 이동
+    // Navigator.of(context).pushReplacement(
+    //   MaterialPageRoute(builder: (context) => LogIn()),
+    // );
     Navigator.of(context).pop();
     final pageNavi = Provider.of<PageNavi>(context, listen: false);
     pageNavi.changePage('LogIn');
@@ -162,7 +157,7 @@ class _MyPageState extends State<MyPage> {
               '$title  :  $value',
               style: TextStyle(
                 fontSize: 15,
-                color: Colors.white70,
+                color: colorText_greedot,
               ),
             ),
           ),

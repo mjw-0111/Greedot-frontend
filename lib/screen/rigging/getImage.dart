@@ -141,7 +141,7 @@ class _getImageState extends State<GetImage_greedot> {
           children: [
             ElevatedButton.icon(
               icon: Icon(Icons.camera_alt, color: Colors.white), // 카메라 아이콘 추가
-              label: Text("카메라"),
+              label: Text("카메라",style:TextStyle(fontSize:17,fontFamily:'greedot_font')),
               onPressed: () {
                 getImage(ImageSource.camera); // 카메라로 찍은 사진 가져오기
               },
@@ -154,7 +154,7 @@ class _getImageState extends State<GetImage_greedot> {
             SizedBox(width: paddingForButtons), // 버튼 사이의 간격 조정
             ElevatedButton.icon(
               icon: Icon(Icons.photo_library, color: Colors.white), // 갤러리 아이콘 추가
-              label: Text("갤러리"),
+              label: Text("갤러리",style:TextStyle(fontSize:17,fontFamily:'greedot_font')),
               onPressed: () {
                 getImage(ImageSource.gallery); // 갤러리에서 사진 가져오기
               },
@@ -173,7 +173,7 @@ class _getImageState extends State<GetImage_greedot> {
           children: [
             ElevatedButton.icon(
               icon: Icon(Icons.cloud_upload, color: Colors.white), // 업로드 아이콘 추가
-              label: Text("업로드"),
+              label: Text("업로드",style:TextStyle(fontSize:17,fontFamily:'greedot_font')),
               onPressed: () {
                 showUploadSuccessSnackBar(1); // 업로드 성공 알림 표시
               },
@@ -186,7 +186,7 @@ class _getImageState extends State<GetImage_greedot> {
             SizedBox(width: paddingForButtons),
             ElevatedButton.icon(
               icon: Icon(Icons.face, color: Colors.white), // AI 캐릭터 만들기 아이콘 추가
-              label: Text("AI 캐릭터 만들기"),
+              label: Text("AI 캐릭터 만들기",style:TextStyle(fontSize:17,fontFamily:'greedot_font')),
               onPressed: () {
                 showUploadSuccessSnackBar(2); // 업로드 성공 알림 표시
               },

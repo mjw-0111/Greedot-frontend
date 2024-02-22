@@ -102,12 +102,12 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
               children: [
                 Text(
                   widget.gree.gree_name ?? 'Unknown',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25,fontFamily:'greedot_font'),
                 ),
                 SizedBox(height: 4), // 간격 추가
                 Text(
                   widget.gree.prompt_mbti ?? 'Unknown',
-                  style: TextStyle(fontSize: 18),
+                  style: TextStyle(fontSize: 18,fontFamily:'greedot_font'),
                 ),
               ],
             ),

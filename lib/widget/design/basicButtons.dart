@@ -38,7 +38,7 @@ class EleButton_greedot extends StatelessWidget {
         backgroundColor: MaterialStateProperty.all(bgColor),
         minimumSize: MaterialStateProperty.all(Size(buttonWidth, buttonHeight)),
         padding: MaterialStateProperty.all(buttonPadding),
-        textStyle: MaterialStateProperty.all(TextStyle(fontSize: buttonFontSize)),
+        textStyle: MaterialStateProperty.all(TextStyle(fontSize: buttonFontSize,fontFamily:'greedot_font')),
       ),
       onPressed: () {
         additionalFunc?.call(); // additionalFunc 호출 방식 간소화
@@ -51,7 +51,7 @@ class EleButton_greedot extends StatelessWidget {
         children: [
           if (icon != null) Icon(icon, color: Colors.white, size: 24), // 아이콘 색상을 흰색으로 설정
           if (icon != null) SizedBox(width: 8), // 아이콘과 텍스트 사이에 공간 추가
-          Text(buttonText, style: TextStyle(color: textColor, fontSize: buttonFontSize)),
+          Text(buttonText, style: TextStyle(color: textColor, fontSize: buttonFontSize,fontFamily:'greedot_font')),
         ],
       ),
     );

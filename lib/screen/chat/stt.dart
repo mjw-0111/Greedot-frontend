@@ -225,7 +225,7 @@ class _ChatPageState extends State<ChatPage> {
                           message.messageContent,
                           style: TextStyle(
                               color: message.isUser ? Colors.white : Colors
-                                  .black),
+                                  .black,fontFamily:'greedot_font'),
                         ),
                       ),
                     );
