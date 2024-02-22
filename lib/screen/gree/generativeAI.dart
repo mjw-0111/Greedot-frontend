@@ -55,9 +55,9 @@ class _GenerativeAIState extends State<GenerativeAI> {
         : GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 0.8, // 이미지 크기 조정을 위해 조금 더 세로로 길게 조정
-        crossAxisSpacing: 10.0,
-        mainAxisSpacing: 10.0,
+        childAspectRatio: 0.7,
+        crossAxisSpacing: 9.0,
+        mainAxisSpacing: 9.0,
       ),
       itemCount: uploadedImageUrls?.length ?? 0,
       itemBuilder: (context, index) {
@@ -88,26 +88,34 @@ class _GenerativeAIState extends State<GenerativeAI> {
             child: Stack(
               alignment: Alignment.bottomCenter,
               children: [
+                // 이미지
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8.0),
                   child: Image.network(
                     uploadedImageUrls![index],
-                    fit: BoxFit.cover,
+                    fit: BoxFit.cover, // 이미지를 타일에 맞게 조절
                   ),
                 ),
-                Container(
-                  width: double.infinity,
-                  color: Colors.black.withOpacity(0.5),
-                  child: Center(
-                    child: TextButton(
-                      onPressed: () {
-                        setState(() {
-                          selectedImageIndex = index;
-                        });
-                      },
-                      child: Text(
-                        '선택하기',
-                        style: TextStyle(color: Colors.white,fontFamily:'greedot_font'),
+                // 선택하기 버튼
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  child: Container(
+                    color: Colors.black.withOpacity(0.5),
+                    padding: EdgeInsets.symmetric(vertical: 8),
+                    child: Center(
+                      child: TextButton(
+                        onPressed: () {
+                          setState(() {
+                            selectedImageIndex = index;
+                          });
+
+                        },
+                        child: Text(
+                          '선택하기',
+                          style: TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
