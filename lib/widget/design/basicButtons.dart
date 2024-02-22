@@ -33,6 +33,12 @@ class EleButton_greedot extends StatelessWidget {
     final double elevation = 5.0; // 그림자 높이
     final Color shadowColor = Colors.black.withOpacity(0.5); // 그림자 색상
 
+    final double buttonWidth = isSmall ? 70 : width;
+    final double buttonHeight = isSmall ? 15 : height;
+    final double buttonFontSize = isSmall ? 11.0 : fontSize;
+    final EdgeInsetsGeometry buttonPadding = isSmall ? EdgeInsets.zero : padding;
+
+
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all(bgColor),
