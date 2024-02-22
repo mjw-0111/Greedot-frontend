@@ -98,7 +98,7 @@ class _LogInState extends State<LogIn> {
                                 onPressed: _login,
                                 child: Icon(
                                   Icons.arrow_forward,
-                                  color: colorText_greedot,
+                                  color: colorBig_But_greedot,
                                   size: 35.0,
                                 ),
                                 style: ElevatedButton.styleFrom(

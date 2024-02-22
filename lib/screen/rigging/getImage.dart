@@ -18,6 +18,7 @@ import '../personality/settingAge.dart';
 double paddingForButtons = 10; //다 상대적인 값으로 교체 예정
 double canvasSize = 350;
 
+
 class GetImage_greedot extends StatefulWidget {
   const GetImage_greedot({Key? key}) : super(key: key);
   @override
@@ -78,15 +79,11 @@ class _getImageState extends State<GetImage_greedot> {
         int greeId = response['gree_id'];
         if (i == 1){
         await ApiServiceGree.processGreeImages(greeId); // 추가 이미지 처리 요청
-        // SettingPersonality 위젯으로 네비게이트하며 greeId 전달
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(builder: (context) => SettingPersonality(greeId: greeId)),
-        // );
+
         pageNavi.changePage('SettingPersonality', data: PageData(greeId: greeId));
         }
         else if (i==2){
-          pageNavi.changePage('GenerativeAI', data: PageData(greeId: greeId));
+          pageNavi.changePage('GenerativeAIprompt', data: PageData(greeId: greeId,));
         }
 
       } else {
@@ -125,13 +122,16 @@ class _getImageState extends State<GetImage_greedot> {
                 ),
               )
             : BoxDecoration(
-                color: Colors.grey, // 이미지가 없을 경우 회색 배경을 표시합니다.
+                color: Colors.white60, // 이미지가 없을 경우 회색 배경을 표시합니다.
               ),
       ),
     );
   }
 
   Widget _buildButton() {
+    double buttonWidth = 170;
+    double buttonHeight = 50;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -139,39 +139,67 @@ class _getImageState extends State<GetImage_greedot> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            EleButton_greedot(
-                additionalFunc: () {
-                  getImage(ImageSource.camera); // 카메라로 찍은 사진 가져오기
-                },
-                buttonText: "카메라"),
+            ElevatedButton.icon(
+              icon: Icon(Icons.camera_alt, color: Colors.white), // 카메라 아이콘 추가
+              label: Text("카메라"),
+              onPressed: () {
+                getImage(ImageSource.camera); // 카메라로 찍은 사진 가져오기
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonHeight), // 모든 버튼에 대해 동일한 크기 설정
+                primary: colorBut_greedot, // 배경 색상
+                onPrimary: Colors.white, // 아이콘 및 텍스트 색상
+              ),
+            ),
             SizedBox(width: paddingForButtons), // 버튼 사이의 간격 조정
-            EleButton_greedot(
-                additionalFunc: () {
-                  getImage(ImageSource.gallery); // 갤러리에서 사진 가져오기
-                },
-                buttonText: "갤러리"),
+            ElevatedButton.icon(
+              icon: Icon(Icons.photo_library, color: Colors.white), // 갤러리 아이콘 추가
+              label: Text("갤러리"),
+              onPressed: () {
+                getImage(ImageSource.gallery); // 갤러리에서 사진 가져오기
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonHeight), // 모든 버튼에 대해 동일한 크기 설정
+                primary: colorBut_greedot, // 버튼 배경 색상
+                onPrimary: Colors.white, // 버튼 텍스트 및 아이콘 색상
+              ),
+            ),
           ],
         ),
         SizedBox(height: paddingForButtons),
+        // 두 번째 줄에 업로드와 AI 캐릭터 만들기 버튼 배치
         Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-            EleButton_greedot(
-                additionalFunc: () {
-                  importedImage = _image;
-                  showUploadSuccessSnackBar(1); // 업로드 성공 알림 표시
-                },
-                buttonText: "업로드"),
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton.icon(
+              icon: Icon(Icons.cloud_upload, color: Colors.white), // 업로드 아이콘 추가
+              label: Text("업로드"),
+              onPressed: () {
+                showUploadSuccessSnackBar(1); // 업로드 성공 알림 표시
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonHeight), // 모든 버튼에 대해 동일한 크기 설정
+                primary: colorBut_greedot, // 버튼 배경 색상
+                onPrimary: Colors.white, // 버튼 텍스트 및 아이콘 색상
+              ),
+            ),
             SizedBox(width: paddingForButtons),
-            EleButton_greedot(
-                additionalFunc: () {
-                  importedImage = _image;
-                  showUploadSuccessSnackBar(2); // 업로드 성공 알림 표시
-                },
-                buttonText: "AI 캐릭터 만들기"),
-          ]
-        )
+            ElevatedButton.icon(
+              icon: Icon(Icons.face, color: Colors.white), // AI 캐릭터 만들기 아이콘 추가
+              label: Text("AI 캐릭터 만들기"),
+              onPressed: () {
+                showUploadSuccessSnackBar(2); // 업로드 성공 알림 표시
+              },
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonHeight), // 모든 버튼에 대해 동일한 크기 설정
+                primary: colorBut_greedot, // 버튼 배경 색상
+                onPrimary: Colors.white, // 버튼 텍스트 및 아이콘 색상
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
+
 }
