@@ -18,6 +18,7 @@ import '../personality/settingAge.dart';
 double paddingForButtons = 10; //다 상대적인 값으로 교체 예정
 double canvasSize = 350;
 
+
 class GetImage_greedot extends StatefulWidget {
   const GetImage_greedot({Key? key}) : super(key: key);
   @override
@@ -128,6 +129,9 @@ class _getImageState extends State<GetImage_greedot> {
   }
 
   Widget _buildButton() {
+    double buttonWidth = 170;
+    double buttonHeight = 50;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -142,8 +146,9 @@ class _getImageState extends State<GetImage_greedot> {
                 getImage(ImageSource.camera); // 카메라로 찍은 사진 가져오기
               },
               style: ElevatedButton.styleFrom(
-                primary: colorBut_greedot, // 버튼 배경 색상
-                onPrimary: Colors.white, // 버튼 텍스트 및 아이콘 색상
+                minimumSize: Size(buttonWidth, buttonHeight), // 모든 버튼에 대해 동일한 크기 설정
+                primary: colorBut_greedot, // 배경 색상
+                onPrimary: Colors.white, // 아이콘 및 텍스트 색상
               ),
             ),
             SizedBox(width: paddingForButtons), // 버튼 사이의 간격 조정
@@ -154,6 +159,7 @@ class _getImageState extends State<GetImage_greedot> {
                 getImage(ImageSource.gallery); // 갤러리에서 사진 가져오기
               },
               style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonHeight), // 모든 버튼에 대해 동일한 크기 설정
                 primary: colorBut_greedot, // 버튼 배경 색상
                 onPrimary: Colors.white, // 버튼 텍스트 및 아이콘 색상
               ),
@@ -172,6 +178,7 @@ class _getImageState extends State<GetImage_greedot> {
                 showUploadSuccessSnackBar(1); // 업로드 성공 알림 표시
               },
               style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonHeight), // 모든 버튼에 대해 동일한 크기 설정
                 primary: colorBut_greedot, // 버튼 배경 색상
                 onPrimary: Colors.white, // 버튼 텍스트 및 아이콘 색상
               ),
@@ -184,6 +191,7 @@ class _getImageState extends State<GetImage_greedot> {
                 showUploadSuccessSnackBar(2); // 업로드 성공 알림 표시
               },
               style: ElevatedButton.styleFrom(
+                minimumSize: Size(buttonWidth, buttonHeight), // 모든 버튼에 대해 동일한 크기 설정
                 primary: colorBut_greedot, // 버튼 배경 색상
                 onPrimary: Colors.white, // 버튼 텍스트 및 아이콘 색상
               ),
