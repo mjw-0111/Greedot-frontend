@@ -92,7 +92,6 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
               ),
             ),
           ),
-
           Positioned(
             top: 12,
             left: 8,
