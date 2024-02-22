@@ -74,6 +74,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
+         backgroundColor: colorMainBG_greedot,
          title: SizedBox(
           height: 56, // AppBar의 높이에 맞춰 조절
           child: Image.asset('assets/images/appbarLogo.png', fit: BoxFit.contain), // 사이즈 조절을 위해 BoxFit 사용
