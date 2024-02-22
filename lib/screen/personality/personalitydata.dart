@@ -2,7 +2,7 @@
 class PersonalityData {
   static final List<String> sexList = ['남자', '여자'];
   static final List<String> ageList = List.generate(20, (index) => (index + 1).toString());
-  static final List<List<String>> optionValues = [['I', 'E'], ['N', 'S'], ['F', 'T'], ['P', 'J']];
+  static final List<List<String>> optionValues = [['E', 'I'], ['N', 'S'], ['T', 'F'], ['J', 'P']];
   static final List<String> questionList = [
     '새로운 놀이 친구를 사귀는 게 좋아, 아니면 친한 친구와 같이 놀기가 더 좋아?',
     '책을 읽을 때, 어떤 이야기가 더 좋아?',
