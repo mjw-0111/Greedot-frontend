@@ -23,12 +23,32 @@ class _ReportPageState extends State<ReportPage> {
   int touchedIndex = -1;
   Map<String, List<String>> emotions = {}; // 초기 상태는 비어있음
   Map<String, String> urls = {};
-
+  List<Map<String, dynamic>> dialogLogs = [];
 
   @override
   void initState() {
     super.initState();
     fetchEmotionData();
+    fetchDialogLogs();
+  }
+
+  Future<void> fetchDialogLogs() async {
+    if (widget.greeId == null) {
+      print('Gree ID is null');
+      return;
+    }
+    try {
+      final response = await http.get(Uri.parse('http://20.196.198.166:8000/api/v1/log/gree/1'));
+      if (response.statusCode == 200) {
+        setState(() {
+          dialogLogs = List<Map<String, dynamic>>.from(json.decode(utf8.decode(response.bodyBytes)));
+        });
+      } else {
+        throw Exception('Failed to load dialog logs');
+      }
+    } catch (e) {
+      print('Error fetching dialog logs: $e');
+    }
   }
 
   Future<void> fetchEmotionData() async {
@@ -96,9 +116,9 @@ class _ReportPageState extends State<ReportPage> {
     if (totalSentences == 0) {
       // 데이터가 없을 때 기본 섹션 데이터를 반환
       return [PieChartSectionData(
-        color: Colors.grey,
+        color: Colors.grey[500],
         value: 100,
-        title: '데이터 없음',
+        title: '대화를 분석 중입니다',
         radius: 30,
         titleStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
       )];
@@ -134,40 +154,28 @@ class _ReportPageState extends State<ReportPage> {
           touchedIndex = -1;
         });
       },
-      child: Scaffold(
+      child:  Scaffold(
         backgroundColor: colorMainBG_greedot,
         body: SafeArea(
-          child: Stack(
-            children: <Widget>[
-              Align(
-                alignment: Alignment.topCenter,
-                child: Padding(
+          child: SingleChildScrollView( // 전체 화면을 스크롤 가능하게 변경
+            child: Column( // 위젯들을 수직으로 배열
+              children: <Widget>[
+                Padding(
                   padding: const EdgeInsets.only(top: 40),
                   child: Text('< 차트를 클릭하면 대화 로그가 보여요! >'),
                 ),
-              ),
-              Positioned(
-                top: 20,
-                left: 0,
-                right: 0,
-                height: MediaQuery.of(context).size.height / 2,
-                child: buildChartAndImageRow(),
-              ),
-              Positioned(
-                top: MediaQuery.of(context).size.height / 2 - 35,
-                left: 0,
-                right: 0,
-                child: buildLegend(),
-              ),
-              if (touchedIndex != -1)
-                Positioned(
-                  bottom: 25,
-                  left: 10,
-                  right: 10,
-                  height: 200,
-                  child: buildScrollableEmotionSentences(emotions.keys.elementAt(touchedIndex)),
+                Container(
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: buildChartAndImageRow(),
                 ),
-            ],
+                buildLegend(),
+                if (touchedIndex != -1) //
+                  buildScrollableEmotionSentences(emotions.keys.elementAt(touchedIndex)),
+                SizedBox(height: 20),
+                Text('< 전체 대화 로그 >'),
+                buildScrollableDialogLog(), // 대화 로그를 항상 표시
+              ],
+            ),
           ),
         ),
       ),
@@ -225,7 +233,11 @@ class _ReportPageState extends State<ReportPage> {
   Widget buildScrollableEmotionSentences(String emotion) {
     List<String>? sentencesList = emotions[emotion];
     String allSentences = sentencesList != null ? sentencesList.join('\n\n') : 'No sentences found for this emotion.';
+    double screenWidth = MediaQuery.of(context).size.width;
+    double containerWidth = screenWidth - 20;
     return Container(
+      width: containerWidth, // 여기에서 Container의 가로 길이를 설정합니다.
+      margin: EdgeInsets.only(left: 10, right: 10),
       height: 200,
       padding: EdgeInsets.all(16.0),
       decoration: BoxDecoration(
@@ -244,9 +256,51 @@ class _ReportPageState extends State<ReportPage> {
       child: SingleChildScrollView(
         child: Text(
           allSentences,
-          style: TextStyle(fontSize: 11.0),
+          style: TextStyle(fontSize: 11.0, fontWeight:FontWeight.bold),
         ),
       ),
     );
   }
+
+  Widget buildScrollableDialogLog() {
+    // 대화 로그의 내용을 모두 결합하여 하나의 문자열로 만듭니다.
+    String dialogText = dialogLogs.map((log) {
+      return '${log['log_type'] == 'USER_TALK' ? 'User' : 'Gree'}: ${log['content']}';
+    }).join('\n\n'); // 각 대화 로그 사이에 공백을 추가합니다.
+
+    double screenWidth = MediaQuery.of(context).size.width;
+    double containerWidth = screenWidth - 20;
+
+    return Container(
+      width: containerWidth, // 여기에서 Container의 가로 길이를 설정합니다.
+      margin: EdgeInsets.only(left: 10, right: 10),
+      height: 200,
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: colorFilling_greedot,
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(color: Colors.grey[400]!, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: SingleChildScrollView(
+        child: Text(
+          dialogText.isEmpty ? '대화 로그가 없습니다.' : dialogText, // 대화 로그가 비어있는 경우 대체 텍스트를 표시합니다.
+          style: TextStyle(fontSize: 11.0, fontWeight:FontWeight.bold),
+        ),
+      ),
+    );
+  }
+
+
 }
+
+
+
+// 기존 클래스의 나머지 부분
