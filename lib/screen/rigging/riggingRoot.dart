@@ -122,7 +122,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   child: Text(
                       "캐릭터를 터치하면 캐릭터 정보가 보여요!",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: colorSnackBar_greedot, fontSize: 15)
+                      style: TextStyle(color: colorSnackBar_greedot, fontSize: 15, fontFamily:'greedot_font')
                   ),
                 ),
                 Positioned(
@@ -196,7 +196,7 @@ Widget buildCardBack(Gree gree, BuildContext context) {
             buildInfoRow(context, Icons.psychology, '성격: ${gree.prompt_mbti ?? '없음'}'),
             buildInfoSpacer(),
             Text(introduction, // 자기소개 부분
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Color(0xFFFFFFFF)),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Color(0xFFFFFFFF),fontFamily:'greedot_font'),
                 textAlign: TextAlign.center),
           ],
         ),
@@ -211,7 +211,7 @@ Widget buildInfoRow(BuildContext context, IconData icon, String text) {
     children: [
       Icon(icon, color: Color(0xFFFFFFFF), size: 20), // 아이콘 색상 변경
       SizedBox(width: 10),
-      Text(text, style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: Color(0xFFFFFFFF))), // 글씨체 얇게 변경
+      Text(text, style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: Color(0xFFFFFFFF),fontFamily:'greedot_font')), // 글씨체 얇게 변경
     ],
   );
 }

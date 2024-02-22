@@ -23,8 +23,8 @@ class drawer_greedot extends StatelessWidget {
               //backgroundColor: Colors.white,
               backgroundImage: AssetImage('/assets/images/kid.png'),
             ),
-            accountName: const Text('dong'),
-            accountEmail: const Text('dongdong@naver.com'),
+            accountName: const Text('dong',style:TextStyle(fontFamily:'greedot_font')),
+            accountEmail: const Text('dongdong@naver.com',style:TextStyle(fontFamily:'greedot_font')),
             onDetailsPressed: () {
               print('Hello, My Hope World!');
               pageNavi.changePage('RiggingRoot');
@@ -60,6 +60,7 @@ class drawer_greedot extends StatelessWidget {
     );
   }
 }
+
 class DrawerListTile extends StatelessWidget {
   final IconData listTileIcon;
   final String listTileText;
@@ -75,15 +76,15 @@ class DrawerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(listTileIcon, color: Colors.white), // 아이콘 색상을 하얀색으로 변경
+      leading: Icon(listTileIcon, color: colorText_greedot),
       title: Text(
         listTileText,
-        style: TextStyle(color: Colors.white), // 텍스트 색상을 하얀색으로 변경
+        style: TextStyle(color: colorText_greedot,fontFamily:'greedot_font'),
       ),
       onTap: onTap, // onTap 콜백 사용
       trailing: Icon(
         Icons.add,
-        color: Colors.white, // trailing 아이콘 색상을 하얀색으로 변경
+        color: colorText_greedot,
       ),
     );
   }

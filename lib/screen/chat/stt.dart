@@ -193,13 +193,12 @@ class _ChatPageState extends State<ChatPage> {
                 else // GIF가 준비되었을 때만 GifPlayer 표시
                   Align(
                     alignment: Alignment.center,
-                    child: GifPlayer(
-                      gifUrl: currentGifUrl.isNotEmpty
-                          ? currentGifUrl
-                          : 'https://some-default-url/default.gif',
-                      width: 600.0, // GIF 크기 조정
-                      height: 600.0,
-                  ),
+                    child: Image.network(
+                      currentGifUrl.isNotEmpty ? currentGifUrl : 'https://some-default-url/default.gif',
+                      width: 580.0, // 이미지의 너비
+                      height: 580.0, // 이미지의 높이
+                      fit: BoxFit.cover, // 이미지를 화면에 맞게 조정합니다.
+                    ),
                 ),
                 ListView.builder(
                   reverse: true,
@@ -226,7 +225,7 @@ class _ChatPageState extends State<ChatPage> {
                           message.messageContent,
                           style: TextStyle(
                               color: message.isUser ? Colors.white : Colors
-                                  .black),
+                                  .black,fontFamily:'greedot_font'),
                         ),
                       ),
                     );
