@@ -69,29 +69,32 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
           ),
           Align(
             alignment: Alignment.bottomRight,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                EleButton_greedot(
-                  isSmall: true,
-                  buttonText: "대화 시작",
-                  fontSize: 11,
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  additionalFunc: () => pageNavi.changePage('ChatPage', data: PageData(greeId: widget.gree.id)),
-                ),
-                SizedBox(height: 4), // 버튼 사이의 간격을 조정
-                EleButton_greedot(
-                  isSmall: true,
-                  buttonText: "리포트 보기",
-                  fontSize: 11,
-                  padding: EdgeInsets.symmetric(horizontal: 2),
-                  additionalFunc: () => pageNavi.changePage('ReportPage', data: PageData(greeId: widget.gree.id)),
-                ),
-              ],
+            child: IntrinsicWidth(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  EleButton_greedot(
+                    isSmall: false,
+                    buttonText: "대화 시작",
+                    fontSize: 16,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    additionalFunc: () => pageNavi.changePage('ChatPage', data: PageData(greeId: widget.gree.id)),
+                  ),
+                  SizedBox(height: 4), // 버튼 사이의 간격을 조정
+                  EleButton_greedot(
+                    isSmall: false,
+                    buttonText: "리포트 보기",
+                    fontSize: 16,
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+                    additionalFunc: () => pageNavi.changePage('ReportPage', data: PageData(greeId: widget.gree.id)),
+                  ),
+                ],
+              ),
             ),
-          ),
+          )
+
           Positioned(
-            top: 140,
+            top: 12,
             left: 8,
             right: 8,
             child: Column(
@@ -100,12 +103,12 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
               children: [
                 Text(
                   widget.gree.gree_name ?? 'Unknown',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 SizedBox(height: 4), // 간격 추가
                 Text(
                   widget.gree.prompt_mbti ?? 'Unknown',
-                  style: TextStyle(fontSize: 14),
+                  style: TextStyle(fontSize: 18),
                 ),
               ],
             ),
