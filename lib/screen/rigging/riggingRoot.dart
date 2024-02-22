@@ -128,13 +128,13 @@ class _RiggingRootState extends State<RiggingRoot> {
                 Positioned(
                   bottom: 50,
                   left: 0,
-                  right: 190,
+                  right: 210,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const SizedBox(height: 35),
                       EleButton_greedot(
-                        width: 170,
+                        width: 190,
                         height: 50,
                         additionalFunc: () => pageNavi.changePage('FavoriteListPage'),
                         buttonText: "AI 친구들 모아보기",
@@ -145,14 +145,14 @@ class _RiggingRootState extends State<RiggingRoot> {
                 ),
                 Positioned(
                   bottom: 50,
-                  left: 190,
+                  left: 210,
                   right: 0,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const SizedBox(height: 35),
                       EleButton_greedot(
-                        width: 170,
+                        width: 190,
                         height: 50,
                         additionalFunc: () => pageNavi.changePage('newgree'),
                         buttonText: "그리 새로 만들기",
