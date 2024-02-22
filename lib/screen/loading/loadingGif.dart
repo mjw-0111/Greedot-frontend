@@ -8,9 +8,11 @@ class LoadingGifWidget extends StatefulWidget {
 
 class _LoadingGifWidgetState extends State<LoadingGifWidget> {
   List<String> gifPaths = [
-    'assets/images/loading_gif/gif1.gif',
-    'assets/images/loading_gif/gif2.gif',
-    // 여기에 나머지 GIF 경로들을 추가
+    'assets/images/loading_gif/dab1.gif',
+    'assets/images/loading_gif/dab2.gif',
+    'assets/images/loading_gif/dab3.gif',
+    'assets/images/loading_gif/dab4.gif',
+    'assets/images/loading_gif/dab5.gif',
   ];
   int currentIndex = 0;
   Timer? _timer;
@@ -18,7 +20,7 @@ class _LoadingGifWidgetState extends State<LoadingGifWidget> {
   @override
   void initState() {
     super.initState();
-    _timer = Timer.periodic(Duration(seconds: 2), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 9), (timer) {
       setState(() {
         currentIndex = (currentIndex + 1) % gifPaths.length;
       });

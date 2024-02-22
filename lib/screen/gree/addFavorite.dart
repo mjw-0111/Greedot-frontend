@@ -53,10 +53,11 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
                   ),
                   color: cardColor,
                   margin: EdgeInsets.all(10), // 필요한 경우 마진 조정
+                  elevation: 4.0, // 여기에 elevation 값을 추가하여 그림자 효과를 줍니다.
                   child: Row(
                     children: [
                       Expanded(
-                        flex: 4,
+                        flex: 6,
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Column(
@@ -68,10 +69,11 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
                                 children: [
                                   Text(
                                     widget.gree.gree_name ?? 'Unknown',
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
+                                    style: TextStyle(fontSize: 45), // 폰트 사이즈를 30으로 조정
                                   ),
                                 ],
                               ),
+
                               SizedBox(height: 4),
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center, // 가로 중앙 정렬
@@ -98,7 +100,7 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
                                   ),
                                 ],
                               ),
-                              SizedBox(height: 4),
+                              SizedBox(height: 10), // 버튼과 버튼 사이의 간격을 20으로 조정
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center, // 버튼들 가로 중앙 정렬
                                 children: [
@@ -114,6 +116,7 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
                                   ),
                                 ],
                               ),
+
 
                             ],
                           ),
