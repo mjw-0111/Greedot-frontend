@@ -32,24 +32,24 @@ class _ReportPageState extends State<ReportPage> {
     fetchDialogLogs();
   }
 
-  Future<void> fetchDialogLogs() async {
-    if (widget.greeId == null) {
-      print('Gree ID is null');
-      return;
-    }
-    try {
-      final response = await http.get(Uri.parse('http://20.196.198.166:8000/api/v1/log/gree/1'));
-      if (response.statusCode == 200) {
-        setState(() {
-          dialogLogs = List<Map<String, dynamic>>.from(json.decode(utf8.decode(response.bodyBytes)));
-        });
-      } else {
-        throw Exception('Failed to load dialog logs');
-      }
-    } catch (e) {
-      print('Error fetching dialog logs: $e');
-    }
-  }
+  // Future<void> fetchDialogLogs() async {
+  //   if (widget.greeId == null) {
+  //     print('Gree ID is null');
+  //     return;
+  //   }
+  //   try {
+  //     final response = await http.get(Uri.parse('http://20.196.198.166:8000/api/v1/log/gree/1'));
+  //     if (response.statusCode == 200) {
+  //       setState(() {
+  //         dialogLogs = List<Map<String, dynamic>>.from(json.decode(utf8.decode(response.bodyBytes)));
+  //       });
+  //     } else {
+  //       throw Exception('Failed to load dialog logs');
+  //     }
+  //   } catch (e) {
+  //     print('Error fetching dialog logs: $e');
+  //   }
+  // }
 
   Future<void> fetchEmotionData() async {
     try {
@@ -74,6 +74,21 @@ class _ReportPageState extends State<ReportPage> {
       });
     } catch (e) {
       print('% Error fetching emotion data: $e');
+    }
+  }
+
+  Future<void> fetchDialogLogs() async {
+    if (widget.greeId == null) {
+      print('Gree ID is null');
+      return;
+    }
+    try {
+      final logs = await ApiServiceGree.fetchDialogLogs(widget.greeId!);
+      setState(() {
+        dialogLogs = logs;
+      });
+    } catch (e) {
+      print('Error fetching dialog logs: $e');
     }
   }
 
@@ -173,7 +188,10 @@ class _ReportPageState extends State<ReportPage> {
                   buildScrollableEmotionSentences(emotions.keys.elementAt(touchedIndex)),
                 SizedBox(height: 20),
                 Text('< 전체 대화 로그 >'),
-                buildScrollableDialogLog(), // 대화 로그를 항상 표시
+                buildScrollableDialogLog(),
+                SizedBox(height: 20),
+                Text('< 하루 대화 요약 >'),
+                tempText(),// 대화 로그를 항상 표시
               ],
             ),
           ),
@@ -298,9 +316,35 @@ class _ReportPageState extends State<ReportPage> {
     );
   }
 
+  Widget tempText() {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double containerWidth = screenWidth - 20;
+
+    return Container(
+      width: containerWidth, // 여기에서 Container의 가로 길이를 설정합니다.
+      margin: EdgeInsets.only(left: 10, right: 10),
+      height: 200,
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: colorFilling_greedot,
+        borderRadius: BorderRadius.circular(12.0),
+        border: Border.all(color: Colors.grey[400]!, width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 7,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: SingleChildScrollView(
+        child: Text(
+          '아이 A는 친구와 적극적으로 소통하려는 모습을 보이며, \n 일상적인 인사, 놀이 제안, 장난스러운 도발 및 반응을 통해 다양한 감정과 행동을 표현했습니다. \n 대체로 활발하고 친구와의 상호작용을 즐기는 태도가 눈에 띕니다',
+          style: TextStyle(fontSize: 11.0, fontWeight:FontWeight.bold),
+        ),
+      ),
+    );
+  }
 
 }
-
-
-
-// 기존 클래스의 나머지 부분
