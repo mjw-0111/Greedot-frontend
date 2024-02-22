@@ -216,7 +216,7 @@ class ApiServiceGree {
 
   static Future<List<String>> fetchSentences(int greeId) async {
     final url = Uri.parse(
-        '$baseUrl/api/v1/log/sentence/$greeId'); // 실제 URL로 변경 필요
+        '$baseUrl/api/v1/log/sentence/$greeId');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       print('% sentence load success');
@@ -245,6 +245,7 @@ class ApiServiceGree {
       throw Exception('% Failed to make emotion report');
     }
   }
+
 
 
   static Future<String?> fetchSpecificGreeGif(int greeId) async {
