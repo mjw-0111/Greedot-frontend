@@ -60,7 +60,6 @@ class drawer_greedot extends StatelessWidget {
     );
   }
 }
-
 class DrawerListTile extends StatelessWidget {
   final IconData listTileIcon;
   final String listTileText;
@@ -76,15 +75,15 @@ class DrawerListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(listTileIcon, color: colorText_greedot),
+      leading: Icon(listTileIcon, color: Colors.white), // 아이콘 색상을 하얀색으로 변경
       title: Text(
         listTileText,
-        style: TextStyle(color: colorText_greedot),
+        style: TextStyle(color: Colors.white), // 텍스트 색상을 하얀색으로 변경
       ),
       onTap: onTap, // onTap 콜백 사용
       trailing: Icon(
         Icons.add,
-        color: colorText_greedot,
+        color: Colors.white, // trailing 아이콘 색상을 하얀색으로 변경
       ),
     );
   }
