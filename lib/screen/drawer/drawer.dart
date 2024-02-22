@@ -23,8 +23,8 @@ class drawer_greedot extends StatelessWidget {
               //backgroundColor: Colors.white,
               backgroundImage: AssetImage('/assets/images/kid.png'),
             ),
-            accountName: const Text('dong'),
-            accountEmail: const Text('dongdong@naver.com'),
+            accountName: const Text('dong',style:TextStyle(fontFamily:'greedot_font')),
+            accountEmail: const Text('dongdong@naver.com',style:TextStyle(fontFamily:'greedot_font')),
             onDetailsPressed: () {
               print('Hello, My Hope World!');
               pageNavi.changePage('RiggingRoot');
@@ -79,7 +79,7 @@ class DrawerListTile extends StatelessWidget {
       leading: Icon(listTileIcon, color: colorText_greedot),
       title: Text(
         listTileText,
-        style: TextStyle(color: colorText_greedot),
+        style: TextStyle(color: colorText_greedot,fontFamily:'greedot_font'),
       ),
       onTap: onTap, // onTap 콜백 사용
       trailing: Icon(

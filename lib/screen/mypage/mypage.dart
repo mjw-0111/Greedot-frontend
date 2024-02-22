@@ -57,6 +57,7 @@ class _MyPageState extends State<MyPage> {
                             color: Colors.black,
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
+                            fontFamily:'greedot_font'
                           ),
                         ),
                         SizedBox(height: 80),
@@ -68,11 +69,11 @@ class _MyPageState extends State<MyPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             TextButton(
-                              child: Text('프로필 수정'),
+                              child: Text('프로필 수정',style:TextStyle(fontFamily:'greedot_font')),
                               onPressed: () => showEditProfileDialog(context, user),
                             ),
                             TextButton(
-                              child: Text('로그아웃'),
+                              child: Text('로그아웃',style:TextStyle(fontFamily:'greedot_font')),
                               onPressed: () => _handleLogout()
                             ),
                           ],

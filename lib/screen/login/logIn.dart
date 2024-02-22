@@ -64,7 +64,7 @@ class _LogInState extends State<LogIn> {
                     primaryColor: Colors.grey,
                     inputDecorationTheme: InputDecorationTheme(
                         labelStyle: TextStyle(
-                            color: colorSnackBar_greedot, fontSize: 15.0))),
+                            color: colorSnackBar_greedot, fontSize: 15.0,fontFamily:'greedot_font'))),
                 child: Container(
                     padding: EdgeInsets.all(40.0),
                     child: Builder(builder: (context) {
@@ -76,8 +76,9 @@ class _LogInState extends State<LogIn> {
                             decoration: InputDecoration(
                                 labelText: 'email',
                                 hintText: 'example@nate.com',
-                                hintStyle: TextStyle(color: Colors.grey),
+                                hintStyle: TextStyle(color: Colors.grey,fontFamily:'greedot_font'),
                                 icon: Icon(Icons.mail_outline)),
+                            style: TextStyle(fontFamily:'greedot_font'),
                             keyboardType: TextInputType.emailAddress,
                           ),
                           TextField(
@@ -119,12 +120,12 @@ class _LogInState extends State<LogIn> {
                                   child: Text(
                                     '회원가입 하기',
                                     style:
-                                        TextStyle(color: colorSnackBar_greedot),
+                                        TextStyle(color: colorSnackBar_greedot,fontFamily:'greedot_font'),
                                   ),
                                 ),
                                 Text('|',
                                     style: TextStyle(
-                                        color: colorSnackBar_greedot)),
+                                        color: colorSnackBar_greedot,fontFamily:'greedot_font')),
                                 TextButton(
                                   onPressed: () {
                                     pageNavi.changePage('FindPassword');
@@ -132,7 +133,7 @@ class _LogInState extends State<LogIn> {
                                   child: Text(
                                     '아이디·비밀번호 찾기',
                                     style:
-                                        TextStyle(color: colorSnackBar_greedot),
+                                        TextStyle(color: colorSnackBar_greedot,fontFamily:'greedot_font'),
                                   ),
                                 ),
                               ],

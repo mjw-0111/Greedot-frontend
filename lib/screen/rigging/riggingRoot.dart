@@ -122,7 +122,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   child: Text(
                       "캐릭터를 터치하면 캐릭터 정보가 보여요!",
                       textAlign: TextAlign.center,
-                      style: TextStyle(color: colorSnackBar_greedot, fontSize: 15)
+                      style: TextStyle(color: colorSnackBar_greedot, fontSize: 15, fontFamily:'greedot_font')
                   ),
                 ),
                 Positioned(

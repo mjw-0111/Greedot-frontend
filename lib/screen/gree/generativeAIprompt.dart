@@ -48,6 +48,7 @@ class GenerativeAIprompt extends StatelessWidget {
                       style: TextStyle(
                         fontSize: fontSize,
                         fontWeight: FontWeight.bold,
+                        fontFamily:'greedot_font'
                       ),
                     ),
                   ),

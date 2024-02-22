@@ -107,7 +107,7 @@ class _GenerativeAIState extends State<GenerativeAI> {
                       },
                       child: Text(
                         '선택하기',
-                        style: TextStyle(color: Colors.white),
+                        style: TextStyle(color: Colors.white,fontFamily:'greedot_font'),
                       ),
                     ),
                   ),

@@ -195,11 +195,11 @@ class _SettingPersonalityState extends State<SettingPersonality> {
           height: 50,
           child: TextField(
             controller: _nameController,
-            style: TextStyle(color: colorText_greedot),
+            style: TextStyle(color: colorText_greedot,fontFamily:'greedot_font'),
             decoration: InputDecoration(
               labelText: '이름:',
               hintText: ' 이름을 입력하세요',
-              hintStyle: TextStyle(color: colorText_greedot, fontSize: 14),
+              hintStyle: TextStyle(color: colorText_greedot, fontSize: 14,fontFamily:'greedot_font'),
               filled: true,
               fillColor: colorBut_greedot,
               border: OutlineInputBorder(
@@ -214,7 +214,7 @@ class _SettingPersonalityState extends State<SettingPersonality> {
                 borderSide: BorderSide(color: colorBut_greedot, width: 2.0),
                 borderRadius: BorderRadius.circular(15),
               ),
-              labelStyle: TextStyle(color: colorText_greedot, fontSize: 14),
+              labelStyle: TextStyle(color: colorText_greedot, fontSize: 14,fontFamily:'greedot_font'),
             ),
           ),
         ),

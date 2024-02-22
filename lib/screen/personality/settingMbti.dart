@@ -56,7 +56,7 @@ class QuestionWidget extends StatelessWidget {
             ListTile(
               title: Text(
                 optionsList[step][i],
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.white,fontFamily:'greedot_font'),
               ),
               leading: Radio<String>(
                 value: optionsList[step][i],

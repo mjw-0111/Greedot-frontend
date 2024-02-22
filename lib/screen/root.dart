@@ -104,6 +104,14 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         selectedItemColor: colorText_greedot,
         //todo 색수정
         unselectedItemColor: colorText_greedot,
+        selectedLabelStyle: TextStyle(
+          fontFamily: 'greedot_font',
+          fontSize: 12,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontFamily: 'greedot_font',
+          fontSize: 12,
+        ),
         items: bottomNavigationBarItems,
       ),
       body: buildBody(pageNavi.currentPageKey),
