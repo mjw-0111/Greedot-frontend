@@ -28,20 +28,24 @@ class EleButton_greedot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double buttonWidth = isSmall ? 70 : width;
-    final double buttonHeight = isSmall ? 15 : height;
-    final double buttonFontSize = isSmall ? 11.0 : fontSize;
-    final EdgeInsetsGeometry buttonPadding = isSmall ? EdgeInsets.zero : padding;
+    // 버튼 디자인을 위한 색상과 그림자 효과 정의
+    final Color buttonColor = colorBut_greedot; // 예시 색상
+    final double elevation = 5.0; // 그림자 높이
+    final Color shadowColor = Colors.black.withOpacity(0.5); // 그림자 색상
 
     return ElevatedButton(
       style: ButtonStyle(
-        backgroundColor: MaterialStateProperty.all(bgColor),
-        minimumSize: MaterialStateProperty.all(Size(buttonWidth, buttonHeight)),
-        padding: MaterialStateProperty.all(buttonPadding),
-        textStyle: MaterialStateProperty.all(TextStyle(fontSize: buttonFontSize)),
+        backgroundColor: MaterialStateProperty.all(buttonColor),
+        foregroundColor: MaterialStateProperty.all(Colors.white), // 텍스트와 아이콘의 색을 흰색으로 설정
+        minimumSize: MaterialStateProperty.all(Size(width, height)),
+        padding: MaterialStateProperty.all(padding),
+        textStyle: MaterialStateProperty.all(TextStyle(fontSize: fontSize)),
+        shape: MaterialStateProperty.all(RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
+        elevation: MaterialStateProperty.all(elevation),
+        shadowColor: MaterialStateProperty.all(shadowColor),
       ),
       onPressed: () {
-        additionalFunc?.call(); // additionalFunc 호출 방식 간소화
+        additionalFunc?.call();
         if (gotoScene != null) {
           Navigator.push(context, MaterialPageRoute(builder: (context) => gotoScene!()));
         }
@@ -49,9 +53,9 @@ class EleButton_greedot extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          if (icon != null) Icon(icon, color: Colors.white, size: 24), // 아이콘 색상을 흰색으로 설정
-          if (icon != null) SizedBox(width: 8), // 아이콘과 텍스트 사이에 공간 추가
-          Text(buttonText, style: TextStyle(color: textColor, fontSize: buttonFontSize)),
+          if (icon != null) Icon(icon, color: Colors.white, size: 24),
+          if (icon != null) SizedBox(width: 8),
+          Text(buttonText, style: TextStyle(color: textColor, fontSize: fontSize)),
         ],
       ),
     );
