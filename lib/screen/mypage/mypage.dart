@@ -26,7 +26,7 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Profile'),
+        title: const Text('회원가입 정보'),
         backgroundColor: colorMainBG_greedot,
       ),
       body: FutureBuilder<UserModel>(
@@ -57,7 +57,6 @@ class _MyPageState extends State<MyPage> {
                             color: Colors.black,
                             fontSize: 32,
                             fontWeight: FontWeight.bold,
-                            fontFamily:'greedot_font'
                           ),
                         ),
                         SizedBox(height: 80),
@@ -69,11 +68,11 @@ class _MyPageState extends State<MyPage> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
                             TextButton(
-                              child: Text('프로필 수정',style:TextStyle(fontFamily:'greedot_font')),
+                              child: Text('프로필 수정'),
                               onPressed: () => showEditProfileDialog(context, user),
                             ),
                             TextButton(
-                              child: Text('로그아웃',style:TextStyle(fontFamily:'greedot_font')),
+                              child: Text('로그아웃'),
                               onPressed: () => _handleLogout()
                             ),
                           ],
