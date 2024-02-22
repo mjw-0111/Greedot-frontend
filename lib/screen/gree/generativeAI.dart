@@ -55,7 +55,7 @@ class _GenerativeAIState extends State<GenerativeAI> {
         : GridView.builder(
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        childAspectRatio: 1.0,
+        childAspectRatio: 0.8, // 이미지 크기 조정을 위해 조금 더 세로로 길게 조정
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
       ),

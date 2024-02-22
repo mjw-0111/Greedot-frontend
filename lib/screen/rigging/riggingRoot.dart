@@ -84,7 +84,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                         ? Text("No 'dab' GIF found")
                         : FlipCard(
                             front: Image.network(gifUrl, fit: BoxFit.cover),
-                            back: buildCardBack(gree),
+                            back: buildCardBack(gree, context),
                           );
                   }).toList(),
                   options: CarouselOptions(
@@ -128,32 +128,37 @@ class _RiggingRootState extends State<RiggingRoot> {
                 Positioned(
                   bottom: 50,
                   left: 0,
-                  right: 170,
+                  right: 210,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const SizedBox(height: 35),
                       EleButton_greedot(
-                        width: 170, height: 50,
+                        width: 190,
+                        height: 50,
                         additionalFunc: () => pageNavi.changePage('FavoriteListPage'),
                         buttonText: "AI 친구들 모아보기",
+                        icon: Icons.group, // 아이콘 지정
                       ),
                     ],
                   ),
                 ),
                 Positioned(
                   bottom: 50,
-                  left: 170,
+                  left: 210,
                   right: 0,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
                       const SizedBox(height: 35),
                       EleButton_greedot(
-                        width: 170, height: 50,
+                        width: 190,
+                        height: 50,
                         additionalFunc: () => pageNavi.changePage('newgree'),
                         buttonText: "그리 새로 만들기",
+                        icon: Icons.create, // 아이콘 지정
                       ),
+
                     ],
                   ),
                 ),
@@ -164,18 +169,51 @@ class _RiggingRootState extends State<RiggingRoot> {
   }
 
 
-Widget buildCardBack(Gree gree) {
-  return Padding(
-    padding: const EdgeInsets.all(8.0),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Text('이름: ${gree.gree_name ?? '없음'}', style: TextStyle(fontWeight: FontWeight.bold)),
-        Text('성별: ${gree.prompt_gender ?? '없음'}'),
-        Text('나이: ${gree.prompt_age ?? '없음'}'),
-        Text('성격: ${gree.prompt_mbti ?? '없음'}'),
-      ],
+Widget buildCardBack(Gree gree, BuildContext context) {
+  // 자기소개 텍스트 생성
+  String introduction = "안녕하세요, ${gree.gree_name ?? '이름없음'}이야. "
+      "나는 ${gree.prompt_age ?? '나이'}살, ${gree.prompt_gender ?? '성별'} 아이야. "
+      "MBTI는 ${gree.prompt_mbti ?? 'MBTI'} 임!!! 나랑 대화를 원한다면 언제든지 찾아와!!";
+
+  return Center(
+    child: Card(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      elevation: 5,
+      color: Color(0xFF527853), // 배경색 설정
+      child: Container(
+        width: double.infinity,
+        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            buildInfoRow(context, Icons.person_outline, '이름: ${gree.gree_name ?? '없음'}'),
+            buildInfoSpacer(),
+            buildInfoRow(context, Icons.transgender, '성별: ${gree.prompt_gender ?? '없음'}'),
+            buildInfoSpacer(),
+            buildInfoRow(context, Icons.cake, '나이: ${gree.prompt_age ?? '없음'}'),
+            buildInfoSpacer(),
+            buildInfoRow(context, Icons.psychology, '성격: ${gree.prompt_mbti ?? '없음'}'),
+            buildInfoSpacer(),
+            Text(introduction, // 자기소개 부분
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.normal, color: Color(0xFFFFFFFF),fontFamily:'greedot_font'),
+                textAlign: TextAlign.center),
+          ],
+        ),
+      ),
     ),
   );
 }
+
+Widget buildInfoRow(BuildContext context, IconData icon, String text) {
+  return Row(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Icon(icon, color: Color(0xFFFFFFFF), size: 20), // 아이콘 색상 변경
+      SizedBox(width: 10),
+      Text(text, style: TextStyle(fontSize: 18, fontWeight: FontWeight.normal, color: Color(0xFFFFFFFF),fontFamily:'greedot_font')), // 글씨체 얇게 변경
+    ],
+  );
+}
+
+Widget buildInfoSpacer() => SizedBox(height: 12);
