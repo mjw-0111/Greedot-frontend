@@ -89,7 +89,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   }).toList(),
                   options: CarouselOptions(
                     height: 500,
-                    viewportFraction: 1.0,
+                    viewportFraction: 0.33,
                     autoPlay: true,
                     onPageChanged: (index, reason) {
                       setState(() {
@@ -99,7 +99,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
                 Positioned(
-                  bottom: 30,
+                  bottom: 20,
                   left: 0,
                   right: 0,
                   child: Center(
@@ -116,7 +116,7 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
                 const Positioned(
-                  bottom: 300,
+                  bottom: 120,
                   left: 0,
                   right: 0,
                   child: Text(
@@ -126,9 +126,9 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
                 Positioned(
-                  bottom: 150,
+                  bottom: 50,
                   left: 0,
-                  right: 200,
+                  right: 170,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
@@ -142,8 +142,8 @@ class _RiggingRootState extends State<RiggingRoot> {
                   ),
                 ),
                 Positioned(
-                  bottom: 150,
-                  left: 200,
+                  bottom: 50,
+                  left: 170,
                   right: 0,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,

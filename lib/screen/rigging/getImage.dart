@@ -121,7 +121,7 @@ class _getImageState extends State<GetImage_greedot> {
                 ),
               )
             : BoxDecoration(
-                color: Colors.grey, // 이미지가 없을 경우 회색 배경을 표시합니다.
+                color: Colors.white60, // 이미지가 없을 경우 회색 배경을 표시합니다.
               ),
       ),
     );
