@@ -134,8 +134,8 @@ class _ReportPageState extends State<ReportPage> {
         color: Colors.grey[500],
         value: 100,
         title: '대화를 분석 중입니다',
-        radius: 30,
-        titleStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+        radius: 60,
+        titleStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
       )];
     }
 
@@ -143,7 +143,7 @@ class _ReportPageState extends State<ReportPage> {
     emotions.forEach((key, sentences) {
       final bool isTouched = emotions.keys.toList().indexOf(key) == touchedIndex;
       final double fontSize = isTouched ? 16 : 14;
-      final double radius = isTouched ? 40 : 30;
+      final double radius = isTouched ? 90 : 70;
       final double percentage = sentences.length / totalSentences * 100;
 
       if (percentage > 0) {
@@ -244,7 +244,7 @@ class _ReportPageState extends State<ReportPage> {
                     }
                   },
                 ),
-                centerSpaceRadius: 40,
+                centerSpaceRadius: 60,
                 sectionsSpace: 2,
                 sections: showingSections(),
               ),
