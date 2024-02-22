@@ -152,12 +152,30 @@ class _FavoriteItemCardState extends State<FavoriteItemCard> {
                 ],
               ),
             ),
-          )
-        ),
+
+          ),
+          Positioned(
+            top: 12,
+            left: 8,
+            right: 8,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.gree.gree_name ?? 'Unknown',
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25,fontFamily:'greedot_font'),
+                ),
+                SizedBox(height: 4), // 간격 추가
+                Text(
+                  widget.gree.prompt_mbti ?? 'Unknown',
+                  style: TextStyle(fontSize: 18,fontFamily:'greedot_font'),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-
-
-

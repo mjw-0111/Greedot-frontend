@@ -38,12 +38,14 @@ class _LogInState extends State<LogIn> {
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
+Widget build(BuildContext context) {
     final pageNavi = Provider.of<PageNavi>(context, listen: false);
+    // 화면의 너비를 기준으로 입력창의 최대 너비를 설정
+    final screenWidth = MediaQuery.of(context).size.width;
+    final inputFieldWidth = screenWidth * 0.38; // 화면이 너무 클 경우를 대비한 최대 너비 설정
+
     return Scaffold(
       backgroundColor: colorMainBG_greedot,
-      // email, password 입력하는 부분을 제외한 화면을 탭하면, 키보드 사라지게 GestureDetector 사용
       body: GestureDetector(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -64,9 +66,10 @@ class _LogInState extends State<LogIn> {
                     primaryColor: Colors.grey,
                     inputDecorationTheme: InputDecorationTheme(
                         labelStyle: TextStyle(
-                            color: colorSnackBar_greedot, fontSize: 15.0))),
+                            color: colorSnackBar_greedot, fontSize: 15.0,fontFamily:'greedot_font'))),
                 child: Container(
                     padding: EdgeInsets.all(40.0),
+                    width: inputFieldWidth.toDouble(), // 입력 필드의 가로 길이를 제한
                     child: Builder(builder: (context) {
                       return Column(
                         children: [
@@ -76,8 +79,9 @@ class _LogInState extends State<LogIn> {
                             decoration: InputDecoration(
                                 labelText: 'email',
                                 hintText: 'example@nate.com',
-                                hintStyle: TextStyle(color: Colors.grey),
+                                hintStyle: TextStyle(color: Colors.grey,fontFamily:'greedot_font'),
                                 icon: Icon(Icons.mail_outline)),
+                            style: TextStyle(fontFamily:'greedot_font'),
                             keyboardType: TextInputType.emailAddress,
                           ),
                           TextField(
@@ -86,7 +90,7 @@ class _LogInState extends State<LogIn> {
                                 labelText: 'password',
                                 icon: Icon(Icons.lock_outline)),
                             keyboardType: TextInputType.text,
-                            obscureText: true, // 비밀번호 안보이도록 하는 것
+                            obscureText: true,
                           ),
                           SizedBox(
                             height: 40.0,
@@ -119,12 +123,12 @@ class _LogInState extends State<LogIn> {
                                   child: Text(
                                     '회원가입 하기',
                                     style:
-                                        TextStyle(color: colorSnackBar_greedot),
+                                        TextStyle(color: colorSnackBar_greedot,fontFamily:'greedot_font'),
                                   ),
                                 ),
                                 Text('|',
                                     style: TextStyle(
-                                        color: colorSnackBar_greedot)),
+                                        color: colorSnackBar_greedot,fontFamily:'greedot_font')),
                                 TextButton(
                                   onPressed: () {
                                     pageNavi.changePage('FindPassword');
@@ -132,7 +136,7 @@ class _LogInState extends State<LogIn> {
                                   child: Text(
                                     '아이디·비밀번호 찾기',
                                     style:
-                                        TextStyle(color: colorSnackBar_greedot),
+                                        TextStyle(color: colorSnackBar_greedot,fontFamily:'greedot_font'),
                                   ),
                                 ),
                               ],

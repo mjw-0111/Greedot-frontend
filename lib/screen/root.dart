@@ -74,8 +74,11 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: const Text("Greedot"),
-        backgroundColor: colorMainBG_greedot,
+         backgroundColor: colorMainBG_greedot,
+         title: SizedBox(
+          height: 56, // AppBar의 높이에 맞춰 조절
+          child: Image.asset('assets/images/appbarLogo.png', fit: BoxFit.contain), // 사이즈 조절을 위해 BoxFit 사용
+        ),
         centerTitle: false,
         elevation: 0.0,
       ),
@@ -89,7 +92,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
               pageKey = 'RiggingRoot';
               break;
             case 1:
-              pageKey = 'GetImage_greedot';
+              pageKey = 'FavoriteListPage';
               break;
             case 2:
               pageKey = 'LogIn';
@@ -104,6 +107,14 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
         selectedItemColor: colorText_greedot,
         //todo 색수정
         unselectedItemColor: colorText_greedot,
+        selectedLabelStyle: TextStyle(
+          fontFamily: 'greedot_font',
+          fontSize: 12,
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontFamily: 'greedot_font',
+          fontSize: 12,
+        ),
         items: bottomNavigationBarItems,
       ),
       body: buildBody(pageNavi.currentPageKey),
@@ -114,7 +125,7 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
     switch (pageKey) {
       case 'RiggingRoot':
         return 0;
-      case 'GetImage_greedot':
+      case 'FavoriteListPage':
         return 1;
       case 'LogIn':
         return 2;
@@ -127,15 +138,15 @@ class _Navigation_GreedotState extends State<Navigation_Greedot> {
     return const [
       BottomNavigationBarItem(
         icon: Icon(Icons.home),
-        label: "home",
+        label: "홈",
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.notification_add),
-        label: "notification",
+        icon: Icon(Icons.child_care),
+        label: "그리 목록",
       ),
       BottomNavigationBarItem(
-        icon: Icon(Icons.message),
-        label: "setting",
+        icon: Icon(Icons.login),
+        label: "로그인",
       ),
     ];
   }

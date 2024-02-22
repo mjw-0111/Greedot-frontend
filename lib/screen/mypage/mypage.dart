@@ -26,7 +26,7 @@ class _MyPageState extends State<MyPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Profile'),
+        title: const Text('회원가입 정보'),
         backgroundColor: colorMainBG_greedot,
       ),
       body: FutureBuilder<UserModel>(

@@ -217,7 +217,7 @@ class ApiServiceGree {
 
   static Future<List<String>> fetchSentences(int greeId) async {
     final url = Uri.parse(
-        '$baseUrl/api/v1/log/sentence/$greeId'); // 실제 URL로 변경 필요
+        '$baseUrl/api/v1/log/sentence/$greeId');
     final response = await http.get(url);
     if (response.statusCode == 200) {
       print('% sentence load success');
@@ -247,6 +247,15 @@ class ApiServiceGree {
     }
   }
 
+  static Future<List<Map<String, dynamic>>> fetchDialogLogs(int greeId) async {
+    final url = Uri.parse('$baseUrl/api/v1/log/gree/$greeId');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return List<Map<String, dynamic>>.from(json.decode(utf8.decode(response.bodyBytes)));
+    } else {
+      throw Exception('Failed to load dialog logs');
+    }
+  }
 
   static Future<String?> fetchSpecificGreeGif(int greeId) async {
     final url = Uri.parse('$baseUrl/api/v1/gree/getgif/$greeId');
