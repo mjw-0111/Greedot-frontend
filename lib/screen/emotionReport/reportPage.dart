@@ -134,8 +134,8 @@ class _ReportPageState extends State<ReportPage> {
         color: Colors.grey[500],
         value: 100,
         title: '대화를 분석 중입니다',
-        radius: 30,
-        titleStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
+        radius: 60,
+        titleStyle: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: const Color(0xffffffff)),
       )];
     }
 
@@ -143,7 +143,7 @@ class _ReportPageState extends State<ReportPage> {
     emotions.forEach((key, sentences) {
       final bool isTouched = emotions.keys.toList().indexOf(key) == touchedIndex;
       final double fontSize = isTouched ? 16 : 14;
-      final double radius = isTouched ? 40 : 30;
+      final double radius = isTouched ? 90 : 70;
       final double percentage = sentences.length / totalSentences * 100;
 
       if (percentage > 0) {
@@ -226,7 +226,7 @@ class _ReportPageState extends State<ReportPage> {
                     }
                   },
                 ),
-                centerSpaceRadius: 40,
+                centerSpaceRadius: 60,
                 sectionsSpace: 2,
                 sections: showingSections(),
               ),
@@ -274,7 +274,7 @@ class _ReportPageState extends State<ReportPage> {
       child: SingleChildScrollView(
         child: Text(
           allSentences,
-          style: TextStyle(fontSize: 11.0, fontWeight:FontWeight.bold),
+          style: TextStyle(fontSize: 14.0, fontWeight:FontWeight.bold),
         ),
       ),
     );
@@ -310,7 +310,7 @@ class _ReportPageState extends State<ReportPage> {
       child: SingleChildScrollView(
         child: Text(
           dialogText.isEmpty ? '대화 로그가 없습니다.' : dialogText, // 대화 로그가 비어있는 경우 대체 텍스트를 표시합니다.
-          style: TextStyle(fontSize: 11.0, fontWeight:FontWeight.bold),
+          style: TextStyle(fontSize: 14.0, fontWeight:FontWeight.bold),
         ),
       ),
     );
@@ -341,7 +341,7 @@ class _ReportPageState extends State<ReportPage> {
       child: SingleChildScrollView(
         child: Text(
           '아이 A는 친구와 적극적으로 소통하려는 모습을 보이며, \n 일상적인 인사, 놀이 제안, 장난스러운 도발 및 반응을 통해 다양한 감정과 행동을 표현했습니다. \n 대체로 활발하고 친구와의 상호작용을 즐기는 태도가 눈에 띕니다',
-          style: TextStyle(fontSize: 11.0, fontWeight:FontWeight.bold),
+          style: TextStyle(fontSize: 14.0, fontWeight:FontWeight.bold),
         ),
       ),
     );
